@@ -14,6 +14,75 @@ def read_bruker(datapath):
     return(ppm_scale, hz_scale, data)
 
 
+def read_ascii(datapath, larmor_freq=0.0, skip_header=0, skip_footer=0, delimiter=' '):
+    """
+    This reads in an ASCII dataset. If provided with the larmor frequency of the observed nuclei, the ppm scale will be calculated
+
+    Args:
+        datapath ([type]): Path to datafile
+        larmor_freq (float, optional): larmor frequency of observed nuclei. Defaults to 0.0.
+        skip_header (int, optional): Skip header lines. Defaults to 0.
+        skip_footer (int, optional): Skip footer lines. Defaults to 0.
+        delimiter (str, optional): Delimiter. Defaults to ' '.
+
+    Returns:
+        ppm_scale (1darray, optional)
+        hz_scale (1darray)
+        data (ndarray)
+    """
+    import numpy as np
+
+    data_temp = np.genfromtxt(datapath, delimiter=delimiter, skip_header=skip_header, skip_footer=skip_footer)
+
+    data = data_temp[:, 1:]
+    hz_scale = data_temp[:, 0]
+    if(larmor_freq!=0.0):
+        ppm_scale = hz_scale/larmor_freq
+
+    return (hz_scale, data) if larmor_freq==0.0 else (ppm_scale, hz_scale, data)
+
+
+def read_spe(datapath, larmor_freq=0.0):
+    """
+    This reads in an ASCII dataset. If provided with the larmor frequency of the observed nuclei, the ppm scale will be calculated
+
+    Args:
+        datapath ([type]): Path to datafile
+        larmor_freq (float, optional): larmor frequency of observed nuclei. Defaults to 0.0.
+
+    Returns:
+        ppm_scale (1darray, optional)
+        hz_scale (1darray)
+        data (ndarray)
+    """
+    import numpy as np
+
+
+    def lines_that_contain(string, fp):
+        return [line for line in fp if string in line]
+
+
+    #Read npoints from shapefile
+
+    with open(datapath,'r') as myfile:
+        head = [next(myfile) for x in range(20)]
+
+    npoints = int(''.join(filter(str.isdigit, str(lines_that_contain('NP=', head)))))
+    spectral_width = int(''.join(filter(str.isdigit, str(lines_that_contain('SW=', head)))))
+
+    for num, line in enumerate(head, 1):
+        if 'DATA' in line:
+            header_count = num
+
+    data = np.genfromtxt(datapath, delimiter=' ', skip_header=header_count, skip_footer=1)
+
+    hz_scale = np.linspace(-spectral_width/2.0, spectral_width/2.0, npoints)
+    if(larmor_freq!=0.0):
+        ppm_scale = hz_scale/larmor_freq
+
+    return (hz_scale, data) if larmor_freq==0.0 else (ppm_scale, hz_scale, data)
+
+
 def get_envelope_idx(s, dmin=1, dmax=1, split=False):
     """[summary]
 
@@ -61,7 +130,9 @@ def save_xri(output_path, output_name, dataset_array):
         dataset_array (np array): a numpy array containing freq., real, imag. columns
     """
     import numpy as np
-
+    import os
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    
     f = open(output_path + output_name + '.dat', 'w')
     np.savetxt(f, dataset_array, delimiter=' ')
     f.close()
@@ -79,7 +150,9 @@ def save_spe(output_path, output_name, dataset_array):
         dataset_array (np array): a numpy array containing freq., real, imag. columns
     """
     import numpy as np
-
+    import os
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    
     f = open(output_path + output_name + '.spe', 'w')
     f.write('SIMP\n')
     f.write('NP='+str(int(len(dataset_array)))+'\n')
@@ -262,3 +335,51 @@ def split_echotrain(datapath, dw, echolength, blankinglength, numecho):
     hz_scale = uc.hz_scale()
 
     return(ppm_scale, hz_scale, data)
+
+
+def calc_mse(data_1, data_2):
+    """
+    This calculates the Mean Square Error loss function of two 1d arrays.
+
+    Args:
+        data_1 (1darray): First data array to be evaluated
+        data_2 (1darray): Second data array to be evaluated
+    """
+    import numpy as np
+
+    data_rms = data_1 - data_2
+    rms = np.mean(data_rms**2)
+
+    return(rms)
+
+
+def calc_mae(data_1, data_2):
+    """
+    This calculates the Mean Absolute Error loss function of two 1d arrays.
+
+    Args:
+        data_1 (1darray): First data array to be evaluated
+        data_2 (1darray): Second data array to be evaluated
+    """
+    import numpy as np
+
+    data_rms = data_1 - data_2
+    rms = np.sqrt(np.mean(data_rms**2))
+
+    return(rms)
+
+
+def calc_logcosh(data_1, data_2):
+    """
+    This calculates the Log-COSH loss function of two 1d arrays.
+
+    Args:
+        data_1 (1darray): First data array to be evaluated
+        data_2 (1darray): Second data array to be evaluated
+    """
+    import numpy as np
+
+    data_rms = data_1 - data_2
+    rms = np.sum(np.log(np.cosh(data_rms)))
+
+    return(rms)
