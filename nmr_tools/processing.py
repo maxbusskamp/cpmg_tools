@@ -380,6 +380,6 @@ def calc_logcosh(data_1, data_2):
     import numpy as np
 
     data_rms = data_1 - data_2
-    rms = np.sum(np.log(np.cosh(data_rms)))
+    rms = np.sum(np.log(np.cosh(data_rms)))/1000.0
 
     return(rms)

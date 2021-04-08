@@ -13,20 +13,21 @@ mse = []
 mae = []
 logcosh = []
 
-for i in range(11):
+simpson.create_simpson(output_path, output_name, sw=1e6, np=8192, spin_rate=25000, proton_frequency=500e6, crystal_file='rep10', gamma_angles=5,
+                        cs_iso=10.0, csa=50.0, csa_eta=1.0, alpha=0.0, beta=0.0, gamma=0.0)
+simpson.run_simpson(output_name, output_path)
+ppm_scale_org, hz_scale_org, data_org = processing.read_ascii(output_path+ascii_file, larmor_freq=500.0)
+
+for i in range(101):
     simpson.create_simpson(output_path, output_name, sw=1e6, np=8192, spin_rate=25000, proton_frequency=500e6, crystal_file='rep10', gamma_angles=5,
-                           cs_iso=10.0, csa=100.0, csa_eta=1.0, alpha=0.0, beta=0.0, gamma=0.0)
+                            cs_iso=10.0, csa=i, csa_eta=1.0, alpha=0.0, beta=0.0, gamma=0.0)
     simpson.run_simpson(output_name, output_path)
 
-    ppm_scale_spe, hz_scale_spe, data_spe = processing.read_spe(output_path+spe_file, larmor_freq=500.0)
-    ppm_scale_ascii, hz_scale_ascii, data_ascii = processing.read_ascii(output_path+ascii_file, larmor_freq=500.0)
+    ppm_scale_fit, hz_scale_fit, data_fit = processing.read_ascii(output_path+ascii_file, larmor_freq=500.0)
 
-    data_ascii = data_ascii*(0.75+i/20.0)
-
-
-    mse = np.append(mse, processing.calc_mse(data_spe, data_ascii))
-    mae = np.append(mae, processing.calc_mae(data_spe, data_ascii))
-    logcosh = np.append(logcosh, processing.calc_logcosh(data_spe, data_ascii))
+    mse = np.append(mse, processing.calc_mse(data_org, data_fit))
+    mae = np.append(mae, processing.calc_mae(data_org, data_fit))
+    logcosh = np.append(logcosh, processing.calc_logcosh(data_org, data_fit))
 
 plt.figure()
 plt.plot(mse, c='k')
