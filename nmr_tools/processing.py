@@ -413,64 +413,46 @@ def calc_logcosh(data_1, data_2):
     return(rms)
 
 
-def automatic_phasecorrection(datapath, bnds=((-360, 360), (0, 200000)), lb=True, lb_const=0.54, lb_n=2, lb_variant='hamming', SI=4096, Ns=100, remove_dig_filter=True, verb=False):
+def automatic_phasecorrection(data, bnds=((-360, 360), (0, 200000)), SI=32768, Ns=100, verb=False, loss_func='logcosh'):
 
-
-    def data_rms(x, data, data_mc_beforeLB):
-        data_mc = data_mc_beforeLB
+    def data_rms(x, data, data_mc):
         data_phased = ng.proc_base.ps(data, p0=x[0], p1=x[1])
-        data_phased = ng.proc_base.di(data_phased)
-        data_mc = ng.proc_base.di(data_mc)
+        # data_phased = ng.proc_base.di(data_phased)
+        # data_mc = ng.proc_base.di(data_mc)
 
-        rms = np.sum(np.sqrt(np.power((data_phased-data_mc), 2)))
+        if(loss_func=='logcosh'):
+            rms = calc_logcosh(data_mc, data_phased)
+        elif(loss_func=='mse'):
+            rms = calc_mse(data_mc, data_phased)
+        elif(loss_func=='mae'):
+            rms = calc_mae(data_mc, data_phased)
+        else:
+            print('Wrong loss function')
 
         return rms
 
-
-    def autophase(data, data_mc_beforeLB, bnds, Ns=Ns):
-        resbrute = brute(data_rms, ranges=bnds, args=(data, data_mc_beforeLB,), Ns=Ns, disp=False)
+    def autophase(data, data_mc, bnds, Ns=Ns):
+        resbrute = brute(data_rms, ranges=bnds, args=(data, data_mc,), Ns=Ns, disp=False)
         if(verb==True):
             print('Brute-Force Optmization Results:')
             print(resbrute)
-        res = minimize(data_rms, x0 = [resbrute[0], resbrute[1]], args=(data,data_mc_beforeLB,),method='COBYLA')
+        res = minimize(data_rms, x0 = [resbrute[0], resbrute[1]], args=(data,data_mc,),method='COBYLA')
         if(verb==True):
             print('Constrained Optimization BY Linear Approximation (COBYLA) Results:')
             print(res)
 
         return res.x
 
+    data_reverse = ng.proc_base.rev(data)    # Reverse Data, for NMR orientation
 
-    dic, data = ng.bruker.read(datapath)    # Read Data
-    data_trim = np.trim_zeros(data, 'b')    # Trim zeros left/right of Echo, from old FID summation.
-    data_reverse = ng.proc_base.rev(data_trim)    # Reverse Data, for NMR orientation
-
-    # Remove Bruker digital filter. Not always needed.
-    if(remove_dig_filter==True):
-        data_remdigfilt = ng.bruker.remove_digital_filter(dic, data_reverse)
-    else:
-        data_remdigfilt = data_reverse
-
-    data_mc_beforeLB  = ng.proc_base.fft(ng.proc_base.zf_size(data_remdigfilt, SI))    # Fourier transform
-    data_mc_beforeLB = ng.proc_base.mc(data_mc_beforeLB)    # calculate magnitude data
-
-    data_fft = ng.proc_base.fft(ng.proc_base.zf_size(data_remdigfilt, SI))    # Fourier transform
-
-    # Creating the ppm and Hz scale
-    udic = ng.bruker.guess_udic(dic, data_fft)
-    uc = ng.fileiobase.uc_from_udic(udic)
-    ppm_scale = uc.ppm_scale()
-    hz_scale = uc.hz_scale()
+    data_fft = ng.proc_base.fft(ng.proc_base.zf_size(data_reverse, SI))    # Fourier transform
+    data_mc = ng.proc_base.mc(data_fft)      # magnitude mode
 
     # Phasing
-    data_mc = ng.proc_base.mc(data_fft)      # magnitude mode
-    phase = autophase(data_fft, data_mc_beforeLB, bnds=bnds)      # automatically calculate phase
+    phase = autophase(data_fft, data_mc, bnds=bnds)      # automatically calculate phase
     data_auto = ng.proc_base.ps(data_fft, p0=phase[0], p1=phase[1])      # add previously phase values
 
-    # Remove imaginary Parts
-    data_plot = ng.proc_base.di(data_auto)      # Discard imaginary parts of phased data
-    data_mc = ng.proc_base.di(data_mc)      # Discard imaginary parts of magnitude data
-
-    return(ppm_scale, hz_scale, data_mc, data_auto, phase)
+    return(data_auto, phase)
 
 
 def linebroadening(data, lb_variant, lb_const=0.54, lb_n=2):
@@ -506,3 +488,17 @@ def signaltonoise(a, axis=0, ddof=0):
     sino = np.sqrt(np.power(a.mean(axis), 2))/a.std(axis=axis, ddof=ddof)
 
     return sino
+
+
+def remove_digfilter(data, dic):
+    data_remdigfilt = ng.bruker.remove_digital_filter(dic, data)
+    return(data_remdigfilt)
+
+
+def get_scale(data, dic):
+    udic = ng.bruker.guess_udic(dic, data)
+    uc = ng.fileiobase.uc_from_udic(udic)
+    ppm_scale = uc.ppm_scale()
+    hz_scale = uc.hz_scale()
+
+    return(ppm_scale, hz_scale)
