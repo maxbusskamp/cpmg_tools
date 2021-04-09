@@ -1,9 +1,16 @@
+import numpy as np
+import nmrglue as ng
+from scipy import interpolate
+import os
+from scipy.optimize.optimize import brute
+from scipy.optimize import minimize
+
+
 def read_bruker(datapath):
     """
     This reads in Bruker Datasets. At the moment it still uses nmrglue
     Input: Path string to the Bruker Dataset, ending with '/pdata/1'
     """    
-    import nmrglue as ng
 
     dic, data = ng.bruker.read_pdata(datapath)
     udic = ng.bruker.guess_udic(dic, data)
@@ -30,7 +37,6 @@ def read_ascii(datapath, larmor_freq=0.0, skip_header=0, skip_footer=0, delimite
         hz_scale (1darray)
         data (ndarray)
     """
-    import numpy as np
 
     data_temp = np.genfromtxt(datapath, delimiter=delimiter, skip_header=skip_header, skip_footer=skip_footer)
 
@@ -55,8 +61,6 @@ def read_spe(datapath, larmor_freq=0.0):
         hz_scale (1darray)
         data (ndarray)
     """
-    import numpy as np
-
 
     def lines_that_contain(string, fp):
         return [line for line in fp if string in line]
@@ -95,7 +99,6 @@ def get_envelope_idx(s, dmin=1, dmax=1, split=False):
     Output :
         lmin,lmax : high/low envelope idx of input signal s
     """
-    import numpy as np
 
     # locals min      
     lmin = (np.diff(np.sign(np.diff(s))) > 0).nonzero()[0] + 1 
@@ -129,8 +132,6 @@ def save_xri(output_path, output_name, dataset_array):
         output_name (str): name of output
         dataset_array (np array): a numpy array containing freq., real, imag. columns
     """
-    import numpy as np
-    import os
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     
     f = open(output_path + output_name + '.dat', 'w')
@@ -149,8 +150,6 @@ def save_spe(output_path, output_name, dataset_array):
         output_name (str): name of output
         dataset_array (np array): a numpy array containing freq., real, imag. columns
     """
-    import numpy as np
-    import os
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     
     f = open(output_path + output_name + '.spe', 'w')
@@ -168,7 +167,6 @@ def save_spe(output_path, output_name, dataset_array):
 
 
 def find_nearest_index(array, value):
-    import numpy as np
 
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
@@ -177,7 +175,6 @@ def find_nearest_index(array, value):
 
 
 def find_nearest(array, value):
-    import numpy as np
 
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
@@ -199,8 +196,6 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, verbose=False):
         precision_multi (int, optional): Multiplier for the interpolation step. Enhances precision for .spe files.
         verbose (bool, optional): If True, activates debug output
     """
-    from scipy import interpolate
-    import numpy as np
 
     # Combine Data
     index = 0
@@ -300,8 +295,6 @@ def split_echotrain(datapath, dw, echolength, blankinglength, numecho):
         hz_scale
         data
     """  
-    import nmrglue as ng
-    import numpy as np
 
     dic, data = ng.bruker.read(datapath)
     udic = ng.bruker.guess_udic(dic, data)
@@ -345,7 +338,6 @@ def calc_mse(data_1, data_2):
         data_1 (1darray): First data array to be evaluated
         data_2 (1darray): Second data array to be evaluated
     """
-    import numpy as np
 
     data_rms = data_1 - data_2
     rms = np.mean(data_rms**2)
@@ -361,7 +353,6 @@ def calc_mae(data_1, data_2):
         data_1 (1darray): First data array to be evaluated
         data_2 (1darray): Second data array to be evaluated
     """
-    import numpy as np
 
     data_rms = data_1 - data_2
     rms = np.sqrt(np.mean(data_rms**2))
@@ -377,9 +368,89 @@ def calc_logcosh(data_1, data_2):
         data_1 (1darray): First data array to be evaluated
         data_2 (1darray): Second data array to be evaluated
     """
-    import numpy as np
 
     data_rms = data_1 - data_2
     rms = np.sum(np.log(np.cosh(data_rms)))/1000.0
 
     return(rms)
+
+
+def automatic_phasecorrection(datapath, bnds=((-360, 360), (0, 200000)), lb=True, lb_const=0.54, lb_n=2, lb_variant='hamming', SI=4096, Ns=100, remove_dig_filter=True, verb=False):
+
+
+    def data_rms(x, data, data_mc_beforeLB):
+        data_mc = data_mc_beforeLB
+        data_phased = ng.proc_base.ps(data, p0=x[0], p1=x[1])
+        data_phased = ng.proc_base.di(data_phased)
+        data_mc = ng.proc_base.di(data_mc)
+
+        rms = np.sum(np.sqrt(np.power((data_phased-data_mc), 2)))
+
+        return rms
+
+
+    def autophase(data, data_mc_beforeLB, bnds, Ns=Ns):
+        resbrute = brute(data_rms, ranges=bnds, args=(data, data_mc_beforeLB,), Ns=Ns, disp=False)
+        if(verb==True):
+            print('Brute-Force Optmization Results:')
+            print(resbrute)
+        res = minimize(data_rms, x0 = [resbrute[0], resbrute[1]], args=(data,data_mc_beforeLB,),method='COBYLA')
+        if(verb==True):
+            print('Constrained Optimization BY Linear Approximation (COBYLA) Results:')
+            print(res)
+
+        return res.x
+
+
+    dic, data = ng.bruker.read(datapath)    # Read Data
+    data_trim = np.trim_zeros(data, 'b')    # Trim zeros left/right of Echo, from old FID summation.
+    data_reverse = ng.proc_base.rev(data_trim)    # Reverse Data, for NMR orientation
+
+    # Remove Bruker digital filter. Not always needed.
+    if(remove_dig_filter==True):
+        data_remdigfilt = ng.bruker.remove_digital_filter(dic, data_reverse)
+    else:
+        data_remdigfilt = data_reverse
+
+    data_mc_beforeLB  = ng.proc_base.fft(ng.proc_base.zf_size(data_remdigfilt, SI))    # Fourier transform
+    data_mc_beforeLB = ng.proc_base.mc(data_mc_beforeLB)    # calculate magnitude data
+
+    # Echo Linebroadening
+    if(lb==True):
+        x_range = np.linspace(0, 1, len(data_remdigfilt))    # Calculate x values from 0 to 1
+        # Calculate y value depending on chosen window function
+        if(lb_variant=='hamming'):
+            y_range = lb_const+(1-lb_const)*(1-np.power(abs(np.cos(np.pi*x_range)), lb_n))
+        if(lb_variant=='shifted_wurst'):
+            y_range = 1-np.power(abs(np.cos(np.pi*x_range)), lb_n)+lb_const
+            y_range[y_range > 1.0] = 1.0
+        if(lb_variant=='gaussian'):
+            y_range = 1/np.exp(10*np.power((x_range-0.5), 2))
+        data_lb = np.multiply(y_range, data_remdigfilt)    # Apply linebroadening
+        data_fft = ng.proc_base.fft(ng.proc_base.zf_size(data_lb, SI))    # Fourier transform
+    else:
+        data_fft = ng.proc_base.fft(ng.proc_base.zf_size(data_remdigfilt, SI))    # Fourier transform
+
+    # Creating the ppm and Hz scale
+    udic = ng.bruker.guess_udic(dic, data_fft)
+    uc = ng.fileiobase.uc_from_udic(udic)
+    ppm_scale = uc.ppm_scale()
+    hz_scale = uc.hz_scale()
+
+    # Phasing
+    data_mc = ng.proc_base.mc(data_fft)      # magnitude mode
+    phase = autophase(data_fft, data_mc_beforeLB, bnds=bnds)      # automatically calculate phase
+    data_auto = ng.proc_base.ps(data_fft, p0=phase[0], p1=phase[1])      # add previously phase values
+
+    # Remove imaginary Parts
+    data_plot = ng.proc_base.di(data_auto)      # Discard imaginary parts of phased data
+    data_mc = ng.proc_base.di(data_mc)      # Discard imaginary parts of magnitude data
+
+    return(ppm_scale, hz_scale, data_mc, data_auto, phase)
+
+
+def signaltonoise(a, axis=0, ddof=0):
+    a = np.asanyarray(a)
+    sino = np.sqrt(np.power(a.mean(axis), 2))/a.std(axis=axis, ddof=ddof)
+
+    return sino

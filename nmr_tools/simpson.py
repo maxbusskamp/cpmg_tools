@@ -1,3 +1,8 @@
+import os
+import textwrap
+from subprocess import run
+
+
 def create_simpson(output_path, output_name, sw, np, spin_rate, proton_frequency, crystal_file='rep2000', gamma_angles=45, lb=1000, lb_ratio=1.0, cs_iso=0.0, csa=0.0, csa_eta=0.0, alpha=0.0, beta=0.0, gamma=0.0):  # Write simpson input files
     """This generates a custom Simpson inputfile, which can be used from the terminal with: 'simpson <output_name>'
 
@@ -13,8 +18,7 @@ def create_simpson(output_path, output_name, sw, np, spin_rate, proton_frequency
         lb (int, optional): Linebroadening in Hz. Defaults to 1000.
         lb_ratio (float, optional): Ratio between Gauss/Lorentz linebroadening. Defaults to 1.0.
     """
-    import os
-    import textwrap
+
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
     simpson_input = """\
@@ -83,8 +87,6 @@ def create_simpson(output_path, output_name, sw, np, spin_rate, proton_frequency
 
 
 def run_simpson(input_file, working_dir):
-    from subprocess import run
-    import os
 
     os.chdir(working_dir)
 
