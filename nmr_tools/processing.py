@@ -453,21 +453,7 @@ def automatic_phasecorrection(datapath, bnds=((-360, 360), (0, 200000)), lb=True
     data_mc_beforeLB  = ng.proc_base.fft(ng.proc_base.zf_size(data_remdigfilt, SI))    # Fourier transform
     data_mc_beforeLB = ng.proc_base.mc(data_mc_beforeLB)    # calculate magnitude data
 
-    # Echo Linebroadening
-    if(lb==True):
-        x_range = np.linspace(0, 1, len(data_remdigfilt))    # Calculate x values from 0 to 1
-        # Calculate y value depending on chosen window function
-        if(lb_variant=='hamming'):
-            y_range = lb_const+(1-lb_const)*(1-np.power(abs(np.cos(np.pi*x_range)), lb_n))
-        if(lb_variant=='shifted_wurst'):
-            y_range = 1-np.power(abs(np.cos(np.pi*x_range)), lb_n)+lb_const
-            y_range[y_range > 1.0] = 1.0
-        if(lb_variant=='gaussian'):
-            y_range = 1/np.exp(10*np.power((x_range-0.5), 2))
-        data_lb = np.multiply(y_range, data_remdigfilt)    # Apply linebroadening
-        data_fft = ng.proc_base.fft(ng.proc_base.zf_size(data_lb, SI))    # Fourier transform
-    else:
-        data_fft = ng.proc_base.fft(ng.proc_base.zf_size(data_remdigfilt, SI))    # Fourier transform
+    data_fft = ng.proc_base.fft(ng.proc_base.zf_size(data_remdigfilt, SI))    # Fourier transform
 
     # Creating the ppm and Hz scale
     udic = ng.bruker.guess_udic(dic, data_fft)
