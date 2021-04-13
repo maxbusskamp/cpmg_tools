@@ -1,10 +1,11 @@
 import numpy as np
-import nmrglue as ng
 from scipy import interpolate
 import os
 from scipy.optimize.optimize import brute
 from scipy.optimize import minimize
-
+from nmr_tools import bruker
+from nmr_tools import fileiobase
+from nmr_tools import proc_base
 
 def read_brukerproc(datapath, dict=False):
     """
@@ -22,9 +23,9 @@ def read_brukerproc(datapath, dict=False):
     """
 
 
-    dic, data = ng.bruker.read_pdata(datapath)
-    udic = ng.bruker.guess_udic(dic, data)
-    uc = ng.fileio.fileiobase.uc_from_udic(udic)
+    dic, data = bruker.read_pdata(datapath)
+    udic = bruker.guess_udic(dic, data)
+    uc = fileiobase.uc_from_udic(udic)
     ppm_scale = uc.ppm_scale()
     hz_scale = uc.hz_scale()
 
@@ -47,9 +48,9 @@ def read_brukerfid(datapath, dict=False):
     """
 
 
-    dic, data = ng.bruker.read(datapath)
-    udic = ng.bruker.guess_udic(dic, data)
-    uc = ng.fileio.fileiobase.uc_from_udic(udic)
+    dic, data = bruker.read(datapath)
+    udic = bruker.guess_udic(dic, data)
+    uc = fileiobase.uc_from_udic(udic)
     ppm_scale = uc.ppm_scale()
     hz_scale = uc.hz_scale()
 
@@ -334,9 +335,9 @@ def split_echotrain(datapath, dw, echolength, blankinglength, numecho, dict=Fals
         data
     """  
 
-    dic, data = ng.bruker.read(datapath)
-    udic = ng.bruker.guess_udic(dic, data)
-    uc = ng.fileiobase.uc_from_udic(udic)
+    dic, data = bruker.read(datapath)
+    udic = bruker.guess_udic(dic, data)
+    uc = fileiobase.uc_from_udic(udic)
 
     echopoints = int(echolength/dw/2)
     echotop = np.argmax(np.absolute(data))
@@ -416,9 +417,7 @@ def calc_logcosh(data_1, data_2):
 def automatic_phasecorrection(data, bnds=((-360, 360), (0, 200000)), SI=32768, Ns=100, verb=False, loss_func='logcosh'):
 
     def data_rms(x, data, data_mc):
-        data_phased = ng.proc_base.ps(data, p0=x[0], p1=x[1])
-        # data_phased = ng.proc_base.di(data_phased)
-        # data_mc = ng.proc_base.di(data_mc)
+        data_phased = proc_base.ps(data, p0=x[0], p1=x[1])
 
         if(loss_func=='logcosh'):
             rms = calc_logcosh(data_mc, data_phased)
@@ -443,14 +442,14 @@ def automatic_phasecorrection(data, bnds=((-360, 360), (0, 200000)), SI=32768, N
 
         return res.x
 
-    data_reverse = ng.proc_base.rev(data)    # Reverse Data, for NMR orientation
+    data_reverse = proc_base.rev(data)    # Reverse Data, for NMR orientation
 
-    data_fft = ng.proc_base.fft(ng.proc_base.zf_size(data_reverse, SI))    # Fourier transform
-    data_mc = ng.proc_base.mc(data_fft)      # magnitude mode
+    data_fft = proc_base.fft(proc_base.zf_size(data_reverse, SI))    # Fourier transform
+    data_mc = proc_base.mc(data_fft)      # magnitude mode
 
     # Phasing
     phase = autophase(data_fft, data_mc, bnds=bnds)      # automatically calculate phase
-    data_auto = ng.proc_base.ps(data_fft, p0=phase[0], p1=phase[1])      # add previously phase values
+    data_auto = proc_base.ps(data_fft, p0=phase[0], p1=phase[1])      # add previously phase values
 
     return(data_auto, phase)
 
@@ -491,13 +490,13 @@ def signaltonoise(a, axis=0, ddof=0):
 
 
 def remove_digfilter(data, dic):
-    data_remdigfilt = ng.bruker.remove_digital_filter(dic, data)
+    data_remdigfilt = bruker.remove_digital_filter(dic, data)
     return(data_remdigfilt)
 
 
 def get_scale(data, dic):
-    udic = ng.bruker.guess_udic(dic, data)
-    uc = ng.fileiobase.uc_from_udic(udic)
+    udic = bruker.guess_udic(dic, data)
+    uc = fileiobase.uc_from_udic(udic)
     ppm_scale = uc.ppm_scale()
     hz_scale = uc.hz_scale()
 

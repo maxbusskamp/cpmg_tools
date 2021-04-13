@@ -1,10 +1,11 @@
 #%%
 import matplotlib.pyplot as plt
-import nmrglue as ng
 import numpy as np
 import matplotlib.gridspec as gridspec
 from plot_module import plot_module
 from nmr_tools import processing
+from nmr_tools import proc_base
+
 
 plt.rcParams['figure.dpi'] = 200
 
@@ -13,10 +14,9 @@ ppm_scale, hz_scale, data = processing.split_echotrain(datapath='/home/m_buss13/
 
 
 # process the spectrum
-data_sum_proc = ng.proc_base.zf_size(data, 32768)    # zero fill to 32768 points
-data_sum_proc = ng.proc_base.fft(data_sum_proc)               # Fourier transform
+data_sum_proc = proc_base.zf_size(data, 32768)    # zero fill to 32768 points
+data_sum_proc = proc_base.fft(data_sum_proc)               # Fourier transform
 
-# x_values = uc.ppm_scale()
 ppm_scale = np.linspace(ppm_scale[-1], ppm_scale[0], len(data_sum_proc))
 
 
@@ -34,7 +34,6 @@ spec.update(wspace=0.0, hspace=0.0)
 f1_ax1 = fig.add_subplot(spec[0, 0])
 
 f1_ax1.plot(ppm_scale, abs(data_sum_proc), lw=.3, c='k', label='Abs. Coadd')
-# f1_ax1.plot(bruker_proc[0], bruker_proc[1], lw=.3, c='g', label='Bruker')
 f1_ax1.plot(bruker_proc_abs[0], bruker_proc_abs[1], lw=.3, c='g', label='Abs. Bruker')
 
 

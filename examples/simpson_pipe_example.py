@@ -32,9 +32,11 @@ for i in range(101):
 plt.figure()
 plt.plot(mse, c='k')
 plt.title('mse')
+plt.savefig('mse.png', )
 plt.figure()
 plt.plot(mae, c='k')
 plt.title('mae')
+
 plt.figure()
 plt.plot(logcosh, c='k')
 plt.title('logcosh')

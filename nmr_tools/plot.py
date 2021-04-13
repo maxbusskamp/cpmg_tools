@@ -4,12 +4,10 @@ from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.ticker import (MultipleLocator, FormatStrFormatter,
                                AutoMinorLocator)
 from plot_module import plot_module
-import os
 import re
 import glob
 from scipy.interpolate import griddata
 from matplotlib import cm
-import nmrglue as ng
 import math
 import tarfile
 
