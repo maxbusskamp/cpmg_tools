@@ -51,7 +51,6 @@ from __future__ import division
 
 import os
 import string
-import sys
 import itertools
 from functools import reduce
 
