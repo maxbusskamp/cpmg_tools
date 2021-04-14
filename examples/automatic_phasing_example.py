@@ -12,6 +12,8 @@ ppm_scale, hz_scale, data, dic = processing.read_brukerfid(datapath, dict=True)
 data, phase = processing.automatic_phasecorrection(data, bnds=((-360, 360), (0, 200000)), SI=32768, Ns=50, verb=False, loss_func='mse')
 print(phase)
 
+
+
 ppm_scale, hz_scale = processing.get_scale(data, dic)
 
 plt.figure()

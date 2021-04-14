@@ -3,9 +3,7 @@ from scipy import interpolate
 import os
 from scipy.optimize.optimize import brute
 from scipy.optimize import minimize
-from nmr_tools import bruker
-from nmr_tools import fileiobase
-from nmr_tools import proc_base
+from nmr_tools import bruker, fileiobase, proc_base
 
 def read_brukerproc(datapath, dict=False):
     """
@@ -238,9 +236,15 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, verbose=False):
     # Combine Data
     index = 0
     for datapath in datasets:
-        dataset = read_brukerproc(datapath)
-        dataset = np.array(dataset)
-        
+        if(isinstance(datapath, str)):
+            dataset = read_brukerproc(datapath)
+            dataset = np.array(dataset)
+        elif(isinstance(datapath, (np.ndarray, np.generic)) or isinstance(datapath, (tuple))):
+            dataset = datapath
+            dataset = np.array(dataset)
+        else:
+            print('Wrong input format. Use list of datapath strings, or list of ndarrays.')
+
         if(index == 0):
             dataset_combine = dataset
         else:
@@ -313,7 +317,6 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, verbose=False):
         print('.spe precision: ' + str(int(precision)) + ' Hz')
         print('SW raw: ' + str(int(abs(dataset_array[-1,0])+abs(dataset_array[0,0]))) + ' Hz')
         print('SW rounded: ' + str(int(np.round((abs(dataset_array[-1,0])+abs(dataset_array[0,0])), -3))) + ' Hz')
-        
 
     return(dataset_array)
 
@@ -415,7 +418,18 @@ def calc_logcosh(data_1, data_2):
 
 
 def automatic_phasecorrection(data, bnds=((-360, 360), (0, 200000)), SI=32768, Ns=100, verb=False, loss_func='logcosh'):
+    """
+    !!!WIP!!!
+    This automatically calculates the phase of the spectrum
 
+    Args:
+        data ([type]): [description]
+        bnds (tuple, optional): [description]. Defaults to ((-360, 360), (0, 200000)).
+        SI (int, optional): [description]. Defaults to 32768.
+        Ns (int, optional): [description]. Defaults to 100.
+        verb (bool, optional): [description]. Defaults to False.
+        loss_func (str, optional): [description]. Defaults to 'logcosh'.
+    """
     def data_rms(x, data, data_mc):
         data_phased = proc_base.ps(data, p0=x[0], p1=x[1])
 
@@ -483,21 +497,61 @@ def linebroadening(data, lb_variant, lb_const=0.54, lb_n=2):
 
 
 def signaltonoise(a, axis=0, ddof=0):
+    """
+    Calculates the signal-to-noise ratio from the mean and std of the whole spectrum. Not sure if correct or comparable.
+
+    Args:
+        a (ndarray): Processed dataset
+        axis (int, optional): Axis which to look at. Defaults to 0.
+        ddof (int, optional): Degree of freedom for std calculation. Defaults to 0.
+
+    Returns:
+        sino (float): Signal-to-noise
+    """
     a = np.asanyarray(a)
     sino = np.sqrt(np.power(a.mean(axis), 2))/a.std(axis=axis, ddof=ddof)
 
     return sino
 
 
-def remove_digfilter(data, dic):
-    data_remdigfilt = bruker.remove_digital_filter(dic, data)
-    return(data_remdigfilt)
-
-
 def get_scale(data, dic):
+    """
+    This generates the ppm and hz scales from a processed dataset. Can be used of the number of points was changed by e.g. zerofilling.
+
+    Args:
+        data (ndarray complex): Processed dataset
+        dic (dict): Bruker dictionary
+    """
     udic = bruker.guess_udic(dic, data)
     uc = fileiobase.uc_from_udic(udic)
     ppm_scale = uc.ppm_scale()
     hz_scale = uc.hz_scale()
 
     return(ppm_scale, hz_scale)
+
+
+def fft(data, dic, si=0, mc=True, phase=[0, 0], dict=False):
+    """
+    This takes the output of read_brukerfid (FID and dic) and applies fft and zerofilling. It can return magnitude or phased data.
+
+    Args:
+        data (ndarray complex): FID data
+        dic (dict): Bruker dictionary
+        si (int, optional): Number of points to zerofill. Defaults to 0.
+        mc (bool, optional): Set to False for phased data. Defaults to True.
+        dict (bool, optional): Set to True to return the dictionary. Defaults to False.
+    """
+    data = proc_base.zf_size(data, si)
+    data = proc_base.fft(data)
+    if(mc==True):
+        data = proc_base.mc(data)
+    else:
+        data = proc_base.ps(data, p0=phase[0], p1=phase[1])
+
+    udic = bruker.guess_udic(dic, data)
+    uc = fileiobase.uc_from_udic(udic)
+
+    ppm_scale = uc.ppm_scale()
+    hz_scale = uc.hz_scale()
+
+    return(ppm_scale, hz_scale, data, dic) if dict==True else (ppm_scale, hz_scale, data)
