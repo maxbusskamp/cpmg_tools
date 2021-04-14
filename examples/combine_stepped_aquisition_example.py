@@ -1,9 +1,7 @@
 #%%
 from nmr_tools import processing
 import matplotlib.pyplot as plt
-import nmrglue as ng
 import matplotlib.gridspec as gridspec
-import numpy as np
 
 datasets = ['/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9510131/pdata/1',
             '/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9510231/pdata/1',
@@ -32,7 +30,6 @@ spec.update(wspace=0.0, hspace=0.0)
 f1_ax1 = fig.add_subplot(spec[0, 0])
 
 f1_ax1.plot(dataset_array[:,0], dataset_array[:,1], lw=.3, c='k', label='Combined Spectrum')
-# f1_ax1.set_xlim(-800,300)
 f1_ax1.set_yticks([])
 f1_ax1.invert_xaxis()
 plt.show()

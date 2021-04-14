@@ -1,8 +1,5 @@
 #%%
 import matplotlib.pyplot as plt
-import nmrglue as ng
-from nmrglue import process
-import numpy as np
 from nmr_tools import processing
 
 plt.rcParams['figure.dpi'] = 200
