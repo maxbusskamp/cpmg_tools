@@ -474,7 +474,40 @@ def automatic_phasecorrection(data, bnds=((-360, 360), (0, 200000)), SI=32768, N
     return(data_auto, phase)
 
 
-def automatic_phasecorrection2(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, verb=False, loss_func='logcosh'):
+def data_rms(x, data, data_mc_beforeLB, loss_func):
+    data_mc = data_mc_beforeLB
+    data_phased = proc_base.ps2(data, p0=x[0], p1=x[1], p2=x[2])      # phase correction
+    # data_phased = proc_base.di(data_phased)
+    # data_mc = proc_base.di(data_mc)
+
+    if(loss_func=='logcosh'):
+        rms = calc_logcosh(data_mc, data_phased)
+    elif(loss_func=='mse'):
+        rms = calc_mse(data_mc, data_phased)
+    elif(loss_func=='mae'):
+        rms = calc_mae(data_mc, data_phased)
+    elif(loss_func=='int_sum'):
+        rms = 1.0/calc_int_sum(data_phased)
+    else:
+        print('Wrong loss function')
+
+    return rms
+
+
+def autophase(data, data_mc_beforeLB, bnds, Ns, loss_func, workers, verb=False):
+    resbrute = brute(data_rms, ranges=bnds, args=(data, data_mc_beforeLB, loss_func,), Ns=Ns, disp=False, workers=workers)
+    if(verb==True):
+        print('Brute-Force Optmization Results:')
+        print(resbrute)
+    res = minimize(data_rms, x0 = [resbrute[0], resbrute[1], resbrute[2]], args=(data, data_mc_beforeLB, loss_func,),method='COBYLA')
+    if(verb==True):
+        print('Constrained Optimization BY Linear Approximation (COBYLA) Results:')
+        print(res)
+
+    return res.x
+
+
+def automatic_phasecorrection2(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, verb=False, loss_func='logcosh', workers=4):
     """
     !!!WIP!!!
     This automatically calculates the phase of the spectrum
@@ -487,45 +520,13 @@ def automatic_phasecorrection2(data, bnds=((-360, 360), (0, 200000), (0, 200000)
         verb (bool, optional): [description]. Defaults to False.
         loss_func (str, optional): [description]. Defaults to 'logcosh'.
     """
-    def data_rms(x, data, data_mc_beforeLB):
-        data_mc = data_mc_beforeLB
-        data_phased = proc_base.ps2(data, p0=x[0], p1=x[1], p2=x[2])      # phase correction
-        # data_phased = proc_base.di(data_phased)
-        # data_mc = proc_base.di(data_mc)
-
-        if(loss_func=='logcosh'):
-            rms = calc_logcosh(data_mc, data_phased)
-        elif(loss_func=='mse'):
-            rms = calc_mse(data_mc, data_phased)
-        elif(loss_func=='mae'):
-            rms = calc_mae(data_mc, data_phased)
-        elif(loss_func=='int_sum'):
-            rms = 1.0/calc_int_sum(data_phased)
-        else:
-            print('Wrong loss function')
-
-        return rms
-
-
-    def autophase(data, data_mc_beforeLB, bnds, Ns=Ns):
-        resbrute = brute(data_rms, ranges=bnds, args=(data, data_mc_beforeLB,), Ns=Ns, disp=False)
-        if(verb==True):
-            print('Brute-Force Optmization Results:')
-            print(resbrute)
-        res = minimize(data_rms, x0 = [resbrute[0], resbrute[1], resbrute[2]], args=(data,data_mc_beforeLB,),method='COBYLA')
-        if(verb==True):
-            print('Constrained Optimization BY Linear Approximation (COBYLA) Results:')
-            print(res)
-
-        return res.x
-
     data_reverse = proc_base.rev(data)    # Reverse Data, for NMR orientation
 
     data_fft = proc_base.fft(data_reverse)    # Fourier transform
     data_mc = proc_base.mc(data_fft)      # magnitude mode
 
     # Phasing
-    phase = autophase(data_fft, data_mc, bnds=bnds)      # automatically calculate phase
+    phase = autophase(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, workers=workers, verb=verb)      # automatically calculate phase
     data_auto = proc_base.ps2(data_fft, p0=phase[0], p1=phase[1], p2=phase[2])      # add previously phase values
 
     return(data_auto, phase)
