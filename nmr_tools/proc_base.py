@@ -984,6 +984,7 @@ def ps(data, p0=0.0, p1=0.0, inv=False):
         apod = 1 / apod
     return apod * data
 
+
 def ps2(data, p0=0.0, p1=0.0, p2=0.0, inv=False):
     """
     Linear phase correction
@@ -996,6 +997,8 @@ def ps2(data, p0=0.0, p1=0.0, p2=0.0, inv=False):
         Zero order phase in degrees.
     p1 : float
         First order phase in degrees.
+    p2 : float
+        Second order phase in degrees.    
     inv : bool, optional
         True for inverse phase correction
 
@@ -1009,7 +1012,8 @@ def ps2(data, p0=0.0, p1=0.0, p2=0.0, inv=False):
     p1 = p1 * pi / 180.
     p2 = p2 * pi / 180.
     size = data.shape[-1]
-    apod = np.exp(1.0j * (p0 + (p1 * np.arange(size) / size) + (p2 * np.power(np.arange(size) / size, 2)))
+    apod = np.exp(1.0j * (p0 + (p1 * ((np.arange(size) / size)-0.5)) + (p2 * np.power((np.arange(size) / size)-0.5, 2)))
+    # apod = np.exp(1.0j * (p0 + (p1 * ((np.arange(size) / size))) + (p2 * np.power((np.arange(size) / size), 2)))
                  ).astype(data.dtype)
     
     if inv:
