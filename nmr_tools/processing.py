@@ -1,8 +1,9 @@
 import numpy as np
 from scipy import interpolate
 from scipy.integrate import simps
-import os
+import os, sys
 from scipy.optimize.optimize import brute
+from scipy.optimize import basinhopping
 from scipy.optimize import minimize
 from nmr_tools import bruker, fileiobase, proc_base
 import numpy.ma as ma
@@ -291,7 +292,7 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, verbose=False):
 
 
     # Restrict spectral width
-    if(set_sw is not 0):
+    if(set_sw!=0):
         index1 = find_nearest_index(dataset_array[:,0], -set_sw/2)
         index2 = find_nearest_index(dataset_array[:,0], set_sw/2)
         dataset_array = dataset_array[index1:index2,:]
@@ -419,66 +420,26 @@ def calc_logcosh(data_1, data_2):
     return(rms)
 
 
-def calc_int_sum(data):
-    return(simps(data.real[ma.masked_greater(data.real, np.std(data.real)).mask]))
+def calc_int_sum(data, data_mc, int_sum_cutoff):
+    index = np.where(data.real > int_sum_cutoff*np.std(data_mc.real))
+    index_sub = np.where(data.real < -int_sum_cutoff*np.std(data_mc.real))
+    # integral = simps(data.real[index])
+    integral = abs(simps(data.real[index])) - abs(simps(data.real[index_sub]))
+    # integral = abs(simps(data.real)) - abs(simps(data.real))
+    # integral = simps(data.real)
+    return(integral)
 
 
-def automatic_phasecorrection(data, bnds=((-360, 360), (0, 200000)), SI=32768, Ns=50, verb=False, loss_func='logcosh'):
-    """
-    !!!WIP!!!
-    This automatically calculates the phase of the spectrum
+def data_rms(x, data, data_mc, loss_func, int_sum_cutoff):
+    if(len(x)==2):
+        data_phased = proc_base.ps(data, p0=x[0], p1=x[1])      # phase correction
+    elif(len(x)==3):
+        data_phased = proc_base.ps2(data, p0=x[0], p1=x[1], p2=x[2])      # phase correction
+    else:
+        sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
 
-    Args:
-        data ([type]): [description]
-        bnds (tuple, optional): [description]. Defaults to ((-360, 360), (0, 200000)).
-        SI (int, optional): [description]. Defaults to 32768.
-        Ns (int, optional): [description]. Defaults to 100.
-        verb (bool, optional): [description]. Defaults to False.
-        loss_func (str, optional): [description]. Defaults to 'logcosh'.
-    """
-    def data_rms(x, data, data_mc):
-        data_phased = proc_base.ps(data, p0=x[0], p1=x[1])
-
-        if(loss_func=='logcosh'):
-            rms = calc_logcosh(data_mc, data_phased)
-        elif(loss_func=='mse'):
-            rms = calc_mse(data_mc, data_phased)
-        elif(loss_func=='mae'):
-            rms = calc_mae(data_mc, data_phased)
-        else:
-            print('Wrong loss function')
-
-        return rms
-
-    def autophase(data, data_mc, bnds, Ns=Ns):
-        resbrute = brute(data_rms, ranges=bnds, args=(data, data_mc,), Ns=Ns, disp=False)
-        if(verb==True):
-            print('Brute-Force Optmization Results:')
-            print(resbrute)
-        res = minimize(data_rms, x0 = [resbrute[0], resbrute[1]], args=(data,data_mc,),method='COBYLA')
-        if(verb==True):
-            print('Constrained Optimization BY Linear Approximation (COBYLA) Results:')
-            print(res)
-
-        return res.x
-
-    data_reverse = proc_base.rev(data)    # Reverse Data, for NMR orientation
-
-    data_fft = proc_base.fft(proc_base.zf_size(data_reverse, SI))    # Fourier transform
-    data_mc = proc_base.mc(data_fft)      # magnitude mode
-
-    # Phasing
-    phase = autophase(data_fft, data_mc, bnds=bnds)      # automatically calculate phase
-    data_auto = proc_base.ps(data_fft, p0=phase[0], p1=phase[1])      # add previously phase values
-
-    return(data_auto, phase)
-
-
-def data_rms(x, data, data_mc_beforeLB, loss_func):
-    data_mc = data_mc_beforeLB
-    data_phased = proc_base.ps2(data, p0=x[0], p1=x[1], p2=x[2])      # phase correction
-    # data_phased = proc_base.di(data_phased)
-    # data_mc = proc_base.di(data_mc)
+    data_phased = proc_base.di(data_phased)
+    data_mc = proc_base.di(data_mc)
 
     if(loss_func=='logcosh'):
         rms = calc_logcosh(data_mc, data_phased)
@@ -487,27 +448,35 @@ def data_rms(x, data, data_mc_beforeLB, loss_func):
     elif(loss_func=='mae'):
         rms = calc_mae(data_mc, data_phased)
     elif(loss_func=='int_sum'):
-        rms = 1.0/calc_int_sum(data_phased)
+        rms = -1.0*calc_int_sum(data_phased, data_mc, int_sum_cutoff)
     else:
         print('Wrong loss function')
 
     return rms
 
 
-def autophase(data, data_mc_beforeLB, bnds, Ns, loss_func, workers, verb=False):
-    resbrute = brute(data_rms, ranges=bnds, args=(data, data_mc_beforeLB, loss_func,), Ns=Ns, disp=False, workers=workers)
+def phase_minimizer(data, data_mc, bnds, Ns, loss_func, int_sum_cutoff, workers, verb, minimizer, tol, options, stepsize, T, disp, niter):
+    resbrute = brute(data_rms, ranges=bnds, args=(data, data_mc, loss_func, int_sum_cutoff,), Ns=Ns, disp=True, workers=workers, finish=None)
     if(verb==True):
         print('Brute-Force Optmization Results:')
         print(resbrute)
-    res = minimize(data_rms, x0 = [resbrute[0], resbrute[1], resbrute[2]], args=(data, data_mc_beforeLB, loss_func,),method='COBYLA')
+    if(minimizer=='Nelder-Mead'):
+        res = minimize(data_rms, x0 = resbrute, args=(data, data_mc, loss_func, int_sum_cutoff,), method='Nelder-Mead', tol=tol, options=options)
+    elif(minimizer=='COBYLA'):
+        res = minimize(data_rms, x0 = resbrute, args=(data, data_mc, loss_func, int_sum_cutoff,),method='COBYLA', tol=tol, options=options)
+    elif(minimizer=='basinhopping'):
+        minimizer_kwargs={"method":"Nelder-Mead", "args":(data, data_mc, loss_func, int_sum_cutoff,)}
+        res = basinhopping(data_rms, x0 = resbrute, minimizer_kwargs=minimizer_kwargs, stepsize=stepsize, T=T, disp=disp, niter=niter)
+    else:
+        sys.exit('Wrong minimizer! Choose from: Nelder-Mead, COBYLA, or basinhopping')
     if(verb==True):
-        print('Constrained Optimization BY Linear Approximation (COBYLA) Results:')
+        print(minimizer + ' Results:')
         print(res)
 
     return res.x
 
 
-def automatic_phasecorrection2(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, verb=False, loss_func='logcosh', workers=4):
+def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum_cutoff=1.0, verb=False, minimizer='basinhopping', tol=1e-14, options={'rhobeg':1000.0, 'maxiter':5000, 'maxfev':5000}, stepsize=1000, T=100, disp=True, niter=200, loss_func='logcosh', workers=4):
     """
     !!!WIP!!!
     This automatically calculates the phase of the spectrum
@@ -526,8 +495,16 @@ def automatic_phasecorrection2(data, bnds=((-360, 360), (0, 200000), (0, 200000)
     data_mc = proc_base.mc(data_fft)      # magnitude mode
 
     # Phasing
-    phase = autophase(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, workers=workers, verb=verb)      # automatically calculate phase
-    data_auto = proc_base.ps2(data_fft, p0=phase[0], p1=phase[1], p2=phase[2])      # add previously phase values
+    if(type(bnds[0])==int):
+        sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
+    if(len(bnds)==2):
+        phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
+        data_auto = proc_base.ps(data_fft, p0=phase[0], p1=phase[1])      # add previously phase values
+    elif(len(bnds)==3):
+        phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
+        data_auto = proc_base.ps2(data_fft, p0=phase[0], p1=phase[1], p2=phase[2])      # add previously phase values
+    else:
+        sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
 
     return(data_auto, phase)
 

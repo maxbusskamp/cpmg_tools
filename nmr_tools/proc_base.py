@@ -977,7 +977,7 @@ def ps(data, p0=0.0, p1=0.0, inv=False):
     p0 = p0 * pi / 180.  # convert to radians
     p1 = p1 * pi / 180.
     size = data.shape[-1]
-    apod = np.exp(1.0j * (p0 + (p1 * np.arange(size) / size))
+    apod = np.exp(1.0j * (p0 + (p1 * ((np.arange(size) / size)-0.5)))
                  ).astype(data.dtype)
     
     if inv:
