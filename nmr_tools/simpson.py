@@ -3,7 +3,7 @@ import textwrap
 from subprocess import run
 
 
-def create_simpson(output_path, output_name, sw, np, spin_rate, proton_frequency, crystal_file='rep2000', gamma_angles=45, lb=1000, lb_ratio=1.0, cs_iso=0.0, csa=0.0, csa_eta=0.0, alpha=0.0, beta=0.0, gamma=0.0):  # Write simpson input files
+def create_simpson(output_path, output_name, nuclei, sw, np, spin_rate, proton_frequency, crystal_file='rep2000', gamma_angles=45, lb=1000, lb_ratio=1.0, cs_iso=0.0, csa=0.0, csa_eta=0.0, alpha=0.0, beta=0.0, gamma=0.0):  # Write simpson input files
     """This generates a custom Simpson inputfile, which can be used from the terminal with: 'simpson <output_name>'
 
     Args:
@@ -23,8 +23,8 @@ def create_simpson(output_path, output_name, sw, np, spin_rate, proton_frequency
 
     simpson_input = """\
     spinsys ⁍
-        channels 1H
-        nuclei 1H
+        channels {nuclei}
+        nuclei {nuclei}
         shift 1 {cs_iso}p {csa}p {csa_eta} {alpha} {beta} {gamma}
     ⁌
 
@@ -57,14 +57,12 @@ def create_simpson(output_path, output_name, sw, np, spin_rate, proton_frequency
         set f [fsimpson]
 
         faddlb $f {lb} {lb_ratio}
-        fzerofill $f $par(si)
-        fft $f
 
-        fsave $f {output_name}.spe
         fsave $f {output_name}.xy -xreim
     ⁌
     """
     simpson_variables = {
+        "nuclei":nuclei,
         "cs_iso":cs_iso,
         "csa":csa,
         "csa_eta":csa_eta,

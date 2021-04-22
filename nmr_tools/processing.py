@@ -87,6 +87,30 @@ def read_ascii(datapath, larmor_freq=0.0, skip_header=0, skip_footer=0, delimite
     return (hz_scale, data) if larmor_freq==0.0 else (ppm_scale, hz_scale, data)
 
 
+def read_ascii_fid(datapath, skip_header=0, skip_footer=0, delimiter=' '):
+    """
+    This reads in an ASCII FID and returns timescale and data
+
+    Args:
+        datapath ([type]): Path to datafile
+        larmor_freq (float, optional): larmor frequency of observed nuclei. Defaults to 0.0.
+        skip_header (int, optional): Skip header lines. Defaults to 0.
+        skip_footer (int, optional): Skip footer lines. Defaults to 0.
+        delimiter (str, optional): Delimiter. Defaults to ' '.
+
+    Returns:
+        timescale (1darray)
+        data (ndarray)
+    """
+
+    data_temp = np.genfromtxt(datapath, delimiter=delimiter, skip_header=skip_header, skip_footer=skip_footer)
+
+    data = data_temp[:, 1]+data_temp[:, 2]*1.0j
+    timescale = data_temp[:, 0]
+
+    return (timescale, data)
+
+
 def read_spe(datapath, larmor_freq=0.0):
     """
     This reads in an ASCII dataset. If provided with the larmor frequency of the observed nuclei, the ppm scale will be calculated
@@ -527,11 +551,15 @@ def linebroadening(data, lb_variant, lb_const=0.54, lb_n=2):
     # Calculate y value depending on chosen window function
     if(lb_variant=='hamming'):
         y_range = lb_const+(1-lb_const)*(1-np.power(abs(np.cos(np.pi*x_range)), lb_n))
-    if(lb_variant=='shifted_wurst'):
+    elif(lb_variant=='shifted_wurst'):
         y_range = 1-np.power(abs(np.cos(np.pi*x_range)), lb_n)+lb_const
         y_range[y_range > 1.0] = 1.0
-    if(lb_variant=='gaussian'):
+    elif(lb_variant=='gaussian'):
         y_range = 1/np.exp(10*np.power((x_range-0.5), 2))
+    elif(lb_variant=='gaussian_normal'):
+        y_range = 1/np.exp(10*np.power((x_range), 2))
+    else:
+        sys.exit('Wrong window function! Choose from: hamming, shifted_wurst, gaussian, gaussian_normal')
     data_lb = np.multiply(y_range, data)    # Apply linebroadening
 
     return(data_lb, y_range)
@@ -596,3 +624,25 @@ def fft(data, dic, si=0, mc=True, phase=[0, 0], dict=False):
     hz_scale = uc.hz_scale()
 
     return(ppm_scale, hz_scale, data, dic) if dict==True else (ppm_scale, hz_scale, data)
+
+
+def sfft(data, timescale, si=0, larmor_freq=0.0):
+    """
+    This takes the output of read_brukerfid (FID and dic) and applies fft and zerofilling. It can return magnitude or phased data.
+
+    Args:
+        data (ndarray complex): FID data
+        dic (dict): Bruker dictionary
+        si (int, optional): Number of points to zerofill. Defaults to 0.
+        mc (bool, optional): Set to False for phased data. Defaults to True.
+        dict (bool, optional): Set to True to return the dictionary. Defaults to False.
+    """
+    data = proc_base.zf_size(data, si)
+    data = np.fft.fftshift(np.fft.fft(data))
+
+    hz_scale = np.fft.fftshift(np.fft.fftfreq(len(data), d=timescale[1]-timescale[0]))
+
+    if(larmor_freq!=0.0):
+            ppm_scale = hz_scale/larmor_freq
+
+    return(ppm_scale, hz_scale, data)
