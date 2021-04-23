@@ -628,7 +628,7 @@ def fft(data, dic, si=0, mc=True, phase=[0, 0], dict=False):
 
 def sfft(data, timescale, si=0, larmor_freq=0.0):
     """
-    This takes the output of read_brukerfid (FID and dic) and applies fft and zerofilling. It can return magnitude or phased data.
+    This takes the output of read_ascii_fid (FID and dic) and applies fft and zerofilling. It can return magnitude or phased data.
 
     Args:
         data (ndarray complex): FID data
