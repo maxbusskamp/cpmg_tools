@@ -71,7 +71,7 @@ simpson.run_simpson(output_name, output_path)
 timescale2, data_org2 = processing.read_ascii_fid(output_path+ascii_file)
 
 # Summation of both species, regarding their respective scaling factor
-data_sum = data_org + data_org2*1.0
+data_sum = data_org + data_org2*0.5
 
 # Fourier transform summation FID
 ppm_scale, hz_scale , data_fft = processing.sfft(data_sum, timescale, si=8192*2, larmor_freq=104.609)

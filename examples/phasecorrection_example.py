@@ -9,36 +9,37 @@ plt.rcParams['figure.dpi'] = 200
 
 start_time = time.time()
 
-# PtMix Example:
+# # PtMix Example:
 datapath = '/home/m_buss13/ownCloud/nmr_data/development/195Pt_Pt-Mix_WCPMG/1/pdata/1'
 datapath_mc = '/home/m_buss13/ownCloud/nmr_data/development/195Pt_Pt-Mix_WCPMG/1/pdata/11'
-# bnds=((3900, 4100), (-55000, -54000), (-15000, -14000))
+# # bnds=((3900, 4100), (-55000, -54000), (-15000, -14000))
 
 # Reiset Example NMR300 (Jonas):
 # datapath = '/home/m_buss13/ownCloud/nmr_data/development/195Pt_[Pt(NH3)4]Cl2_WCPMG_14.06.16/7/pdata/1'
 # datapath_mc = '/home/m_buss13/ownCloud/nmr_data/development/195Pt_[Pt(NH3)4]Cl2_WCPMG_14.06.16/7/pdata/11'
-# bnds=((-2200, -2300), (-62000, -61000), (-1000, -9000))
+# bnds=((0, 360), (-65000, -55000), (-15000, -5000))
 
-# Reiset Example Neo500:
+# # Reiset Example Neo500:
 # datapath = '/home/m_buss13/ownCloud/nmr_data/development/195Pt_Reiset_WCPMG/1/pdata/1'
 # datapath_mc = '/home/m_buss13/ownCloud/nmr_data/development/195Pt_Reiset_WCPMG/1/pdata/11'
+# # bnds=((0, 360), (-100000, -50000), (-10000, 10000))
 
-# PbZrO3 Example Neo500:
+# # PbZrO3 Example Neo500:
 # datapath = '/home/m_buss13/ownCloud/nmr_data/development/207Pb_wcpmg_mas/1/pdata/1'
 # datapath_mc = '/home/m_buss13/ownCloud/nmr_data/development/207Pb_wcpmg_mas/1/pdata/11'
-# bnds=((0, 1000), (-270000, -260000))
+# # bnds=((0, 1000), (-270000, -260000))
 
 ppm_scale_mc, hz_scale_mc, data_mc = processing.read_brukerproc(datapath_mc)
 ppm_scale, hz_scale, data, dic = processing.read_brukerfid(datapath, dict=True)
 
 data, phase = processing.autophase(data, bnds=((3900, 4100), (-55000, -54000), (-15000, -14000)),
                                    Ns=32, verb=True, loss_func='int_sum', workers=4, int_sum_cutoff=0.5,
-                                   minimizer='Nelder-Mead', T=1000, niter=200, disp=False, stepsize=1000,
-                                   tol=1e-25, options={'rhobeg':1000.0, 'maxiter':5000, 'maxfev':5000})
+                                   minimizer='Nelder-Mead', T=1000, niter=100, disp=False, stepsize=1000,
+                                   tol=1e-25, options={'rhobeg':1000.0, 'maxiter':1000, 'maxfev':1000})
 
-# ppm_scale, hz_scale, data, dic = processing.read_brukerfid(datapath, dict=True)
-# data = proc_base.ps(proc_base.fft(proc_base.rev(proc_base.zf(data, pad=4096*4))), p0=phase[0], p1=phase[1])    # Fourier transform
-# ppm_scale, hz_scale = processing.get_scale(data, dic)
+ppm_scale, hz_scale, data, dic = processing.read_brukerfid(datapath, dict=True)
+data = proc_base.ps2(proc_base.fft(proc_base.rev(proc_base.zf(data, pad=4096*32))), p0=phase[0], p1=phase[1], p2=phase[2])    # Fourier transform
+ppm_scale, hz_scale = processing.get_scale(data, dic)
 
 plt.figure()
 plt.plot(ppm_scale_mc, data_mc/max(data_mc), c='k', lw=1.0, label='Magnitude')
@@ -50,10 +51,12 @@ else:
     ('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
 
 # plt.xlim(1000, -1000)
-plt.xlim(4000, -6000)
 # plt.xlim(1000, -5500)
-# plt.xlim(-4000, -5000)
+plt.xlim(3000, -5500)
+# plt.xlim(-1000, -1100)
+# plt.xlim(-1500, 1500)
 plt.legend()
+plt.yticks([])
 plt.savefig('automatic_phasecorrection_example.png', dpi=300)
 plt.show()
 plt.close()
