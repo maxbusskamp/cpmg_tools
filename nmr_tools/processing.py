@@ -7,6 +7,7 @@ from scipy.optimize import basinhopping
 from scipy.optimize import minimize
 from nmr_tools import bruker, fileiobase, proc_base
 import numpy.ma as ma
+from scipy import stats
 
 def read_brukerproc(datapath, dict=False):
     """
@@ -249,7 +250,7 @@ def shift_bit_length(x):
     return 1<<(x-1).bit_length()
 
 
-def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, verbose=False):
+def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', sum_tol=1.0, verbose=False, bins=1000):
     """
     This combines multiple Bruker Datasets into one spectrum, using a calculation of the envelope to determine the highest x-values, if multiple exist.
 
@@ -259,61 +260,141 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, verbose=False):
         precision_multi (int, optional): Multiplier for the interpolation step. Enhances precision for .spe files.
         verbose (bool, optional): If True, activates debug output
     """
+    if(mode=='skyline'):
+        # Combine Data
+        index = 0
+        for datapath in datasets:
+            if(isinstance(datapath, str)):
+                dataset = read_brukerproc(datapath)
+                dataset = np.array(dataset)
+            elif(isinstance(datapath, (np.ndarray, np.generic)) or isinstance(datapath, (tuple))):
+                dataset = datapath
+                dataset = np.array(dataset)
+            else:
+                print('Wrong input format. Use list of datapath strings, or list of ndarrays.')
 
-    # Combine Data
-    index = 0
-    for datapath in datasets:
-        if(isinstance(datapath, str)):
-            dataset = read_brukerproc(datapath)
-            dataset = np.array(dataset)
-        elif(isinstance(datapath, (np.ndarray, np.generic)) or isinstance(datapath, (tuple))):
-            dataset = datapath
-            dataset = np.array(dataset)
-        else:
-            print('Wrong input format. Use list of datapath strings, or list of ndarrays.')
+            if(index == 0):
+                dataset_combine = dataset
+            else:
+                dataset_combine = np.hstack((dataset_combine, dataset))
+            index = index + 1
 
-        if(index == 0):
-            dataset_combine = dataset
-        else:
-            dataset_combine = np.hstack((dataset_combine, dataset))
-        index = index + 1
+        # Sort Data
+        dataset_combine = dataset_combine[:,dataset_combine[1].argsort()]
+        # Generate Envelope
+        high_idx, low_idx = get_envelope_idx(dataset_combine[2], dmin=4, dmax=4)
+        dataset_array_masked = dataset_combine[2][low_idx]
+        dataset_x_masked = dataset_combine[1][low_idx]
 
-    # Sort Data
-    dataset_combine = dataset_combine[:,dataset_combine[1].argsort()]
-    # Generate Envelope
-    high_idx, low_idx = get_envelope_idx(dataset_combine[2], dmin=4, dmax=4)
-    dataset_array_masked = dataset_combine[2][low_idx]
-    dataset_x_masked = dataset_combine[1][low_idx]
+        # Generate XRI Dataset
+        dataset_new = []
+        index = 0
+        for elem in dataset_x_masked:
+            elem = np.append(elem, dataset_array_masked[index])
+            elem = np.append(elem, 0)
+            dataset_new.append(elem)
+            index = index +1
+        dataset_array = np.array(dataset_new)
 
-    # Generate XRI Dataset
-    dataset_new = []
-    index = 0
-    for elem in dataset_x_masked:
-        elem = np.append(elem, dataset_array_masked[index])
-        elem = np.append(elem, 0)
-        dataset_new.append(elem)
-        index = index +1
-    dataset_array = np.array(dataset_new)
-
-    # Interpolate Values for equidistant .spe generation
-    interpolation_points = shift_bit_length(int(len(dataset_array)))*precision_multi
-    f = interpolate.interp1d(dataset_array[:,0], dataset_array[:,1], fill_value='extrapolate')
-    xnew = np.linspace(dataset_array[0,0], dataset_array[-1,0], interpolation_points)
-    dataset_interpol = f(xnew)
-    if(verbose==True):
-        print('interpolation_points: ' + str(interpolation_points))
+        # Interpolate Values for equidistant .spe generation
+        interpolation_points = shift_bit_length(int(len(dataset_array)))*precision_multi
+        f = interpolate.interp1d(dataset_array[:,0], dataset_array[:,1], fill_value='extrapolate')
+        xnew = np.linspace(dataset_array[0,0], dataset_array[-1,0], interpolation_points)
+        dataset_interpol = f(xnew)
+        if(verbose==True):
+            print('interpolation_points: ' + str(interpolation_points))
 
 
-    # Generate XRI Dataset
-    dataset_new = []
-    index = 0
-    for elem in xnew:
-        elem = np.append(elem, dataset_interpol[index])
-        elem = np.append(elem, 0)
-        dataset_new.append(elem)
-        index = index +1
-    dataset_array = np.array(dataset_new)
+        # Generate XRI Dataset
+        dataset_new = []
+        index = 0
+        for elem in xnew:
+            elem = np.append(elem, dataset_interpol[index])
+            elem = np.append(elem, 0)
+            dataset_new.append(elem)
+            index = index +1
+        dataset_array = np.array(dataset_new)
+    elif(mode=='binning_doNOTuse'):
+        # Combine Data
+        index = 0
+        for datapath in datasets:
+            if(isinstance(datapath, str)):
+                dataset = read_brukerproc(datapath)
+                dataset = np.array(dataset)
+            elif(isinstance(datapath, (np.ndarray, np.generic)) or isinstance(datapath, (tuple))):
+                dataset = datapath
+                dataset = np.array(dataset)
+            else:
+                print('Wrong input format. Use list of datapath strings, or list of ndarrays.')
 
+            if(index == 0):
+                dataset_combine = dataset
+            else:
+                dataset_combine = np.hstack((dataset_combine, dataset))
+            index = index + 1
+
+        # Sort Data
+        dataset_combine = dataset_combine[:,dataset_combine[1].argsort()]
+
+        binned_data = stats.binned_statistic(dataset_combine[1,:], dataset_combine[2,:], 'sum', bins=bins)
+        # binned_data2 = stats.binned_statistic(dataset_array[1,:], dataset_array[2,:], 'sum', bins=bins)
+
+        ppm_binned = np.linspace(dataset_combine[0,:].min(), dataset_combine[0,:].max(), bins)
+
+        hz_binned_mean = np.zeros(len(binned_data[1])-1) 
+        ppm_binned_mean = np.zeros(len(binned_data[1])-1) 
+        for i in range(len(binned_data[1])):
+            if i < len(binned_data[1])-1:
+                hz_binned_mean[i] = (binned_data[1][i]+binned_data[1][i+1])/2.0
+                ppm_binned_mean[i] = (ppm_binned[i]+ppm_binned[i+1])/2.0
+    elif(mode=='sum'):
+        # Combine Data
+        index = 0
+        datasets_temp = []
+        for datapath in datasets:
+            if(isinstance(datapath, str)):
+                dataset = read_brukerproc(datapath)
+                dataset = np.array(dataset)
+            elif(isinstance(datapath, (np.ndarray, np.generic)) or isinstance(datapath, (tuple))):
+                dataset = datapath
+                dataset = np.array(dataset)
+            else:
+                print('Wrong input format. Use list of datapath strings, or list of ndarrays.')
+            datasets_temp.append(dataset)
+
+        index = 0
+        interpolator = []
+        for datasets in datasets_temp:
+            if(index == 0):
+                dataset_scale_hz = datasets[1,:]
+                dataset_scale_ppm = datasets[0,:]
+            else:
+                dataset_scale_hz = np.hstack((dataset_scale_hz, datasets[1,:]))
+                dataset_scale_ppm = np.hstack((dataset_scale_ppm, datasets[0,:]))
+            index = index + 1
+
+            # Sort Data
+            dataset_scale_hz = np.sort(dataset_scale_hz)
+            dataset_scale_ppm = np.sort(dataset_scale_ppm)
+
+        datasets_interpolated = []
+        index = 0
+        for datasets in datasets_temp:
+            f = interpolate.interp1d(datasets[1,:], datasets[2,:], fill_value=0.0, bounds_error=False)
+            datasets_interpolated.append(f(dataset_scale_hz))
+            index+=1
+        sumdata = [sum(elem) for elem in zip(*datasets_interpolated)]
+
+        dataset_new = []
+        index = 0
+        for elem in dataset_scale_hz:
+            elem = np.append(elem, sumdata[index])
+            elem = np.append(elem, 0)
+            dataset_new.append(elem)
+            index = index +1
+        dataset_array = np.array(dataset_new)
+    else:
+        sys.exit('Wrong mode! Please choose between skyline or sum')
 
     # Restrict spectral width
     if(set_sw!=0):
