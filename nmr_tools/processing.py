@@ -1,9 +1,13 @@
 import numpy as np
 from scipy import interpolate
-import os
+from scipy.integrate import simps
+import os, sys
 from scipy.optimize.optimize import brute
+from scipy.optimize import basinhopping
 from scipy.optimize import minimize
 from nmr_tools import bruker, fileiobase, proc_base
+import numpy.ma as ma
+from scipy import stats
 
 def read_brukerproc(datapath, dict=False):
     """
@@ -82,6 +86,30 @@ def read_ascii(datapath, larmor_freq=0.0, skip_header=0, skip_footer=0, delimite
         ppm_scale = hz_scale/larmor_freq
 
     return (hz_scale, data) if larmor_freq==0.0 else (ppm_scale, hz_scale, data)
+
+
+def read_ascii_fid(datapath, skip_header=0, skip_footer=0, delimiter=' '):
+    """
+    This reads in an ASCII FID and returns timescale and data
+
+    Args:
+        datapath ([type]): Path to datafile
+        larmor_freq (float, optional): larmor frequency of observed nuclei. Defaults to 0.0.
+        skip_header (int, optional): Skip header lines. Defaults to 0.
+        skip_footer (int, optional): Skip footer lines. Defaults to 0.
+        delimiter (str, optional): Delimiter. Defaults to ' '.
+
+    Returns:
+        timescale (1darray)
+        data (ndarray)
+    """
+
+    data_temp = np.genfromtxt(datapath, delimiter=delimiter, skip_header=skip_header, skip_footer=skip_footer)
+
+    data = data_temp[:, 1]+data_temp[:, 2]*1.0j
+    timescale = data_temp[:, 0]
+
+    return (timescale, data)
 
 
 def read_spe(datapath, larmor_freq=0.0):
@@ -222,7 +250,7 @@ def shift_bit_length(x):
     return 1<<(x-1).bit_length()
 
 
-def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, verbose=False):
+def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', sum_tol=1.0, verbose=False, bins=1000):
     """
     This combines multiple Bruker Datasets into one spectrum, using a calculation of the envelope to determine the highest x-values, if multiple exist.
 
@@ -232,64 +260,144 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, verbose=False):
         precision_multi (int, optional): Multiplier for the interpolation step. Enhances precision for .spe files.
         verbose (bool, optional): If True, activates debug output
     """
+    if(mode=='skyline'):
+        # Combine Data
+        index = 0
+        for datapath in datasets:
+            if(isinstance(datapath, str)):
+                dataset = read_brukerproc(datapath)
+                dataset = np.array(dataset)
+            elif(isinstance(datapath, (np.ndarray, np.generic)) or isinstance(datapath, (tuple))):
+                dataset = datapath
+                dataset = np.array(dataset)
+            else:
+                print('Wrong input format. Use list of datapath strings, or list of ndarrays.')
 
-    # Combine Data
-    index = 0
-    for datapath in datasets:
-        if(isinstance(datapath, str)):
-            dataset = read_brukerproc(datapath)
-            dataset = np.array(dataset)
-        elif(isinstance(datapath, (np.ndarray, np.generic)) or isinstance(datapath, (tuple))):
-            dataset = datapath
-            dataset = np.array(dataset)
-        else:
-            print('Wrong input format. Use list of datapath strings, or list of ndarrays.')
+            if(index == 0):
+                dataset_combine = dataset
+            else:
+                dataset_combine = np.hstack((dataset_combine, dataset))
+            index = index + 1
 
-        if(index == 0):
-            dataset_combine = dataset
-        else:
-            dataset_combine = np.hstack((dataset_combine, dataset))
-        index = index + 1
+        # Sort Data
+        dataset_combine = dataset_combine[:,dataset_combine[1].argsort()]
+        # Generate Envelope
+        high_idx, low_idx = get_envelope_idx(dataset_combine[2], dmin=4, dmax=4)
+        dataset_array_masked = dataset_combine[2][low_idx]
+        dataset_x_masked = dataset_combine[1][low_idx]
 
-    # Sort Data
-    dataset_combine = dataset_combine[:,dataset_combine[1].argsort()]
-    # Generate Envelope
-    high_idx, low_idx = get_envelope_idx(dataset_combine[2], dmin=4, dmax=4)
-    dataset_array_masked = dataset_combine[2][low_idx]
-    dataset_x_masked = dataset_combine[1][low_idx]
+        # Generate XRI Dataset
+        dataset_new = []
+        index = 0
+        for elem in dataset_x_masked:
+            elem = np.append(elem, dataset_array_masked[index])
+            elem = np.append(elem, 0)
+            dataset_new.append(elem)
+            index = index +1
+        dataset_array = np.array(dataset_new)
 
-    # Generate XRI Dataset
-    dataset_new = []
-    index = 0
-    for elem in dataset_x_masked:
-        elem = np.append(elem, dataset_array_masked[index])
-        elem = np.append(elem, 0)
-        dataset_new.append(elem)
-        index = index +1
-    dataset_array = np.array(dataset_new)
-
-    # Interpolate Values for equidistant .spe generation
-    interpolation_points = shift_bit_length(int(len(dataset_array)))*precision_multi
-    f = interpolate.interp1d(dataset_array[:,0], dataset_array[:,1], fill_value='extrapolate')
-    xnew = np.linspace(dataset_array[0,0], dataset_array[-1,0], interpolation_points)
-    dataset_interpol = f(xnew)
-    if(verbose==True):
-        print('interpolation_points: ' + str(interpolation_points))
+        # Interpolate Values for equidistant .spe generation
+        interpolation_points = shift_bit_length(int(len(dataset_array)))*precision_multi
+        f = interpolate.interp1d(dataset_array[:,0], dataset_array[:,1], fill_value='extrapolate')
+        xnew = np.linspace(dataset_array[0,0], dataset_array[-1,0], interpolation_points)
+        dataset_interpol = f(xnew)
+        if(verbose==True):
+            print('interpolation_points: ' + str(interpolation_points))
 
 
-    # Generate XRI Dataset
-    dataset_new = []
-    index = 0
-    for elem in xnew:
-        elem = np.append(elem, dataset_interpol[index])
-        elem = np.append(elem, 0)
-        dataset_new.append(elem)
-        index = index +1
-    dataset_array = np.array(dataset_new)
+        # Generate XRI Dataset
+        dataset_new = []
+        index = 0
+        for elem in xnew:
+            elem = np.append(elem, dataset_interpol[index])
+            elem = np.append(elem, 0)
+            dataset_new.append(elem)
+            index = index +1
+        dataset_array = np.array(dataset_new)
+    elif(mode=='binning_doNOTuse'):
+        # Combine Data
+        index = 0
+        for datapath in datasets:
+            if(isinstance(datapath, str)):
+                dataset = read_brukerproc(datapath)
+                dataset = np.array(dataset)
+            elif(isinstance(datapath, (np.ndarray, np.generic)) or isinstance(datapath, (tuple))):
+                dataset = datapath
+                dataset = np.array(dataset)
+            else:
+                print('Wrong input format. Use list of datapath strings, or list of ndarrays.')
 
+            if(index == 0):
+                dataset_combine = dataset
+            else:
+                dataset_combine = np.hstack((dataset_combine, dataset))
+            index = index + 1
+
+        # Sort Data
+        dataset_combine = dataset_combine[:,dataset_combine[1].argsort()]
+
+        binned_data = stats.binned_statistic(dataset_combine[1,:], dataset_combine[2,:], 'sum', bins=bins)
+        # binned_data2 = stats.binned_statistic(dataset_array[1,:], dataset_array[2,:], 'sum', bins=bins)
+
+        ppm_binned = np.linspace(dataset_combine[0,:].min(), dataset_combine[0,:].max(), bins)
+
+        hz_binned_mean = np.zeros(len(binned_data[1])-1) 
+        ppm_binned_mean = np.zeros(len(binned_data[1])-1) 
+        for i in range(len(binned_data[1])):
+            if i < len(binned_data[1])-1:
+                hz_binned_mean[i] = (binned_data[1][i]+binned_data[1][i+1])/2.0
+                ppm_binned_mean[i] = (ppm_binned[i]+ppm_binned[i+1])/2.0
+    elif(mode=='sum'):
+        # Combine Data
+        index = 0
+        datasets_temp = []
+        for datapath in datasets:
+            if(isinstance(datapath, str)):
+                dataset = read_brukerproc(datapath)
+                dataset = np.array(dataset)
+            elif(isinstance(datapath, (np.ndarray, np.generic)) or isinstance(datapath, (tuple))):
+                dataset = datapath
+                dataset = np.array(dataset)
+            else:
+                print('Wrong input format. Use list of datapath strings, or list of ndarrays.')
+            datasets_temp.append(dataset)
+
+        index = 0
+        interpolator = []
+        for datasets in datasets_temp:
+            if(index == 0):
+                dataset_scale_hz = datasets[1,:]
+                dataset_scale_ppm = datasets[0,:]
+            else:
+                dataset_scale_hz = np.hstack((dataset_scale_hz, datasets[1,:]))
+                dataset_scale_ppm = np.hstack((dataset_scale_ppm, datasets[0,:]))
+            index = index + 1
+
+            # Sort Data
+            dataset_scale_hz = np.sort(dataset_scale_hz)
+            dataset_scale_ppm = np.sort(dataset_scale_ppm)
+
+        datasets_interpolated = []
+        index = 0
+        for datasets in datasets_temp:
+            f = interpolate.interp1d(datasets[1,:], datasets[2,:], fill_value=0.0, bounds_error=False)
+            datasets_interpolated.append(f(dataset_scale_hz))
+            index+=1
+        sumdata = [sum(elem) for elem in zip(*datasets_interpolated)]
+
+        dataset_new = []
+        index = 0
+        for elem in dataset_scale_hz:
+            elem = np.append(elem, sumdata[index])
+            elem = np.append(elem, 0)
+            dataset_new.append(elem)
+            index = index +1
+        dataset_array = np.array(dataset_new)
+    else:
+        sys.exit('Wrong mode! Please choose between skyline or sum')
 
     # Restrict spectral width
-    if(set_sw is not 0):
+    if(set_sw!=0):
         index1 = find_nearest_index(dataset_array[:,0], -set_sw/2)
         index2 = find_nearest_index(dataset_array[:,0], set_sw/2)
         dataset_array = dataset_array[index1:index2,:]
@@ -417,7 +525,63 @@ def calc_logcosh(data_1, data_2):
     return(rms)
 
 
-def automatic_phasecorrection(data, bnds=((-360, 360), (0, 200000)), SI=32768, Ns=100, verb=False, loss_func='logcosh'):
+def calc_int_sum(data, data_mc, int_sum_cutoff):
+    index = np.where(data.real > int_sum_cutoff*np.std(data_mc.real))
+    index_sub = np.where(data.real < -int_sum_cutoff*np.std(data_mc.real))
+    # integral = simps(data.real[index])
+    integral = abs(simps(data.real[index])) - abs(simps(data.real[index_sub]))
+    # integral = abs(simps(data.real)) - abs(simps(data.real))
+    # integral = simps(data.real)
+    return(integral)
+
+
+def data_rms(x, data, data_mc, loss_func, int_sum_cutoff):
+    if(len(x)==2):
+        data_phased = proc_base.ps(data, p0=x[0], p1=x[1])      # phase correction
+    elif(len(x)==3):
+        data_phased = proc_base.ps2(data, p0=x[0], p1=x[1], p2=x[2])      # phase correction
+    else:
+        sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
+
+    data_phased = proc_base.di(data_phased)
+    data_mc = proc_base.di(data_mc)
+
+    if(loss_func=='logcosh'):
+        rms = calc_logcosh(data_mc, data_phased)
+    elif(loss_func=='mse'):
+        rms = calc_mse(data_mc, data_phased)
+    elif(loss_func=='mae'):
+        rms = calc_mae(data_mc, data_phased)
+    elif(loss_func=='int_sum'):
+        rms = -1.0*calc_int_sum(data_phased, data_mc, int_sum_cutoff)
+    else:
+        print('Wrong loss function')
+
+    return rms
+
+
+def phase_minimizer(data, data_mc, bnds, Ns, loss_func, int_sum_cutoff, workers, verb, minimizer, tol, options, stepsize, T, disp, niter):
+    resbrute = brute(data_rms, ranges=bnds, args=(data, data_mc, loss_func, int_sum_cutoff,), Ns=Ns, disp=True, workers=workers, finish=None)
+    if(verb==True):
+        print('Brute-Force Optmization Results:')
+        print(resbrute)
+    if(minimizer=='Nelder-Mead'):
+        res = minimize(data_rms, x0 = resbrute, args=(data, data_mc, loss_func, int_sum_cutoff,), method='Nelder-Mead', tol=tol, options=options)
+    elif(minimizer=='COBYLA'):
+        res = minimize(data_rms, x0 = resbrute, args=(data, data_mc, loss_func, int_sum_cutoff,),method='COBYLA', tol=tol, options=options)
+    elif(minimizer=='basinhopping'):
+        minimizer_kwargs={"method":"Nelder-Mead", "args":(data, data_mc, loss_func, int_sum_cutoff,)}
+        res = basinhopping(data_rms, x0 = resbrute, minimizer_kwargs=minimizer_kwargs, stepsize=stepsize, T=T, disp=disp, niter=niter)
+    else:
+        sys.exit('Wrong minimizer! Choose from: Nelder-Mead, COBYLA, or basinhopping')
+    if(verb==True):
+        print(minimizer + ' Results:')
+        print(res)
+
+    return res.x
+
+
+def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum_cutoff=1.0, verb=False, minimizer='basinhopping', tol=1e-14, options={'rhobeg':1000.0, 'maxiter':5000, 'maxfev':5000}, stepsize=1000, T=100, disp=True, niter=200, loss_func='logcosh', workers=4):
     """
     !!!WIP!!!
     This automatically calculates the phase of the spectrum
@@ -430,40 +594,22 @@ def automatic_phasecorrection(data, bnds=((-360, 360), (0, 200000)), SI=32768, N
         verb (bool, optional): [description]. Defaults to False.
         loss_func (str, optional): [description]. Defaults to 'logcosh'.
     """
-    def data_rms(x, data, data_mc):
-        data_phased = proc_base.ps(data, p0=x[0], p1=x[1])
-
-        if(loss_func=='logcosh'):
-            rms = calc_logcosh(data_mc, data_phased)
-        elif(loss_func=='mse'):
-            rms = calc_mse(data_mc, data_phased)
-        elif(loss_func=='mae'):
-            rms = calc_mae(data_mc, data_phased)
-        else:
-            print('Wrong loss function')
-
-        return rms
-
-    def autophase(data, data_mc, bnds, Ns=Ns):
-        resbrute = brute(data_rms, ranges=bnds, args=(data, data_mc,), Ns=Ns, disp=False)
-        if(verb==True):
-            print('Brute-Force Optmization Results:')
-            print(resbrute)
-        res = minimize(data_rms, x0 = [resbrute[0], resbrute[1]], args=(data,data_mc,),method='COBYLA')
-        if(verb==True):
-            print('Constrained Optimization BY Linear Approximation (COBYLA) Results:')
-            print(res)
-
-        return res.x
-
     data_reverse = proc_base.rev(data)    # Reverse Data, for NMR orientation
 
-    data_fft = proc_base.fft(proc_base.zf_size(data_reverse, SI))    # Fourier transform
+    data_fft = proc_base.fft(data_reverse)    # Fourier transform
     data_mc = proc_base.mc(data_fft)      # magnitude mode
 
     # Phasing
-    phase = autophase(data_fft, data_mc, bnds=bnds)      # automatically calculate phase
-    data_auto = proc_base.ps(data_fft, p0=phase[0], p1=phase[1])      # add previously phase values
+    if(type(bnds[0])==int):
+        sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
+    if(len(bnds)==2):
+        phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
+        data_auto = proc_base.ps(data_fft, p0=phase[0], p1=phase[1])      # add previously phase values
+    elif(len(bnds)==3):
+        phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
+        data_auto = proc_base.ps2(data_fft, p0=phase[0], p1=phase[1], p2=phase[2])      # add previously phase values
+    else:
+        sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
 
     return(data_auto, phase)
 
@@ -486,11 +632,15 @@ def linebroadening(data, lb_variant, lb_const=0.54, lb_n=2):
     # Calculate y value depending on chosen window function
     if(lb_variant=='hamming'):
         y_range = lb_const+(1-lb_const)*(1-np.power(abs(np.cos(np.pi*x_range)), lb_n))
-    if(lb_variant=='shifted_wurst'):
+    elif(lb_variant=='shifted_wurst'):
         y_range = 1-np.power(abs(np.cos(np.pi*x_range)), lb_n)+lb_const
         y_range[y_range > 1.0] = 1.0
-    if(lb_variant=='gaussian'):
+    elif(lb_variant=='gaussian'):
         y_range = 1/np.exp(10*np.power((x_range-0.5), 2))
+    elif(lb_variant=='gaussian_normal'):
+        y_range = 1/np.exp(10*np.power((x_range), 2))
+    else:
+        sys.exit('Wrong window function! Choose from: hamming, shifted_wurst, gaussian, gaussian_normal')
     data_lb = np.multiply(y_range, data)    # Apply linebroadening
 
     return(data_lb, y_range)
@@ -555,3 +705,25 @@ def fft(data, dic, si=0, mc=True, phase=[0, 0], dict=False):
     hz_scale = uc.hz_scale()
 
     return(ppm_scale, hz_scale, data, dic) if dict==True else (ppm_scale, hz_scale, data)
+
+
+def sfft(data, timescale, si=0, larmor_freq=0.0):
+    """
+    This takes the output of read_ascii_fid (FID and dic) and applies fft and zerofilling. It can return magnitude or phased data.
+
+    Args:
+        data (ndarray complex): FID data
+        dic (dict): Bruker dictionary
+        si (int, optional): Number of points to zerofill. Defaults to 0.
+        mc (bool, optional): Set to False for phased data. Defaults to True.
+        dict (bool, optional): Set to True to return the dictionary. Defaults to False.
+    """
+    data = proc_base.zf_size(data, si)
+    data = np.fft.fftshift(np.fft.fft(data))
+
+    hz_scale = np.fft.fftshift(np.fft.fftfreq(len(data), d=timescale[1]-timescale[0]))
+
+    if(larmor_freq!=0.0):
+            ppm_scale = hz_scale/larmor_freq
+
+    return(ppm_scale, hz_scale, data)
