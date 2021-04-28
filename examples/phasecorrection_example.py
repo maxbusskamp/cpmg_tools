@@ -33,12 +33,11 @@ ppm_scale_mc, hz_scale_mc, data_mc = processing.read_brukerproc(datapath_mc)
 ppm_scale, hz_scale, data, dic = processing.read_brukerfid(datapath, dict=True)
 
 data, phase = processing.autophase(data, bnds=((3900, 4100), (-55000, -54000), (-15000, -14000)),
-                                   Ns=32, verb=True, loss_func='int_sum', workers=4, int_sum_cutoff=0.5,
+                                   Ns=8, verb=True, loss_func='int_sum', workers=4, int_sum_cutoff=0.5,
                                    minimizer='Nelder-Mead', T=1000, niter=100, disp=False, stepsize=1000,
-                                   tol=1e-25, options={'rhobeg':1000.0, 'maxiter':1000, 'maxfev':1000})
+                                   tol=1e-25, options={'rhobeg':1000.0, 'maxiter':1000, 'maxfev':1000},
+                                   zf=4096*32)
 
-ppm_scale, hz_scale, data, dic = processing.read_brukerfid(datapath, dict=True)
-data = proc_base.ps2(proc_base.fft(proc_base.rev(proc_base.zf(data, pad=4096*32))), p0=phase[0], p1=phase[1], p2=phase[2])    # Fourier transform
 ppm_scale, hz_scale = processing.get_scale(data, dic)
 
 plt.figure()

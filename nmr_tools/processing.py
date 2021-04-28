@@ -562,7 +562,7 @@ def data_rms(x, data, data_mc, loss_func, int_sum_cutoff):
 
 def phase_minimizer(data, data_mc, bnds, Ns, loss_func, int_sum_cutoff, workers, verb, minimizer, tol, options, stepsize, T, disp, niter):
     resbrute = brute(data_rms, ranges=bnds, args=(data, data_mc, loss_func, int_sum_cutoff,), Ns=Ns, disp=True, workers=workers, finish=None)
-    if(verb==True):
+    if verb:
         print('Brute-Force Optmization Results:')
         print(resbrute)
     if(minimizer=='Nelder-Mead'):
@@ -574,14 +574,14 @@ def phase_minimizer(data, data_mc, bnds, Ns, loss_func, int_sum_cutoff, workers,
         res = basinhopping(data_rms, x0 = resbrute, minimizer_kwargs=minimizer_kwargs, stepsize=stepsize, T=T, disp=disp, niter=niter)
     else:
         sys.exit('Wrong minimizer! Choose from: Nelder-Mead, COBYLA, or basinhopping')
-    if(verb==True):
+    if verb:
         print(minimizer + ' Results:')
         print(res)
 
     return res.x
 
 
-def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum_cutoff=1.0, verb=False, minimizer='basinhopping', tol=1e-14, options={'rhobeg':1000.0, 'maxiter':5000, 'maxfev':5000}, stepsize=1000, T=100, disp=True, niter=200, loss_func='logcosh', workers=4):
+def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum_cutoff=1.0, zf=0, verb=False, minimizer='basinhopping', tol=1e-14, options={'rhobeg':1000.0, 'maxiter':5000, 'maxfev':5000}, stepsize=1000, T=100, disp=True, niter=200, loss_func='logcosh', workers=4):
     """
     !!!WIP!!!
     This automatically calculates the phase of the spectrum
@@ -594,9 +594,8 @@ def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum
         verb (bool, optional): [description]. Defaults to False.
         loss_func (str, optional): [description]. Defaults to 'logcosh'.
     """
-    data_reverse = proc_base.rev(data)    # Reverse Data, for NMR orientation
 
-    data_fft = proc_base.fft(data_reverse)    # Fourier transform
+    data_fft = proc_base.fft(proc_base.rev(proc_base.zf(data, pad=zf)))    # Fourier transform
     data_mc = proc_base.mc(data_fft)      # magnitude mode
 
     # Phasing
