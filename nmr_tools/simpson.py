@@ -1,7 +1,8 @@
 import os
-import textwrap
 from subprocess import run
-
+import collections
+from typing import DefaultDict
+import inspect
 
 def create_simpson(output_path, output_name, nuclei, sw, np, spin_rate, proton_frequency, crystal_file='rep2000', gamma_angles=45, lb=1000, lb_ratio=1.0, cs_iso=0.0, csa=0.0, csa_eta=0.0, alpha=0.0, beta=0.0, gamma=0.0):  # Write simpson input files
     """This generates a custom Simpson inputfile, which can be used from the terminal with: 'simpson <output_name>'
@@ -21,13 +22,17 @@ def create_simpson(output_path, output_name, nuclei, sw, np, spin_rate, proton_f
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-    simpson_input = """\
+    simpson = {'spinsys': '', 'par': '', 'pulseq': '', 'main': ''}
+
+    simpson['spinsys'] = """
     spinsys ⁍
         channels {nuclei}
         nuclei {nuclei}
         shift 1 {cs_iso}p {csa}p {csa_eta} {alpha} {beta} {gamma}
     ⁌
+    """
 
+    simpson['par'] = """
     par ⁍
         spin_rate        {spin_rate}
         proton_frequency {proton_frequency}
@@ -42,15 +47,18 @@ def create_simpson(output_path, output_name, nuclei, sw, np, spin_rate, proton_f
         np               {np}
         variable si      np*2
     ⁌
+    """
 
-
+    simpson['pulseq'] = """
     proc pulseq ⁍⁌ ⁍
         global par
         acq_block ⁍
             delay $par(tsw)
         ⁌
     ⁌
+    """
 
+    simpson['main'] = """
     proc main ⁍⁌ ⁍
         global par
 
@@ -61,6 +69,7 @@ def create_simpson(output_path, output_name, nuclei, sw, np, spin_rate, proton_f
         fsave $f {output_name}.xy -xreim
     ⁌
     """
+
     simpson_variables = {
         "nuclei":nuclei,
         "cs_iso":cs_iso,
@@ -81,10 +90,10 @@ def create_simpson(output_path, output_name, nuclei, sw, np, spin_rate, proton_f
     }
 
     with  open(output_path + output_name,'w') as myfile:
-        myfile.write(textwrap.dedent(simpson_input.format(**simpson_variables).replace("⁍", "{").replace("⁌", "}")))
+        myfile.write(inspect.cleandoc(''.join(simpson.values()).format(**simpson_variables).replace("⁍", "{").replace("⁌", "}")))
 
 
-def run_simpson(input_file, working_dir):
+def run_simpson(input_file, working_dir, *args):
 
     os.chdir(working_dir)
 

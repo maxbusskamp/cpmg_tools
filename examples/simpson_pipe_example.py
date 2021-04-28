@@ -59,13 +59,13 @@ ascii_file = 'simpson_input.tcl.xy'
 spe_file = 'simpson_input.tcl.spe'
 
 # Simulate species 1
-simpson.create_simpson(output_path, output_name, nuclei='207Pb', sw=2e6, np=8192*2, spin_rate=25000, proton_frequency=500e6, crystal_file='rep100', gamma_angles=10,
+simpson.create_simpson(output_path, output_name, nuclei='207Pb', sw=2e6, np=8192*2, spin_rate=25000, proton_frequency=500e6, crystal_file='rep10', gamma_angles=5,
                         cs_iso=1930, csa=-876, csa_eta=0.204, alpha=0.0, beta=0.0, gamma=0.0)
 simpson.run_simpson(output_name, output_path)
 timescale, data_org = processing.read_ascii_fid(output_path+ascii_file)
 
 # Simulate species 2
-simpson.create_simpson(output_path, output_name, nuclei='207Pb', sw=2e6, np=8192*2, spin_rate=25000, proton_frequency=500e6, crystal_file='rep100', gamma_angles=10,
+simpson.create_simpson(output_path, output_name, nuclei='207Pb', sw=2e6, np=8192*2, spin_rate=25000, proton_frequency=500e6, crystal_file='rep10', gamma_angles=5,
                         cs_iso=1598, csa=-489, csa_eta=0.241, alpha=0.0, beta=0.0, gamma=0.0)
 simpson.run_simpson(output_name, output_path)
 timescale2, data_org2 = processing.read_ascii_fid(output_path+ascii_file)
