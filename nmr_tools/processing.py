@@ -706,7 +706,7 @@ def fft(data, dic, si=0, mc=True, phase=[0, 0], dict=False):
     return(ppm_scale, hz_scale, data, dic) if dict==True else (ppm_scale, hz_scale, data)
 
 
-def sfft(data, timescale, si=0, larmor_freq=0.0):
+def asciifft(data, timescale, si=0, larmor_freq=0.0):
     """
     This takes the output of read_ascii_fid (FID and dic) and applies fft and zerofilling. It can return magnitude or phased data.
 
