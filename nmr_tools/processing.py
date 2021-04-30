@@ -85,6 +85,9 @@ def read_ascii(datapath, larmor_freq=0.0, skip_header=0, skip_footer=0, delimite
     if(larmor_freq!=0.0):
         ppm_scale = hz_scale/larmor_freq
 
+    data = np.transpose(data)
+    data = data[0] + data[1]*1.0j
+
     return (hz_scale, data) if larmor_freq==0.0 else (ppm_scale, hz_scale, data)
 
 

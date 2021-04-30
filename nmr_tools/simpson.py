@@ -1,8 +1,9 @@
 import os
 from subprocess import run
-from typing import DefaultDict
 from nmr_tools import processing
 import numpy as np
+import lmfit
+
 
 def create_simpson(output_path, output_name, input_dict=None, proc_dict=None):  # Write simpson input files
     """This generates a custom Simpson inputfile, which can be used from the terminal with: 'simpson <output_name>'
@@ -114,54 +115,55 @@ def create_simpson(output_path, output_name, input_dict=None, proc_dict=None):  
                     "scaling_factor":1.0,
                     "output_name":output_name}
 
+    # TODO: REMOVE INDENTATION OF MULTILINE STRINGS IN FINAL VERSION
     simpson = {'spinsys': '', 'par': '', 'pulseq': '', 'main': ''}
 
     simpson['spinsys'] = """
-spinsys {{
-    channels {nuclei}
-    nuclei {nuclei}
-    shift 1 {cs_iso}p {csa}p {csa_eta} {alpha} {beta} {gamma}
-}}
-"""
+    spinsys {{
+        channels {nuclei}
+        nuclei {nuclei}
+        shift 1 {cs_iso}p {csa}p {csa_eta} {alpha} {beta} {gamma}
+    }}
+    """
 
     simpson['par'] = """
-par {{
-    spin_rate        {spin_rate}
-    proton_frequency {proton_frequency}
-    start_operator   {start_operator}
-    detect_operator  {detect_operator}
-    method           {method}
-    crystal_file     {crystal_file}
-    gamma_angles     {gamma_angles}
-    sw               {sw}
-    variable tsw     1e6/sw
-    verbose          0000
-    np               {np}
-    variable si      {si}
-}}
-"""
+    par {{
+        spin_rate        {spin_rate}
+        proton_frequency {proton_frequency}
+        start_operator   {start_operator}
+        detect_operator  {detect_operator}
+        method           {method}
+        crystal_file     {crystal_file}
+        gamma_angles     {gamma_angles}
+        sw               {sw}
+        variable tsw     1e6/sw
+        verbose          0000
+        np               {np}
+        variable si      {si}
+    }}
+    """
 
     simpson['pulseq'] = """
-proc pulseq {{}} {{
-    global par
-    {pulse}
-    acq_block {{
-        delay $par(tsw)
+    proc pulseq {{}} {{
+        global par
+        {pulse}
+        acq_block {{
+            delay $par(tsw)
+        }}
     }}
-}}
-"""
+    """
 
     simpson['main'] = """
-proc main {{}} {{
-    global par
+    proc main {{}} {{
+        global par
 
-    set f [fsimpson]
+        set f [fsimpson]
 
-    faddlb $f {lb} {lb_ratio}
+        faddlb $f {lb} {lb_ratio}
 
-    fsave $f {output_name}.xy -xreim
-}}
-"""
+        fsave $f {output_name}.xy -xreim
+    }}
+    """
 
     if proc_dict is not None:
         for keys in proc_dict:
@@ -196,3 +198,37 @@ def run_simpson(input_file, working_dir, *args):
     os.chdir(working_dir)
 
     run(['simpson', input_file])
+
+
+def fit_helper(params, data, output_path, output_name, input_dict, proc_dict):
+
+
+    for keys in params.valuesdict():
+        input_dict[str(keys.rsplit('_', 1)[-1])][str(keys.rsplit('_', 1)[0])] = params.valuesdict()[keys]
+
+    timescale_model, data_model = create_simpson(output_path, output_name, input_dict=input_dict)
+    ppm_scale_model, hz_scale_model , data_model_fft = processing.asciifft(data_model, timescale_model, si=8192*2, larmor_freq=104.609)
+
+    return(processing.calc_mse(data_model_fft.real, data.real))
+
+
+def fit_simpson(output_path, output_name, params_input, data, input_dict=None, proc_dict=None, verb=True):
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    os.chdir(output_path)
+
+    params = lmfit.Parameters()
+    if any(isinstance(i,tuple) for i in params_input):
+        for elem in params_input:
+            params.add(*elem)
+    else:
+        params.add(*params_input)
+    if verb:
+        print('This are the parameters you passed for optimization:')
+        params.pretty_print()
+
+    out = lmfit.minimize(fit_helper, params, args=(data, output_path, output_name, input_dict, proc_dict), method='nelder')
+
+    # TODO: lmfit func
+    # TODO: Func to combine input_dict and params, then run create_simpson, then asciiread, asciifft, loss_func, returns loss value
+
+    return(out)
