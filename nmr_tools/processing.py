@@ -268,26 +268,29 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', su
         index = 0
         for datapath in datasets:
             if(isinstance(datapath, str)):
-                dataset = read_brukerproc(datapath)
-                dataset = np.array(dataset)
+                data_temp, ppm_temp, hz_temp = read_brukerproc(datapath)
             elif(isinstance(datapath, (np.ndarray, np.generic)) or isinstance(datapath, (tuple))):
-                dataset = datapath
-                dataset = np.array(dataset)
+                data_temp, ppm_temp, hz_temp = datapath
             else:
                 print('Wrong input format. Use list of datapath strings, or list of ndarrays.')
+
+            dataset = np.zeros([len(data_temp),3])
+            dataset[:,0] = data_temp
+            dataset[:,1] = ppm_temp
+            dataset[:,2] = hz_temp
 
             if(index == 0):
                 dataset_combine = dataset
             else:
-                dataset_combine = np.hstack((dataset_combine, dataset))
+                dataset_combine = np.vstack((dataset_combine, dataset))
             index = index + 1
 
         # Sort Data
-        dataset_combine = dataset_combine[:,dataset_combine[1].argsort()]
+        dataset_combine = dataset_combine[dataset_combine[:,2].argsort(),:]
         # Generate Envelope
-        high_idx, low_idx = get_envelope_idx(dataset_combine[2], dmin=4, dmax=4)
-        dataset_array_masked = dataset_combine[2][low_idx]
-        dataset_x_masked = dataset_combine[1][low_idx]
+        _, low_idx = get_envelope_idx(dataset_combine[:,0], dmin=4, dmax=4)
+        dataset_array_masked = dataset_combine[low_idx,0]
+        dataset_x_masked = dataset_combine[low_idx,2]
 
         # Generate XRI Dataset
         dataset_new = []
@@ -317,39 +320,6 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', su
             dataset_new.append(elem)
             index = index +1
         dataset_array = np.array(dataset_new)
-    elif(mode=='binning_doNOTuse'):
-        # Combine Data
-        index = 0
-        for datapath in datasets:
-            if(isinstance(datapath, str)):
-                dataset = read_brukerproc(datapath)
-                dataset = np.array(dataset)
-            elif(isinstance(datapath, (np.ndarray, np.generic)) or isinstance(datapath, (tuple))):
-                dataset = datapath
-                dataset = np.array(dataset)
-            else:
-                print('Wrong input format. Use list of datapath strings, or list of ndarrays.')
-
-            if(index == 0):
-                dataset_combine = dataset
-            else:
-                dataset_combine = np.hstack((dataset_combine, dataset))
-            index = index + 1
-
-        # Sort Data
-        dataset_combine = dataset_combine[:,dataset_combine[1].argsort()]
-
-        binned_data = stats.binned_statistic(dataset_combine[1,:], dataset_combine[2,:], 'sum', bins=bins)
-        # binned_data2 = stats.binned_statistic(dataset_array[1,:], dataset_array[2,:], 'sum', bins=bins)
-
-        ppm_binned = np.linspace(dataset_combine[0,:].min(), dataset_combine[0,:].max(), bins)
-
-        hz_binned_mean = np.zeros(len(binned_data[1])-1) 
-        ppm_binned_mean = np.zeros(len(binned_data[1])-1) 
-        for i in range(len(binned_data[1])):
-            if i < len(binned_data[1])-1:
-                hz_binned_mean[i] = (binned_data[1][i]+binned_data[1][i+1])/2.0
-                ppm_binned_mean[i] = (ppm_binned[i]+ppm_binned[i+1])/2.0
     elif(mode=='sum'):
         # Combine Data
         index = 0
@@ -366,14 +336,13 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', su
             datasets_temp.append(dataset)
 
         index = 0
-        interpolator = []
         for datasets in datasets_temp:
             if(index == 0):
-                dataset_scale_hz = datasets[1,:]
-                dataset_scale_ppm = datasets[0,:]
+                dataset_scale_hz = datasets[2,:] 
+                dataset_scale_ppm = datasets[1,:]
             else:
-                dataset_scale_hz = np.hstack((dataset_scale_hz, datasets[1,:]))
-                dataset_scale_ppm = np.hstack((dataset_scale_ppm, datasets[0,:]))
+                dataset_scale_hz = np.hstack((dataset_scale_hz, datasets[2,:]))
+                dataset_scale_ppm = np.hstack((dataset_scale_ppm, datasets[1,:]))
             index = index + 1
 
             # Sort Data
@@ -383,7 +352,7 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', su
         datasets_interpolated = []
         index = 0
         for datasets in datasets_temp:
-            f = interpolate.interp1d(datasets[1,:], datasets[2,:], fill_value=0.0, bounds_error=False)
+            f = interpolate.interp1d(datasets[2,:], datasets[0,:], fill_value=0.0, bounds_error=False)
             datasets_interpolated.append(f(dataset_scale_hz))
             index+=1
         sumdata = [sum(elem) for elem in zip(*datasets_interpolated)]
