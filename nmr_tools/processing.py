@@ -31,7 +31,7 @@ def read_brukerproc(datapath, dict=False):
     ppm_scale = uc.ppm_scale()
     hz_scale = uc.hz_scale()
 
-    return (ppm_scale, hz_scale, data, dic) if dict==True else (ppm_scale, hz_scale, data)
+    return (data, ppm_scale, hz_scale, dic) if dict==True else (data, ppm_scale, hz_scale)
 
 
 def read_brukerfid(datapath, dict=False):
@@ -51,14 +51,14 @@ def read_brukerfid(datapath, dict=False):
 
 
     dic, data = bruker.read(datapath)
-    udic = bruker.guess_udic(dic, data)
-    uc = fileiobase.uc_from_udic(udic)
-    ppm_scale = uc.ppm_scale()
-    hz_scale = uc.hz_scale()
-
     td = int(dic['acqus']['TD']/2)
+    sw_h = float(dic['acqus']['SW_h'])
+    dw = 1.0/(sw_h*2.0)
+    timescale = np.linspace(0, 0+(dw*td),td,endpoint=False)
+    data = data[:td]
 
-    return (ppm_scale[:td], hz_scale[:td], data[:td], dic) if dict==True else (ppm_scale[:td], hz_scale[:td], data[:td])
+
+    return (data, timescale, dic) if dict==True else (data, timescale)
 
 
 def read_ascii(datapath, larmor_freq=0.0, skip_header=0, skip_footer=0, delimiter=' '):
@@ -88,7 +88,7 @@ def read_ascii(datapath, larmor_freq=0.0, skip_header=0, skip_footer=0, delimite
     data = np.transpose(data)
     data = data[0] + data[1]*1.0j
 
-    return (hz_scale, data) if larmor_freq==0.0 else (ppm_scale, hz_scale, data)
+    return (data, hz_scale) if larmor_freq==0.0 else (data, ppm_scale, hz_scale)
 
 
 def read_ascii_fid(datapath, skip_header=0, skip_footer=0, delimiter=' '):
@@ -112,7 +112,7 @@ def read_ascii_fid(datapath, skip_header=0, skip_footer=0, delimiter=' '):
     data = data_temp[:, 1]+data_temp[:, 2]*1.0j
     timescale = data_temp[:, 0]
 
-    return (timescale, data)
+    return (data, timescale)
 
 
 def read_spe(datapath, larmor_freq=0.0):
@@ -151,7 +151,7 @@ def read_spe(datapath, larmor_freq=0.0):
     if(larmor_freq!=0.0):
         ppm_scale = hz_scale/larmor_freq
 
-    return (hz_scale, data) if larmor_freq==0.0 else (ppm_scale, hz_scale, data)
+    return (data, hz_scale) if larmor_freq==0.0 else (data, ppm_scale, hz_scale)
 
 
 def get_envelope_idx(s, dmin=1, dmax=1, split=False):
@@ -421,15 +421,15 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', su
         elem = np.append(elem, 0)
         dataset_new.append(elem)
         index = index +1
-    dataset_array = np.array(dataset_new)
+    data = np.array(dataset_new)
 
     if(verbose==True):
-        precision = np.round((abs(dataset_array[-1,0])+abs(dataset_array[0,0])), -3)-(abs(dataset_array[-1,0])+abs(dataset_array[0,0]))
+        precision = np.round((abs(data[-1,0])+abs(data[0,0])), -3)-(abs(data[-1,0])+abs(data[0,0]))
         print('.spe precision: ' + str(int(precision)) + ' Hz')
-        print('SW raw: ' + str(int(abs(dataset_array[-1,0])+abs(dataset_array[0,0]))) + ' Hz')
-        print('SW rounded: ' + str(int(np.round((abs(dataset_array[-1,0])+abs(dataset_array[0,0])), -3))) + ' Hz')
+        print('SW raw: ' + str(int(abs(data[-1,0])+abs(data[0,0]))) + ' Hz')
+        print('SW rounded: ' + str(int(np.round((abs(data[-1,0])+abs(data[0,0])), -3))) + ' Hz')
 
-    return(dataset_array)
+    return(data)
 
 
 def split_echotrain(datapath, dw, echolength, blankinglength, numecho, dict=False):
@@ -449,9 +449,7 @@ def split_echotrain(datapath, dw, echolength, blankinglength, numecho, dict=Fals
         data
     """  
 
-    dic, data = bruker.read(datapath)
-    udic = bruker.guess_udic(dic, data)
-    uc = fileiobase.uc_from_udic(udic)
+    data, timescale, dic = read_brukerfid(datapath, dict=True)
 
     echopoints = int(echolength/dw/2)
     echotop = np.argmax(np.absolute(data))
@@ -477,10 +475,7 @@ def split_echotrain(datapath, dw, echolength, blankinglength, numecho, dict=Fals
     # Echo Sum
     data = data.sum(axis=0)
 
-    ppm_scale = uc.ppm_scale()
-    hz_scale = uc.hz_scale()
-
-    return (ppm_scale, hz_scale, data, dic) if dict==True else (ppm_scale, hz_scale, data)
+    return (data, timescale, dic) if dict==True else (data, timescale)
 
 
 def calc_mse(data_1, data_2):
@@ -606,14 +601,14 @@ def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum
         sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
     if(len(bnds)==2):
         phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
-        data_auto = proc_base.ps(data_fft, p0=phase[0], p1=phase[1])      # add previously phase values
+        data = proc_base.ps(data_fft, p0=phase[0], p1=phase[1])      # add previously phase values
     elif(len(bnds)==3):
         phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
-        data_auto = proc_base.ps2(data_fft, p0=phase[0], p1=phase[1], p2=phase[2])      # add previously phase values
+        data = proc_base.ps2(data_fft, p0=phase[0], p1=phase[1], p2=phase[2])      # add previously phase values
     else:
         sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
 
-    return(data_auto, phase)
+    return(data, phase)
 
 
 def linebroadening(data, lb_variant, lb_const=0.54, lb_n=2):
@@ -627,7 +622,7 @@ def linebroadening(data, lb_variant, lb_const=0.54, lb_n=2):
         lb_n (int, optional): Shape parameter used by shifted_wurst and hamming (set to 2). Defaults to 2.
 
     Returns:
-        data_lb (1darray): Linebroadened FID
+        data (1darray): Linebroadened FID
         y_range (1darray): Y values of window function
     """
     x_range = np.linspace(0, 1, len(data))    # Calculate x values from 0 to 1
@@ -643,9 +638,9 @@ def linebroadening(data, lb_variant, lb_const=0.54, lb_n=2):
         y_range = 1/np.exp(10*np.power((x_range), 2))
     else:
         sys.exit('Wrong window function! Choose from: hamming, shifted_wurst, gaussian, gaussian_normal')
-    data_lb = np.multiply(y_range, data)    # Apply linebroadening
+    data = np.multiply(y_range, data)    # Apply linebroadening
 
-    return(data_lb, y_range)
+    return(data, y_range)
 
 
 def signaltonoise(a, axis=0, ddof=0):
@@ -706,7 +701,7 @@ def fft(data, dic, si=0, mc=True, phase=[0, 0], dict=False):
     ppm_scale = uc.ppm_scale()
     hz_scale = uc.hz_scale()
 
-    return(ppm_scale, hz_scale, data, dic) if dict==True else (ppm_scale, hz_scale, data)
+    return(data, ppm_scale, hz_scale, dic) if dict==True else (data, ppm_scale, hz_scale)
 
 
 def asciifft(data, timescale, si=0, larmor_freq=0.0):
@@ -728,4 +723,4 @@ def asciifft(data, timescale, si=0, larmor_freq=0.0):
     if(larmor_freq!=0.0):
             ppm_scale = hz_scale/larmor_freq
 
-    return(ppm_scale, hz_scale, data)
+    return(data, ppm_scale, hz_scale)

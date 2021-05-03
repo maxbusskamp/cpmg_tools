@@ -12,8 +12,6 @@ plt.rcParams['figure.dpi'] = 200
 output_path = '/home/m_buss13/testfiles/'
 output_name = 'simpson_input'
 ascii_file = 'simpson_input.xy'
-spe_file = 'simpson_input.spe'
-
 
 # Create a dictionary containing the custom parameter of species 1
 input_dict = {'cs_iso': 0.0,

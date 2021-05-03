@@ -196,8 +196,9 @@ def create_simpson(output_path, output_name, input_dict=None, proc_dict=None):  
 def run_simpson(input_file, working_dir, *args):
 
     os.chdir(working_dir)
-
     run(['simpson', input_file])
+
+    return()
 
 
 def fit_helper(params, data, output_path, output_name, input_dict, proc_dict):
@@ -227,8 +228,5 @@ def fit_simpson(output_path, output_name, params_input, data, input_dict=None, p
         params.pretty_print()
 
     out = lmfit.minimize(fit_helper, params, args=(data, output_path, output_name, input_dict, proc_dict), method='nelder')
-
-    # TODO: lmfit func
-    # TODO: Func to combine input_dict and params, then run create_simpson, then asciiread, asciifft, loss_func, returns loss value
 
     return(out)
