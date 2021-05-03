@@ -1,0 +1,111 @@
+; wqcpmg, 19.01.21 JK
+; The resulting spectrum is easiest to phase via a magnitude calculation "mc" (after FT/EFP) 
+
+;$COMMENT=WQCPMG-MAS sequence, samples continuously, pulses blanked out, requires DRU
+;$CLASS=Solids
+;$DIM=1D
+;$TYPE=spin-1/2 and half-integer spin quadrupolar nuclei
+;$SUBTYPE=simple 1D
+;$OWNER=NMR
+
+;PARAMETERS:
+;ns : 8 * n
+;d1 : recycle delay
+;d6 : acquisition time: must be odd number of rotor echoes times rotor period
+;d7 : corrected acqisition time
+;pl1 : Not used
+;td : Should be larger than setTD!
+;p1 : WURST pulse length (cnst20 in us)
+;sp1 : WURST power level
+;spnam1: select WURST pulse shape
+;l22 : Number of WURST echos (M) to be acquired
+;echod : first delay which ensures right echo placement
+;d4 : corrected ringdown delay
+;cnst0 : Set to rotor period in us
+;cnst1 : spikelet separation in Hz
+;cnst2 : setTD (ensure TD exceeds this number)
+;cnst3 : Number aquired Rotorechos (MUST be odd!)
+;cnst20 : pulse length of WURST pusle (in us)
+;cnst21 : sweep width of WURST pulse (in kHz)
+;cnst22 : sweep direction of WURST pulse (+1 or -1) 
+;cnst23 : shape parameter N of WURST pulse
+;cnst24 : digrate of the amp and phase of WURST pulse (in ns)
+;d25 : not used (abitrary value - not to be regarded)
+;d26 : not used (abitrary value - not to be regarded)
+;zgoptns : -Ddec (enable Decoupling)
+
+#ifdef dec
+;pl30 : CW decoupling power on channel 2
+#endif
+
+#include <Avance.incl>
+#include <Delay.incl>
+#include <De.incl>
+
+define delay echod
+"p1=1u*cnst20"
+
+"d6 = (1u*cnst0)*cnst3"
+"echod=abs((d6+1u*cnst0)/2-p1)"
+"d7=d6+1u*cnst0-p1-de-de"
+
+"cnst1=(1000000.0/(de+p1+de+d7))"
+"cnst2=((l22+1)*(p1+d7+de+de)+echod+p1)/dw"
+
+1 ze
+  1m fq=cnst0:f1
+  1m fq=cnst1:f1
+  1m fq=cnst2:f1
+  1m fq=cnst3:f1
+  1m fq=cnst20:f1
+  1m fq=cnst21:f1
+  1m fq=cnst22:f1
+  1m fq=cnst23:f1
+  1m fq=cnst24:f1
+  1m fq=0:f1
+
+#ifndef dec
+2 d1
+#else
+2 d1 do:f2
+#endif
+
+ACQ_START(ph30,ph31)					; these three comments are used for digital part of receiver
+0.05u DWELL_HOLD							; acq is immediately prevented if started in the future
+0.1u START_NEXT_SCAN						; start acq
+
+#ifdef dec
+  1u cpds2:f2
+#endif
+
+  1u DWELL_RELEASE
+  1u REC_BLK
+
+  (p1:sp1 ph1):f1    ;WURST shape pulse
+  echod
+
+3 (p1:sp1 ph2):f1    ;WURST shape pulse
+  de
+  d7 REC_UNBLK
+  de REC_BLK
+
+  lo to 3 times l22
+
+#ifdef dec
+  1u do:f2
+#endif
+
+  (1u REC_BLK):f1								; path to receiver is blanked
+	0.05u DWELL_RELEASE							; end of acq and used in case data points are left in memory (safety flush)
+
+  rcyc=2
+  100m wr #0
+exit
+
+; WCPMG phases
+ph1 = 0 0 1 1 2 2 3 3
+ph2 = 1 3 2 0 3 1 0 2
+
+; receiver phases
+ph30=0
+ph31=0 0 1 1 2 2 3 3

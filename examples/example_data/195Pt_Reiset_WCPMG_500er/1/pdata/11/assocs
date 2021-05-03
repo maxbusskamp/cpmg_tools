@@ -1,0 +1,11 @@
+##TITLE= Parameter file, TopSpin 4.0.8
+##JCAMPDX= 5.0
+##DATATYPE= Parameter Values
+##NPOINTS= 1	$$ modification sequence number
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= m_buss13
+$$ 2021-04-19 11:52:48.949 +0200  m_buss13@ubuntuvm
+$$ /home/m_buss13/ownCloud/nmr_data/development/195Pt_Reiset_WCPMG/1/pdata/11/assocs
+$$ process /opt/topspin4.0.8/prog/mod/dirdata
+##$MULTDISP= </opt/nmrdata/data/j_kopp06/nmr/195Pt_Reisiet_WCPMG_0203.20/10/pdata/1>
+##END=

@@ -1,0 +1,16 @@
+##TITLE= Parameter file, TOPSPIN		Version 3.2
+##JCAMPDX= 5.0
+##DATATYPE= Parameter Values
+##NPOINTS= 1	$$ modification sequence number
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= j_kopp06
+$$ 2016-06-14 21:28:58.189 +0200  j_kopp06@nmr300
+$$ /opt/akeckert/data/j_kopp06/nmr/195Pt_test2/7/pdata/1/outd
+$$ process /opt/topspin3.2/prog/mod/dirdata
+##$CURPLOT= <hplj4015>
+##$CURPRIN= <$hplj4015>
+##$DFORMAT= <normdp>
+##$LAYOUT= <+/1D_BB.xwp>
+##$LFORMAT= <normlp>
+##$PFORMAT= <normpl>
+##END=

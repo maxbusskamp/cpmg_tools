@@ -1,0 +1,4 @@
+;$OWNER=BRUKER
+  0.3u pl=pl12
+1 100up:0
+  jump to 1

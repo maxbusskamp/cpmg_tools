@@ -1,0 +1,142 @@
+; Wideline Uniform Rate Smooth Truncation (WURST) version of the CPMG experiment
+; 22.12.18 JK and MRH
+; 07.08.19 JD
+; WURST-QCPMG pulse sequence adapted from L.A. O'Dell and R.W. Schurko, Chem. Phys. Lett. 464 (2008) 97-102
+; Here FID contains delays and refocussing pulses, See redWCPMG.jk for different version
+
+; Include libraries
+#include <Avance.incl>
+#include <Delay.incl>
+#include <De.incl>
+
+; Define flags
+;zgoptns : -Ddfs (enable Double Freq Sweep) -Ddec (enable Decoupling)
+
+; Define parameters
+; CPMG related
+;ns : 8 * n
+;td : Should be larger than setTD!
+;l22 : Number of  echos
+;cnst0 : spikelet separation in Hz
+;cnst1 : setTD (ensure TD equals this number)
+
+; Delays
+;d1 : recycle delay
+;d3 : time to allow pulse ringdown, should not be less than 5 us
+;d6 : duration of echo 
+;echod : first delay which ensures right echo placement
+;corr : d3 corrected by necessary receiver delays
+
+; WURST Pulse related
+;p1 : WURST pulse length in us (determined by cnst20)
+;pl1 : Not used in the pulse program (set to 0 W)
+;sp1 : WURST power level
+;spnam1 : select WURST pulse shape (should be wurst.jk)
+;cnst20 : WURST pulse length in us
+;cnst21 : WURST pulse sweep width in kHz
+;cnst22 : WURST pulse sweep direction (1 for low to high frequencies)
+;cnst23 : WURST pulse shape parameter N
+;cnst24 : WURST pulse time resolution in ns (not smaller than 50 ns)
+
+; DFS related
+#ifdef dfs
+;p0 : DFS pulse length in us (determined by cnst30)
+;pl0 : Not used in the pulse program (set to 0 W)
+;sp0 : DFS power level
+;spnam0 : select DFS pulse shape
+;d10 : Delay between DFS and WURST pulse (if -Ddec is used, subract 1 us for)
+;cnst30 : DFS pulse length in us
+;cnst31 : DFS pulse start sweep frequency in kHz
+;cnst32 : DFS pulse end sweep frequency in kHz
+;cnst33 : DFS pulse shape parameter N
+;cnst34 : DFS pulse time resolution in ns (not smaller than 50 ns)
+#endif
+
+; Define decoupling parameters
+#ifdef dec
+;pl2 : not used in the pulse program (set to 0 W)
+;pl12 : CW decoupling power on ch. 2
+#endif
+
+; Calculate shape pulse lengths
+"p1=1.0*cnst20"
+#ifdef dfs
+"p0=1.0*cnst30"
+#endif
+
+; Calculate delays
+define delay echod
+"echod=((d6-p1)/2)"
+define delay corr
+"corr=d3-1u"
+
+; Calculate spikelet separation
+"cnst0=(1.0/(d3+p1+d3+d6))"
+; Calculate setTD (150 us added to compensate for beginning of the fid)
+"cnst1=(l22*(d3+p1+d3+d6)+150u)/dw"
+
+; Pulse sequence
+1	ze
+	1m fq=cnst0:f1												; used to make constants visible in acq pars
+	1m fq=cnst1:f1
+	1m fq=cnst20:f1
+	1m fq=cnst21:f1
+	1m fq=cnst22:f1
+	1m fq=cnst23:f1
+	1m fq=cnst24:f1
+	1m fq=0:f1
+#ifdef dfs
+	1m fq=cnst30:f1
+	1m fq=cnst31:f1
+	1m fq=cnst32:f1
+	1m fq=cnst33:f1
+	1m fq=cnst34:f1 
+	1m fq=0:f1
+#endif
+
+#ifndef dec
+2	d1 
+#else	
+	1m pl12:f2																	
+2 d1 do:f2															; if flag is used, safety off for decoupler
+#endif
+	ACQ_START(ph30,ph31)									; these three comments are used for digital part of receiver
+	0.05u DWELL_HOLD											; acq is immediately prevented if started in the future
+  0.1u START_NEXT_SCAN									; start acq
+#ifdef dfs
+	(p0:sp0 ph0):f1												; if flags is used, apply dfs shape pulse
+	d10																		; delay bewteen dfs and wurst pulse
+#endif
+#ifdef dec
+  1u cpds2:f2														; if flag is used, start decoupling
+#endif
+	(p1:sp1 ph1):f1												; excitation shape pulse 
+	echod
+	1u DWELL_RELEASE											; digital part of receiver starts acq
+3	corr
+	(p1:sp1 ph2):f1												; refocussing shape pulse
+	corr
+	(1u REC_UNBLK):f1											; path to receiver is unblanked (analogue: enables acq of data points)
+	d6																		; echo time
+	(1u REC_BLK):f1												; path to receiver is blanked (analogue: prevents acq of data points)
+	lo to 3 times l22											; acquire all echos
+	(1u REC_BLK):f1												; path to receiver is blanked
+	0.05u DWELL_RELEASE										; end of acq and used in case data points are left in memory (safety flush)
+#ifdef dec
+ 	1u do:f2															; if flag is used, decoupler off
+#endif
+	rcyc = 2 
+ 	wr #0
+exit
+
+#ifdef dfs
+ph0 = 0
+#endif
+
+; WCPMG phases
+ph1=0 0 1 1 2 2 3 3
+ph2=1 3 2 0 3 1 0 2
+
+; receiver phases
+ph30=0
+ph31=0 0 1 1 2 2 3 3

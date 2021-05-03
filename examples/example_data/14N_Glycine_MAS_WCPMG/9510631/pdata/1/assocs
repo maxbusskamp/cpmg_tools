@@ -1,0 +1,11 @@
+##TITLE= Parameter file, TopSpin 4.0.9
+##JCAMPDX= 5.0
+##DATATYPE= Parameter Values
+##NPOINTS= 1	$$ modification sequence number
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= p_keil01
+$$ 2021-03-12 11:52:35.385 +0100  p_keil01@Hansen23
+$$ /home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr/14N-Glycine-WCPMG-MAS-4mmHFX/9510631/pdata/1/assocs
+$$ process /opt/topspin4.0.9/prog/mod/dirdata
+##$MULTDISP= </opt/nmrdata/data/p_keil01/nmr/14N-Glycine-WCPMG-MAS-4mmHFX/1005105/pdata/1|/opt/nmrdata/data/p_keil01/nmr/14N-Glycine-WCPMG-MAS-4mmHFX/1005104/pdata/1|/opt/nmrdata/data/p_keil01/nmr/14N-Glycine-WCPMG-MAS-4mmHFX/1005103/pdata/1|/opt/nmrdata/data/p_keil01/nmr/14N-Glycine-WCPMG-MAS-4mmHFX/1004104/pdata/1|/opt/nmrdata/data/p_keil01/nmr/14N-Glycine-WCPMG-MAS-4mmHFX/1004103/pdata/1>
+##END=

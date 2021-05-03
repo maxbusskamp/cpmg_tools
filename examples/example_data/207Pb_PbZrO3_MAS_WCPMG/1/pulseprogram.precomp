@@ -1,0 +1,236 @@
+# 1 "/root/.topspin-BladeEpu/local_acqu/ppDirs/wcpmg_mas_neo.jk"
+# 1 "<built-in>"
+# 1 "<command-line>"
+# 1 "/root/.topspin-BladeEpu/local_acqu/ppDirs/wcpmg_mas_neo.jk"
+; wqcpmg, 19.01.21 JK
+; The resulting spectrum is easiest to phase via a magnitude calculation "mc" (after FT/EFP) 
+
+;$COMMENT=WQCPMG-MAS sequence, samples continuously, pulses blanked out, requires DRU
+;$CLASS=Solids
+;$DIM=1D
+;$TYPE=spin-1/2 and half-integer spin quadrupolar nuclei
+;$SUBTYPE=simple 1D
+;$OWNER=NMR
+
+;PARAMETERS:
+;ns : 8 * n
+;d1 : recycle delay
+;d6 : acquisition time: must be odd number of rotor echoes times rotor period
+;d7 : corrected acqisition time
+;pl1 : Not used
+;td : Should be larger than setTD!
+;p1 : WURST pulse length (cnst20 in us)
+;sp1 : WURST power level
+;spnam1: select WURST pulse shape
+;l22 : Number of WURST echos (M) to be acquired
+;echod : first delay which ensures right echo placement
+;d4 : corrected ringdown delay
+;cnst0 : Set to rotor period in us
+;cnst1 : spikelet separation in Hz
+;cnst2 : setTD (ensure TD exceeds this number)
+;cnst3 : Number aquired Rotorechos (MUST be odd!)
+;cnst20 : pulse length of WURST pusle (in us)
+;cnst21 : sweep width of WURST pulse (in kHz)
+;cnst22 : sweep direction of WURST pulse (+1 or -1) 
+;cnst23 : shape parameter N of WURST pulse
+;cnst24 : digrate of the amp and phase of WURST pulse (in ns)
+;d25 : not used (abitrary value - not to be regarded)
+;d26 : not used (abitrary value - not to be regarded)
+;zgoptns : -Ddec (enable Decoupling)
+# 1 "/root/.topspin-BladeEpu/local_acqu/ppDirs/Avance.incl" 1
+;Avance4.incl
+;   for AV 4
+;
+;avance-version (16/08/18)
+;
+;$CLASS=HighRes Incl
+;$COMMENT=
+
+
+# 19 "/root/.topspin-BladeEpu/local_acqu/ppDirs/Avance.incl"
+;setrtp0 denotes TimingController
+
+
+# 50 "/root/.topspin-BladeEpu/local_acqu/ppDirs/Avance.incl"
+# 51 "/root/.topspin-BladeEpu/local_acqu/ppDirs/Avance.incl"
+
+
+# 63 "/root/.topspin-BladeEpu/local_acqu/ppDirs/Avance.incl"
+# 89 "/root/.topspin-BladeEpu/local_acqu/ppDirs/Avance.incl"
+# 90 "/root/.topspin-BladeEpu/local_acqu/ppDirs/Avance.incl"
+
+
+# 123 "/root/.topspin-BladeEpu/local_acqu/ppDirs/Avance.incl"
+;#define LOWQ
+;#define HIGHQ
+
+
+;#define MIX_UP
+;#define MIX_DOWN
+# 136 "/root/.topspin-BladeEpu/local_acqu/ppDirs/Avance.incl"
+;$Id: Avance4.incl,v 1.11 2016/11/11 13:43:39 ber Exp $
+# 42 "/root/.topspin-BladeEpu/local_acqu/ppDirs/wcpmg_mas_neo.jk" 2
+
+# 1 "/root/.topspin-BladeEpu/local_acqu/ppDirs/Delay.incl" 1
+;Delay.incl  -  include file for commonly used delays
+;
+;version (13/08/07)
+;
+;$CLASS=HighRes Incl
+;$COMMENT=
+
+# 9 "/root/.topspin-BladeEpu/local_acqu/ppDirs/Delay.incl"
+;general delays
+
+define delay DELTA
+define delay DELTA1
+define delay DELTA2
+define delay DELTA3
+define delay DELTA4
+define delay DELTA5
+define delay DELTA6
+define delay DELTA7
+define delay DELTA8
+define delay DELTA9
+define delay DELTA10
+define delay DELTA11
+define delay DELTA12
+define delay DELTA13
+define delay DELTA14
+define delay DELTA15
+define delay DELTA16
+
+define delay TAU
+define delay TAU1
+define delay TAU2
+define delay TAU3
+define delay TAU4
+define delay TAU5
+define delay TAU6
+define delay TAU7
+define delay TAU8
+define delay TAU9
+# 40 "/root/.topspin-BladeEpu/local_acqu/ppDirs/Delay.incl"
+define delay INCR1
+define delay INCR2
+define delay INCR3
+define delay INCR4
+define delay INCR5
+define delay INCR6
+
+
+;delays for centering pulses
+# 50 "/root/.topspin-BladeEpu/local_acqu/ppDirs/Delay.incl"
+define delay CEN_HN1
+define delay CEN_HN2
+define delay CEN_HN3
+define delay CEN_HC1
+define delay CEN_HC2
+define delay CEN_HC3
+define delay CEN_HC4
+define delay CEN_HP1
+define delay CEN_HP2
+define delay CEN_CN1
+define delay CEN_CN2
+define delay CEN_CN3
+define delay CEN_CN4
+define delay CEN_CP1
+define delay CEN_CP2
+
+
+;loop counters
+# 69 "/root/.topspin-BladeEpu/local_acqu/ppDirs/Delay.incl"
+define loopcounter COUNTER
+define loopcounter SCALEF
+define loopcounter FACTOR1
+define loopcounter FACTOR2
+define loopcounter FACTOR3
+define loopcounter FACTOR4
+define loopcounter FACTOR5
+define loopcounter FACTOR6
+
+
+# 80 "/root/.topspin-BladeEpu/local_acqu/ppDirs/Delay.incl"
+;$Id: Delay.incl,v 1.15 2013/08/30 09:42:06 ber Exp $
+# 43 "/root/.topspin-BladeEpu/local_acqu/ppDirs/wcpmg_mas_neo.jk" 2
+
+# 1 "/root/.topspin-BladeEpu/local_acqu/ppDirs/De.incl" 1
+;De4.incl
+;   for AV4
+;
+;avance-version (15/08/13)
+;
+;$CLASS=HighRes Incl
+;$COMMENT=
+
+# 18 "/root/.topspin-BladeEpu/local_acqu/ppDirs/De.incl"
+;for multi receive
+
+
+# 27 "/root/.topspin-BladeEpu/local_acqu/ppDirs/De.incl"
+;$Id: De4.incl,v 1.3 2015/08/13 12:41:31 ber Exp $
+# 44 "/root/.topspin-BladeEpu/local_acqu/ppDirs/wcpmg_mas_neo.jk" 2
+
+define delay echod
+"p1=1u*cnst20"
+
+"d6 = (1u*cnst0)*cnst3"
+"echod=abs((d6+1u*cnst0)/2-p1)"
+"d7=d6+1u*cnst0-p1-de-de"
+# 52 "/root/.topspin-BladeEpu/local_acqu/ppDirs/wcpmg_mas_neo.jk"
+"cnst1=(1000000.0/(de+p1+de+d7))"
+"cnst2=((l22+1)*(p1+d7+de+de)+echod+p1)/dw"
+
+# 55 "/root/.topspin-BladeEpu/local_acqu/ppDirs/wcpmg_mas_neo.jk"
+1 ze
+  1m fq=cnst0:f1
+  1m fq=cnst1:f1
+  1m fq=cnst2:f1
+  1m fq=cnst3:f1
+  1m fq=cnst20:f1
+  1m fq=cnst21:f1
+  1m fq=cnst22:f1
+  1m fq=cnst23:f1
+  1m fq=cnst24:f1
+  1m fq=0:f1
+
+# 68 "/root/.topspin-BladeEpu/local_acqu/ppDirs/wcpmg_mas_neo.jk"
+2 d1
+
+
+# 73 "/root/.topspin-BladeEpu/local_acqu/ppDirs/wcpmg_mas_neo.jk"
+(de adc ph31 syrec) (1u 1u ph30:r):f1					; these three comments are used for digital part of receiver
+0.05u setrtp1|1							; acq is immediately prevented if started in the future
+0.1u setrtp1|0						; start acq
+
+
+# 81 "/root/.topspin-BladeEpu/local_acqu/ppDirs/wcpmg_mas_neo.jk"
+  1u setrtp1^1
+  1u setrtp1^26
+
+  (p1:sp1 ph1):f1    ;WURST shape pulse
+  echod
+
+3 (p1:sp1 ph2):f1    ;WURST shape pulse
+  de
+  d7 setrtp1|26
+  de setrtp1^26
+# 92 "/root/.topspin-BladeEpu/local_acqu/ppDirs/wcpmg_mas_neo.jk"
+  lo to 3 times l22
+
+
+# 98 "/root/.topspin-BladeEpu/local_acqu/ppDirs/wcpmg_mas_neo.jk"
+  (1u setrtp1^26):f1								; path to receiver is blanked
+	0.05u setrtp1^1							; end of acq and used in case data points are left in memory (safety flush)
+
+  rcyc=2
+  100m wr #0
+exit
+
+; WCPMG phases
+ph1 = 0 0 1 1 2 2 3 3
+ph2 = 1 3 2 0 3 1 0 2
+# 109 "/root/.topspin-BladeEpu/local_acqu/ppDirs/wcpmg_mas_neo.jk"
+; receiver phases
+ph30=0
+ph31=0 0 1 1 2 2 3 3

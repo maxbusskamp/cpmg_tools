@@ -1,0 +1,20 @@
+expno12&13
+195Pt WCPMG-MAS NMR of Pt-Mix
+#############################################
+195Pt standard reference K2PtCl6 1pulse NMR @ static (set to 0 ppm)
+Probe: PH MASDVT 500W2 BL4 N-P/F/H CGR+14N
+Shim: zero
+Filter 195Pt: no filter
+Filter 1H: highpass filter from neo
+#############################################
+d1: 4 s
+42 echoes with 13 rotorechoes each
+#############################################
+cw decoupling at ~ 100 kHz
+#############################################
+25us W2 5MHz at 120 kHz
+
+splitadd:
+3020
+500
+60

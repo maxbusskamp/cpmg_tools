@@ -1,0 +1,11 @@
+##TITLE= Parameter file, TopSpin 4.1.1
+##JCAMPDX= 5.0
+##DATATYPE= Parameter Values
+##NPOINTS= 4	$$ modification sequence number
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= j_kopp06
+$$ 2021-04-20 15:36:20.141 +0200  m_buss13@hansen24
+$$ /home/m_buss13/Desktop/jonas-test/195Pt_[Pt(NH3)4]Cl2_WCPMG_14.06.16/7/pdata/1/assocs
+$$ process /opt/topspin4.1.1/prog/mod/dataserver
+##$MULTDISP= </home/m_buss13/Desktop/jonas-test/195Pt_[Pt(NH3)4]Cl2_WCPMG_20.06.16/9/pdata/1>
+##END=
