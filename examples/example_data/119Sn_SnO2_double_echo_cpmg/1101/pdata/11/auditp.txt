@@ -1,0 +1,341 @@
+##TITLE= Audit trail, TopSpin 4.0.7
+##JCAMPDX= 5.01
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= m_buss13
+$$ /home/m_buss13/ownCloud/nmr_data/neo500/2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg/1101/pdata/11/auditp.txt
+##AUDIT TRAIL=  $$ (NUMBER, WHEN, WHO, WHERE, PROCESS, VERSION, WHAT)
+(   1,<2020-08-23 17:52:09.598 +0000>,<root>,<BladeEpu>,<go4>,<TopSpin 4.0.8>,
+      <created by zg on 'AvanceNEO' (neo500) by user 'm_buss13'
+       on data set with UUID '2131d8fe-e568-11ea-8b49-00139526ce73'
+       started at 2020-08-23 17:43:18.815 +0000, POWCHK enabled, PULCHK disabled,
+       completed at 2020-08-23 17:52:09.596 +0000
+       configuration hash MD5:
+       3E 41 48 7F 24 F0 1C D0 16 86 27 26 9B CA 33 46
+       double data hash MD5: 63000
+       74 5D 40 36 D1 8C FF BF 3E BB EE 59 35 1A DB 4D>)
+(   2,<2020-08-24 14:56:51.949 +0200>,<m_buss13>,<ubuntuvm>,<dirdata>,<TopSpin 4.0.8>,
+      <wrpa from 1 801 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       74 5D 40 36 D1 8C FF BF 3E BB EE 59 35 1A DB 4D>)
+(   3,<2020-08-24 14:57:31.071 +0200>,<m_buss13>,<ubuntuvm>,<dirdata>,<TopSpin 4.0.8>,
+      <wra from 1100 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       74 5D 40 36 D1 8C FF BF 3E BB EE 59 35 1A DB 4D>)
+(   4,<2020-08-24 14:57:37.796 +0200>,<m_buss13>,<ubuntuvm>,<dirdata>,<TopSpin 4.0.8>,
+      <Unknown data manipulation detected
+       wra from 1101 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       65 E6 D1 38 AF DB 18 B6 47 8A 87 CC 0A 5D AA 38>)
+(   5,<2020-08-24 14:57:37.950 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1102 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       6B AB 4D 6F BB 85 A8 9B 93 31 56 31 22 D1 24 53>)
+(   6,<2020-08-24 14:57:38.019 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1103 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       FC D0 E1 FE D2 9A 8A 93 FC D4 DA 91 26 53 CA 14>)
+(   7,<2020-08-24 14:57:38.080 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1104 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       B7 7C 3E 7D 7D F6 87 2F AF 75 36 38 69 D4 8E A3>)
+(   8,<2020-08-24 14:57:38.140 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1105 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       98 F6 36 D2 75 F7 EA D7 90 8A EA F0 C4 5E 8D BB>)
+(   9,<2020-08-24 14:57:38.207 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1106 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       6C E1 5F FA 56 58 0B FF E8 18 95 69 21 F4 2A FD>)
+(  10,<2020-08-24 14:57:38.267 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1107 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       E1 D2 C0 07 10 13 07 18 A0 E4 52 A3 E5 67 44 CD>)
+(  11,<2020-08-24 14:57:38.332 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1108 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       92 FD B3 3A 29 49 DE 6F 12 B6 10 95 44 82 30 4B>)
+(  12,<2020-08-24 14:57:38.406 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1109 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       9C DC C2 A0 74 E7 15 6B 16 88 F1 B9 67 1E 59 E4>)
+(  13,<2020-08-24 14:57:38.469 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1110 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       ED 17 69 26 1E 51 DF FB 53 F6 B5 49 84 47 55 CD>)
+(  14,<2020-08-24 14:57:38.533 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1111 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       1C C2 C3 59 D0 E3 CD D7 57 0E 53 D3 13 51 6F 63>)
+(  15,<2020-08-24 14:57:38.594 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1112 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       E2 B1 41 E2 C7 AD B4 1C 4B 1C E4 D4 44 F9 8A 9F>)
+(  16,<2020-08-24 14:57:38.656 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1113 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       29 E3 B9 E9 D9 B3 EA 44 E5 07 40 99 7A F0 9D 25>)
+(  17,<2020-08-24 14:57:38.720 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1114 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       F3 C4 5E 8F 60 97 2B 76 B7 53 37 26 48 E9 DD A1>)
+(  18,<2020-08-24 14:57:38.785 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1115 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       27 F1 E8 C7 06 25 72 DF 4D 75 7A 75 A8 CB CB BF>)
+(  19,<2020-08-24 14:57:38.846 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1116 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       DE 88 47 5F 6B A0 C3 27 59 56 63 CA 0A 9D DF F0>)
+(  20,<2020-08-24 14:57:38.907 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1117 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       CC 1C 7A 65 82 17 44 83 35 7B BA 3D 6E 51 E5 ED>)
+(  21,<2020-08-24 14:57:38.969 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1118 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       FC 12 F6 E8 1E F9 AB 2F 6F 3D 8F 8D 28 CC C1 63>)
+(  22,<2020-08-24 14:57:39.036 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1119 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       8B 7D A4 2A 4D 5C 92 5C 7A 6D 55 18 9C 90 ED 65>)
+(  23,<2020-08-24 14:57:39.096 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1120 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       15 FB 13 55 59 DE 51 A8 C1 77 66 C5 5F 00 56 01>)
+(  24,<2020-08-24 14:57:39.157 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1121 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       F9 2D 93 26 4B 0A B8 32 67 12 03 EC C2 F6 47 A0>)
+(  25,<2020-08-24 14:57:39.221 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1122 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       DD B9 96 D6 C9 B8 A2 6C 77 17 32 DC 63 DF 1F 69>)
+(  26,<2020-08-24 14:57:39.281 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1123 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       46 5C 09 33 06 18 AD 2B 82 93 AE 47 58 3A FB A1>)
+(  27,<2020-08-24 14:57:39.344 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1124 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       49 A0 4F 18 3F 8A E3 0F C6 1F 56 90 6E FD 54 D0>)
+(  28,<2020-08-24 14:57:39.405 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1125 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       DD 3F 34 0D A4 99 17 60 EF DF 7E AC 44 CD 5A 9E>)
+(  29,<2020-08-24 14:57:39.493 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1126 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       89 A6 15 30 1E F6 EF 8C C0 B8 25 5C 2B 89 BF 02>)
+(  30,<2020-08-24 14:57:39.554 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1127 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       39 88 AF 69 50 B8 ED 7F 5B BA 7B 18 52 5C C3 B5>)
+(  31,<2020-08-24 14:57:39.614 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1128 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       C0 A4 59 01 C2 D3 41 56 E6 F2 8F 4B 5A E4 7B 87>)
+(  32,<2020-08-24 14:57:39.670 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1129 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       03 B4 8E 08 FF 74 17 FC FF C1 6D BB 91 4B 6F 8B>)
+(  33,<2020-08-24 14:57:39.735 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1130 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       BF 7C 5A 42 B7 30 FC 82 CC 43 84 94 5B 91 D1 E0>)
+(  34,<2020-08-24 14:57:39.795 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1131 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       CE 0E 01 D1 14 40 8D BE 65 E9 1E 99 7D 0B 42 FE>)
+(  35,<2020-08-24 14:57:39.854 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1132 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       AE 0F 08 AF CF DD 51 F2 DC 77 F7 A4 F0 3A EB F3>)
+(  36,<2020-08-24 14:57:39.915 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1133 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       8A 28 B8 86 D9 89 FB 8C 28 6F 0A 8E 74 90 EF 92>)
+(  37,<2020-08-24 14:57:39.975 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1134 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       2A 77 E9 5B E6 E2 E9 EB 7F 95 C8 04 1A 5C 9C 14>)
+(  38,<2020-08-24 14:57:40.040 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1135 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       7E B8 11 93 01 DB 73 2B 21 B5 35 D6 0D 68 DC 1B>)
+(  39,<2020-08-24 14:57:40.116 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1136 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       70 3F D0 D6 AD 50 DA 3D E4 1E 4B 11 97 E1 3E F6>)
+(  40,<2020-08-24 14:57:40.176 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1137 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       2F D2 FC AE 54 4B A9 12 A2 7F 61 5F 04 A0 5A 6C>)
+(  41,<2020-08-24 14:57:40.236 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1138 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       6E 12 FC 53 67 4A 53 39 3C ED 6C 11 E6 E0 D4 80>)
+(  42,<2020-08-24 14:57:40.302 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1139 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       3D 41 C3 7C DD 08 8D 49 5B 51 79 9C 8B A0 49 97>)
+(  43,<2020-08-24 14:57:40.361 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1140 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       56 58 38 85 6D 3B DD 74 94 43 42 4B 2D 64 F0 5E>)
+(  44,<2020-08-24 14:57:40.420 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1141 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       F2 11 64 9E 7F 28 67 8F 0D 56 DD A6 AD 0E 43 C4>)
+(  45,<2020-08-24 14:57:40.480 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1142 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       18 DE C4 A8 11 88 00 4F 15 03 50 D5 D2 E2 F8 33>)
+(  46,<2020-08-24 14:57:40.541 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1143 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       BB 4B CE CD 34 7D 47 21 2E 7E 6B 60 1F C2 2F 35>)
+(  47,<2020-08-24 14:57:40.608 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1144 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       4E 3C 0A 5A 0F A8 87 BD 2B 5D 3D 89 D3 38 98 46>)
+(  48,<2020-08-24 14:57:40.672 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1145 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       4F 64 C9 F2 DA B3 1D 50 A1 94 EF F8 CC F5 1B 28>)
+(  49,<2020-08-24 14:57:40.732 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1146 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       FF E0 95 8B 38 83 87 17 8F 2B 6D 08 8B 4C 87 5E>)
+(  50,<2020-08-24 14:57:40.791 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1147 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       4D E6 40 81 F1 E0 8B 24 29 06 87 A4 4C CA 5F 36>)
+(  51,<2020-08-24 14:57:40.861 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1148 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       D6 CF 1F 02 C6 90 32 15 A5 92 06 58 78 38 A7 48>)
+(  52,<2020-08-24 14:57:40.926 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1149 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       F6 8D 15 6A E3 FC 40 1C 61 81 95 5D A9 6E 42 37>)
+(  53,<2020-08-24 14:57:40.988 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1150 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       12 25 B7 2C 9C 2E 26 6C D3 0E 0A 69 6D 0C 59 27>)
+(  54,<2020-08-24 14:57:41.048 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       1152 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       1151 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       83 4D 02 82 FF 0D BF 97 91 8B 9E 78 49 3F 4D 6A>)
+(  55,<2020-09-24 17:01:47.657 +0200>,<m_buss13>,<HansenY>,<proc1d>,<TopSpin 4.0.7>,
+      <Start of raw data processing
+       fmc FT_mod = 6 PKNL = 1 TDeff = 8K SI = 64K 
+       data hash MD5: 64K
+       77 D0 75 6C 01 C5 1F EF 9C 0E AF 24 C2 3A A8 A4>)
+(  56,<2020-09-24 17:01:49.563 +0200>,<m_buss13>,<HansenY>,<dirdata>,<TopSpin 4.0.7>,
+      <wrp from 1 1101 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/home/m_buss13/ownCloud/nmr_data/neo500"
+       data hash MD5: 64K
+       77 D0 75 6C 01 C5 1F EF 9C 0E AF 24 C2 3A A8 A4>)
+##END=
+
+$$ hash MD5
+$$ 32 66 5E A1 62 66 78 FA 15 88 65 25 F9 CB C7 C2
