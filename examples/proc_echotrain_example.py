@@ -1,8 +1,6 @@
 #%%
 import matplotlib.pyplot as plt
-import numpy as np
 import matplotlib.gridspec as gridspec
-from plot_module import plot_module
 from nmr_tools import processing, proc_base
 
 

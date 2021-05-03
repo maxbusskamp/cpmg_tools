@@ -3,7 +3,6 @@
 # Example for the different loss function calculations
 from nmr_tools import simpson, processing
 import matplotlib.pyplot as plt
-from subprocess import run
 
 plt.rcParams['figure.dpi'] = 200
 

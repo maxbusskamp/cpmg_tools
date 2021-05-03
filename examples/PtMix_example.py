@@ -1,7 +1,6 @@
 #%%
 from nmr_tools import proc_base, processing
 import matplotlib.pyplot as plt
-import numpy as np
 plt.rcParams['figure.dpi'] = 120
 
 

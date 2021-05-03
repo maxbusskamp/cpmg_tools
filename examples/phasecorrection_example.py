@@ -1,9 +1,7 @@
 #%%
 import matplotlib.pyplot as plt
-from nmr_tools import processing, proc_base
-import numpy as np
+from nmr_tools import processing
 import time
-from scipy.integrate import simps
 plt.rcParams['figure.dpi'] = 200
 
 
