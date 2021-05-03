@@ -6,7 +6,7 @@ plt.rcParams['figure.dpi'] = 200
 
 datapath = '/home/m_buss13/ownCloud/nmr_data/development/195Pt_PtMix_stepped/2999/pdata/1'
 
-ppm_scale, hz_scale, data, dic = processing.read_brukerfid(datapath, dict=True)
+data, _ = processing.read_brukerfid(datapath)
 
 data_lb, window = processing.linebroadening(data, lb_variant='hamming', lb_const=0.2, lb_n=2)
 

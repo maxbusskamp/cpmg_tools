@@ -50,7 +50,7 @@ proc_dict['pulseq'] = """
     """
 
 # Read-in comparison file
-ppm_scale_pb, hz_scale_pb, data = processing.read_ascii(output_path+'PbZrO3_mas_scaled_combined.xy', larmor_freq=104.609)
+data, _, _ = processing.read_ascii(output_path+'PbZrO3_mas_scaled_combined.xy', larmor_freq=104.609)
 
 # Define parameter to be optimized
 # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)

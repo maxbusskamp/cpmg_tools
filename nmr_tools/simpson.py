@@ -177,7 +177,7 @@ def create_simpson(output_path, output_name, input_dict=None, proc_dict=None):  
 
             os.chdir(output_path)
             run(['simpson', output_name])
-            timescale, data = processing.read_ascii_fid(output_path + output_name + '.xy')
+            data, timescale = processing.read_ascii_fid(output_path + output_name + '.xy')
             if data_temp.any():
                 data = data*simpson_variables[keys]['scaling_factor'] + data_temp
             else:
@@ -188,15 +188,15 @@ def create_simpson(output_path, output_name, input_dict=None, proc_dict=None):  
                 myfile.write(''.join(simpson.values()).format(**simpson_variables))
         os.chdir(output_path)
         run(['simpson', output_name])
-        timescale, data = processing.read_ascii_fid(output_path + output_name + '.xy')
+        data, timescale = processing.read_ascii_fid(output_path + output_name + '.xy')
     
-    return (timescale, data)
+    return (data, timescale)
 
 
 def run_simpson(input_file, working_dir, *args):
 
     os.chdir(working_dir)
-    run(['simpson', input_file])
+    run(['simpson', input_file, *args])
 
     return()
 
@@ -207,8 +207,8 @@ def fit_helper(params, data, output_path, output_name, input_dict, proc_dict):
     for keys in params.valuesdict():
         input_dict[str(keys.rsplit('_', 1)[-1])][str(keys.rsplit('_', 1)[0])] = params.valuesdict()[keys]
 
-    timescale_model, data_model = create_simpson(output_path, output_name, input_dict=input_dict)
-    ppm_scale_model, hz_scale_model , data_model_fft = processing.asciifft(data_model, timescale_model, si=8192*2, larmor_freq=104.609)
+    data_model, timescale_model  = create_simpson(output_path, output_name, input_dict=input_dict)
+    data_model_fft, _, _ = processing.asciifft(data_model, timescale_model, si=8192*2, larmor_freq=104.609)
 
     return(processing.calc_mse(data_model_fft.real, data.real))
 

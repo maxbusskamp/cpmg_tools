@@ -39,10 +39,10 @@ simpson.create_simpson(output_path, output_name, input_dict=input_dict, proc_dic
 simpson.run_simpson(output_name, output_path)
 
 # Read FID from ASCII file. FFT can also be performed in Simpson, then read_ascii() can be used.
-timescale, data = processing.read_ascii_fid(output_path+ascii_file)
+data, timescale = processing.read_ascii_fid(output_path+ascii_file)
 
 # Fourier transform FID
-ppm_scale, hz_scale , data = processing.asciifft(data, timescale, si=8192*2, larmor_freq=500.0)
+data, ppm_scale, hz_scale = processing.asciifft(data, timescale, si=8192*2, larmor_freq=500.0)
 
 # Plotting
 plt.figure()
