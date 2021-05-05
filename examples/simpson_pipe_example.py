@@ -36,14 +36,15 @@ input_dict = {'1': {
 data, timescale = simpson.create_simpson(output_path, output_name, input_dict=input_dict)
 
 # Fourier transform summation FID
-data_fft, ppm_scale, hz_scale = processing.asciifft(data, timescale, si=8192*2, larmor_freq=104.609)
+data, ppm_scale, _ = processing.asciifft(data, timescale, si=8192*2, larmor_freq=104.609)
 
 # Read-in comparison file
 data_pb, ppm_scale_pb, _ = processing.read_ascii(output_path+'PbZrO3_mas_scaled_combined.xy', larmor_freq=104.609)
 
 # Plotting
 plt.figure()
-plt.plot(ppm_scale, data_fft.real, c='k', label='Python Pipeline')
+plt.plot(ppm_scale, data.real, c='k', label='Python Pipeline')
 plt.plot(ppm_scale_pb, data_pb.real, c='r', ls='--', label='Manual Simulation')
 plt.legend()
-plt.xlim(0, 3500)
+plt.xlim(-100, 3500)
+plt.savefig('simpson_pipeline.png', dpi=600)
