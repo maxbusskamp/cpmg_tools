@@ -2,7 +2,7 @@
 ##JCAMPDX= 5.01
 ##ORIGIN= Bruker BioSpin GmbH
 ##OWNER= m_buss13
-$$ /home/m_buss13/ownCloud/nmr_data/development/207Pb_wcpmg_mas/1/pdata/1/auditp.txt
+$$ /home/m_buss13/ownCloud/git/nmr_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/12/auditp.txt
 ##AUDIT TRAIL=  $$ (NUMBER, WHEN, WHO, WHERE, PROCESS, VERSION, WHAT)
 (   1,<2021-02-24 14:57:28.403 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
       <acquisition in progress>)
@@ -414,7 +414,11 @@ $$ /home/m_buss13/ownCloud/git/nmr_tools/examples/example_data/207Pb_PbZrO3_MAS_
       <pk fgphup PHC0 = -49.35 PHC1 = 146432 
        data hash MD5: 32K
        2A C6 CA 5D 33 48 48 FF 89 28 9C 27 03 48 7E 31>)
+(  77,<2021-05-07 12:18:48.244 +0200>,<m_buss13>,<ubuntuvm>,<dirdata>,<TopSpin 4.0.8>,
+      <wrp from 1 1 "207Pb_PbZrO3_MAS_WCPMG" "/home/m_buss13/ownCloud/git/nmr_tools/examples/example_data"
+       data hash MD5: 32K
+       2A C6 CA 5D 33 48 48 FF 89 28 9C 27 03 48 7E 31>)
 ##END=
 
 $$ hash MD5
-$$ 49 D3 9E A3 61 E5 F2 83 BF 77 A3 02 5C 02 68 2D
+$$ AE 01 09 5A 6D EA 18 F3 42 F3 2B C3 AE C5 36 E3

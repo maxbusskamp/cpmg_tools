@@ -1,11 +1,11 @@
 ##TITLE= Parameter file, TopSpin 4.0.8
 ##JCAMPDX= 5.0
 ##DATATYPE= Parameter Values
-##NPOINTS= 2	$$ modification sequence number
+##NPOINTS= 3	$$ modification sequence number
 ##ORIGIN= Bruker BioSpin GmbH
 ##OWNER= m_buss13
-$$ 2021-04-21 14:08:33.737 +0200  m_buss13@ubuntuvm
-$$ /home/m_buss13/ownCloud/nmr_data/development/207Pb_wcpmg_mas/1/pdata/1/assocs
+$$ 2021-05-07 12:19:18.421 +0200  m_buss13@ubuntuvm
+$$ /home/m_buss13/ownCloud/git/nmr_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1/assocs
 $$ process /opt/topspin4.0.8/prog/mod/dataserver
-##$MULTDISP= </home/m_buss13/ownCloud/nmr_data/development/207Pb_wcpmg_mas/1/pdata/10|/home/m_buss13/ownCloud/nmr_data/development/207Pb_wcpmg_mas/1/pdata/11>
+##$MULTDISP= </home/m_buss13/ownCloud/git/nmr_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/11>
 ##END=

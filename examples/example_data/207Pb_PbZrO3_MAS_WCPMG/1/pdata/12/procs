@@ -1,16 +1,16 @@
 ##TITLE= Parameter file, TopSpin 4.0.8
 ##JCAMPDX= 5.0
 ##DATATYPE= Parameter Values
-##NPOINTS= 11	$$ modification sequence number
+##NPOINTS= 1	$$ modification sequence number
 ##ORIGIN= Bruker BioSpin GmbH
 ##OWNER= m_buss13
-$$ 2021-05-07 12:18:45.912 +0200  m_buss13@ubuntuvm
-$$ /home/m_buss13/ownCloud/git/nmr_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1/proc
-$$ process /opt/topspin4.0.8/prog/mod/proc1d
-##$ABSF1= 10.99263
-##$ABSF2= -11.04602
-##$ABSG= 5
-##$ABSL= 50
+$$ 2021-05-07 12:18:48.235 +0200  m_buss13@ubuntuvm
+$$ /home/m_buss13/ownCloud/git/nmr_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/12/procs
+$$ process /opt/topspin4.0.8/prog/mod/dirdata
+##$ABSF1= 0
+##$ABSF2= 0
+##$ABSG= 0
+##$ABSL= 0
 ##$ALPHA= 0
 ##$AQORDER= 0
 ##$ASSFAC= 0
@@ -20,28 +20,28 @@ $$ process /opt/topspin4.0.8/prog/mod/proc1d
 ##$AUNMP= <proc_1d>
 ##$AXLEFT= 0
 ##$AXNAME= <>
-##$AXNUC= <off>
+##$AXNUC= <207Pb>
 ##$AXRIGHT= 0
 ##$AXTYPE= 0
 ##$AXUNIT= <>
 ##$AZFE= 0.1
 ##$AZFW= 0.1
-##$BCFW= 1
-##$BC_mod= 2
+##$BCFW= 0
+##$BC_mod= 0
 ##$BYTORDP= 0
 ##$COROFFS= 0
 ##$CY= 15
 ##$DATMOD= 1
-##$DC= 1
+##$DC= 0
 ##$DFILT= <>
 ##$DTYPP= 0
 ##$ERETIC= no
-##$F1P= 10
-##$F2P= -10
-##$FCOR= 0.5
-##$FTSIZE= 0
+##$F1P= 40.9607965697774
+##$F2P= -76.5753095622413
+##$FCOR= 1
+##$FTSIZE= 32768
 ##$FT_mod= 6
-##$GAMMA= 1
+##$GAMMA= 0
 ##$GB= 0
 ##$INTBC= 1
 ##$INTSCL= 1
@@ -67,10 +67,10 @@ $$ process /opt/topspin4.0.8/prog/mod/proc1d
 ##$MddSEED= 0
 ##$MddSRSIZE= 0
 ##$Mdd_CsALG= 0
-##$Mdd_CsLAMBDA= 1
+##$Mdd_CsLAMBDA= 0
 ##$Mdd_CsNITER= 0
 ##$Mdd_CsNORM= 0
-##$Mdd_CsVE= yes
+##$Mdd_CsVE= no
 ##$Mdd_CsZF= 0
 ##$Mdd_LrLAMBDA= 0
 ##$Mdd_LrNITER= 0
@@ -78,14 +78,14 @@ $$ process /opt/topspin4.0.8/prog/mod/proc1d
 ##$Mdd_LrZF= 0
 ##$Mdd_mod= 0
 ##$NCOEF= 0
-##$NC_proc= 0
+##$NC_proc= 11
 ##$NLEV= 6
 ##$NOISF1= 0
 ##$NOISF2= 0
-##$NSP= 1
+##$NSP= 0
 ##$NTH_PI= 0
 ##$NZP= 0
-##$OFFSET= 14340.01
+##$OFFSET= 11954.24
 ##$PC= 1
 ##$PHC0= -177.5531
 ##$PHC1= 244889.6
@@ -105,7 +105,7 @@ $$ process /opt/topspin4.0.8/prog/mod/proc1d
 ##$RDINT= 0
 ##$RDPOS= 0
 ##$REVERSE= no
-##$SF= 104.31946078125
+##$SF= 104.565402367777
 ##$SI= 32768
 ##$SIGF1= 0
 ##$SIGF2= 0
@@ -115,12 +115,12 @@ $$ process /opt/topspin4.0.8/prog/mod/proc1d
 ##$SREF_mod= 1
 ##$SREGLST= <1H.CDCl3>
 ##$SSB= 0
-##$STSI= 0
+##$STSI= 32768
 ##$STSR= 0
-##$SW_p= 10000.0000000013
+##$SW_p= 2500000
 ##$SYMM= 0
 ##$S_DEV= 0
-##$TDeff= 32768
+##$TDeff= 3000
 ##$TDoff= 0
 ##$TI= <result of fidadd>
 ##$TILT= no
@@ -132,8 +132,8 @@ $$ process /opt/topspin4.0.8/prog/mod/proc1d
 ##$USERP3= <>
 ##$USERP4= <>
 ##$USERP5= <>
-##$WDW= 1
+##$WDW= 0
 ##$XDIM= 0
-##$YMAX_p= 0
-##$YMIN_p= 0
+##$YMAX_p= 394874596
+##$YMIN_p= -33215983
 ##END=
