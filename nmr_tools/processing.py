@@ -459,7 +459,19 @@ def calc_mse(data_1, data_2):
     data_rms = data_1 - data_2
     rms = np.mean(data_rms**2)
 
-    return(rms)
+    return (rms) if rms<1.0e+100 else (1.0e+100)
+
+
+def calc_residual(data_1, data_2):
+    """
+    This calculates the Mean Square Error loss function of two 1d arrays.
+
+    Args:
+        data_1 (1darray): First data array to be evaluated
+        data_2 (1darray): Second data array to be evaluated
+    """
+
+    return (abs(data_1 - data_2))
 
 
 def calc_mae(data_1, data_2):
@@ -692,4 +704,4 @@ def asciifft(data, timescale, si=0, larmor_freq=0.0):
     if(larmor_freq!=0.0):
             ppm_scale = hz_scale/larmor_freq
 
-    return(data, ppm_scale, hz_scale)
+    return(data, ppm_scale, hz_scale) if larmor_freq!=0.0 else (data, hz_scale)

@@ -3,9 +3,16 @@ from subprocess import run
 from nmr_tools import processing
 import numpy as np
 import lmfit
+from collections import defaultdict
+import sys
+
+def constant_factory(value):
+
+    return lambda: value
 
 
-def create_simpson(output_path, output_name, input_dict=None, proc_dict=None):  # Write simpson input files
+
+def create_simpson(output_path, output_name, input_dict=None, proc_dict=None, params_scaling={}):  # Write simpson input files
     """This generates a custom Simpson inputfile, which can be used from the terminal with: 'simpson <output_name>'
 
     Args:
@@ -64,6 +71,10 @@ def create_simpson(output_path, output_name, input_dict=None, proc_dict=None):  
             for keys in input_dict:
                 for subkeys in input_dict[keys]:
                     simpson_variables[keys][subkeys] = input_dict[keys][subkeys]
+                    if keys in params_scaling:
+                        if subkeys in params_scaling[keys]:
+                            simpson_variables[keys][subkeys] = input_dict[keys][subkeys]*params_scaling[keys][subkeys]
+
         else:
             simpson_variables = {
                 "nuclei":'1H',
@@ -89,7 +100,10 @@ def create_simpson(output_path, output_name, input_dict=None, proc_dict=None):  
                 "scaling_factor":1.0,
                 "output_name":output_name}
             for keys in input_dict:
-                simpson_variables[keys] = input_dict[keys]
+                if keys in params_scaling:
+                    simpson_variables[keys] = input_dict[keys]*params_scaling[keys]
+                else:
+                    simpson_variables[keys] = input_dict[keys]
     else:
         simpson_variables = {
                     "nuclei":'1H',
@@ -170,7 +184,7 @@ def create_simpson(output_path, output_name, input_dict=None, proc_dict=None):  
             simpson[keys] = proc_dict[keys]
 
     if any(isinstance(i,dict) for i in simpson_variables.values()):
-        data_temp = np.empty(1)
+        counter = 0
         for keys in simpson_variables:
             with  open(output_path + output_name,'w') as myfile:
                 myfile.write(''.join(simpson.values()).format(**simpson_variables[keys]))
@@ -178,11 +192,12 @@ def create_simpson(output_path, output_name, input_dict=None, proc_dict=None):  
             os.chdir(output_path)
             run(['simpson', output_name])
             data, timescale = processing.read_ascii_fid(output_path + output_name + '.xy')
-            if data_temp.any():
-                data = data*simpson_variables[keys]['scaling_factor'] + data_temp
-            else:
+            if counter == 0:
                 data = data*simpson_variables[keys]['scaling_factor']
+            else:
+                data = data*simpson_variables[keys]['scaling_factor'] + data_temp
             data_temp = data
+            counter += 1
     else:
         with  open(output_path + output_name,'w') as myfile:
                 myfile.write(''.join(simpson.values()).format(**simpson_variables))
@@ -201,32 +216,103 @@ def run_simpson(input_file, working_dir, *args):
     return()
 
 
-def fit_helper(params, data, output_path, output_name, input_dict, proc_dict):
+def fit_helper(params, data, output_path, output_name, input_dict, proc_dict, params_scaling, si):
 
 
     for keys in params.valuesdict():
         input_dict[str(keys.rsplit('_', 1)[-1])][str(keys.rsplit('_', 1)[0])] = params.valuesdict()[keys]
 
-    data_model, timescale_model  = create_simpson(output_path, output_name, input_dict=input_dict)
-    data_model_fft, _, _ = processing.asciifft(data_model, timescale_model, si=8192*2, larmor_freq=104.609)
+    params_scaling_input = defaultdict(lambda: defaultdict(constant_factory(1.0)))
+    for keys in params_scaling:
+        params_scaling_input[str(keys.rsplit('_', 1)[-1])][str(keys.rsplit('_', 1)[0])] = params_scaling[keys]
 
-    return(processing.calc_mse(data_model_fft.real, data.real))
+    # print(input_dict)
+    data_model, timescale_model  = create_simpson(output_path, output_name, input_dict=input_dict, proc_dict=proc_dict, params_scaling=params_scaling_input)
+    if(len(data_model)>si):
+        si = len(data_model)
+        print('SI value to low. Value was corrected to: ' + str(si))
+    data_model_fft, _ = processing.asciifft(data_model, timescale_model, si=si)
+    
+    # Scaling
+    data_model_fft = data_model_fft/max(data_model_fft.real)
+    data = data/max(data.real)
+
+    # Check SI compliance
+    if(len(data_model_fft)!=len(data)):
+        sys.exit('Model and comparison data are not of same length. Check SI value. ' + str(len(data_model_fft)) + ' vs. ' + str(len(data)))
+
+    # print(processing.calc_logcosh(data_model_fft.real, data.real))
+    # print(processing.calc_mse(data_model_fft.real, data.real))
+    # return(data_model_fft.real - data.real)
+    return(processing.calc_logcosh(data_model_fft.real, data.real))
 
 
-def fit_simpson(output_path, output_name, params_input, data, input_dict=None, proc_dict=None, verb=True):
+def fit_simpson(output_path, output_name, params_input, data, si, input_dict=None, proc_dict=None, verb=True, method='leastsq', **fit_kws):
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     os.chdir(output_path)
 
     params = lmfit.Parameters()
+    params_scaling = {}
     if any(isinstance(i,tuple) for i in params_input):
         for elem in params_input:
-            params.add(*elem)
+            name, value, vary, valmin, valmax, expr, brute_step = elem
+            scalefactor = 1
+            if value:
+                if(abs(value)>scalefactor):
+                    scalefactor = abs(value)
+            if valmin != -np.inf and valmin != None:
+                if(abs(valmin)>scalefactor):
+                    scalefactor = abs(valmin)
+            if valmax != np.inf and valmax != None:
+                if(abs(valmax)>scalefactor):
+                    scalefactor = abs(valmax)
+            if value:
+                value = value/scalefactor
+            if valmin != -np.inf and valmin != None:
+                valmin = valmin/scalefactor
+            if valmax != np.inf and valmax != None:
+                valmax = valmax/scalefactor
+            if brute_step:
+                brute_step = brute_step/scalefactor
+            params.add(*(name, value, vary, valmin, valmax, expr, brute_step))
+            params_scaling[name] = scalefactor
     else:
-        params.add(*params_input)
+        name, value, vary, valmin, valmax, expr, brute_step = params_input
+        # print(name, value, vary, valmin, valmax, expr, brute_step)
+        scalefactor = 1
+        if value:
+            if(abs(value)>scalefactor):
+                scalefactor = abs(value)
+        if valmin != -np.inf and valmin != None:
+            if(abs(valmin)>scalefactor):
+                scalefactor = abs(valmin)
+        if valmax != np.inf and valmax != None:
+            if(abs(valmax)>scalefactor):
+                scalefactor = abs(valmax)
+        if value:
+            value = value/scalefactor
+        if valmin != -np.inf and valmin != None:
+            valmin = valmin/scalefactor
+        if valmax != np.inf and valmax != None:
+            valmax = valmax/scalefactor
+        if brute_step:
+            brute_step = brute_step/scalefactor
+        # print(name, value, vary, valmin, valmax, expr, brute_step)
+        params.add(*(name, value, vary, valmin, valmax, expr, brute_step))
+        params_scaling[name] = scalefactor
     if verb:
-        print('This are the parameters you passed for optimization:')
+        print('This are the parameters you passed for optimization, after scaling:')
         params.pretty_print()
+        print('Scale parameters are:')
+        print(params_scaling)
 
-    out = lmfit.minimize(fit_helper, params, args=(data, output_path, output_name, input_dict, proc_dict), method='nelder')
+    out = lmfit.minimize(fit_helper, params, args=(data, output_path, output_name, input_dict, proc_dict, params_scaling, si), method=method, **fit_kws)
+
+    print('--------------------------------------')
+    print('These are the resulting fit parameter:')
+    print('--------------------------------------')
+    print('Parameter    Value    Min    Max    Stderr')
+    for name, param in out.params.items():
+        print('{:7s} {:11.5f} {:11.5f} {:11.5f} {}'.format(name, param.value*params_scaling[name], param.min*params_scaling[name], param.max*params_scaling[name], param.stderr))
 
     return(out)
