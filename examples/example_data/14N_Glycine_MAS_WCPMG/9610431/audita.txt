@@ -1,0 +1,210 @@
+##TITLE= Audit trail, TopSpin 4.0.9
+##JCAMPDX= 5.01
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= p_keil01
+$$ /home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr/14N-Glycine-WCPMG-MAS-4mmHFX/9610431/audita.txt
+##AUDIT TRAIL=  $$ (NUMBER, WHEN, WHO, WHERE, PROCESS, VERSION, WHAT)
+(   1,<2021-03-12 11:24:39.641 +0000>,<p_keil01>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <acquisition in progress>)
+$$ /opt/nmrdata/data/p_keil01/nmr/14N-Glycine-WCPMG-MAS-4mmHFX/1006104/audita.txt
+(   2,<2021-03-12 11:42:07.497 +0000>,<p_keil01>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <created by zg on 'AvanceNEO' (neo500) by user 'p_keil01'
+       on data set with UUID '88b03e3e-8325-11eb-842a-00139526ce73'
+       started at 2021-03-12 11:24:39.652 +0000, POWCHK enabled, PULCHK disabled,
+       completed at 2021-03-12 11:42:07.495 +0000
+       configuration hash MD5:
+       ED 19 E1 B9 96 B8 76 4B A9 E5 BA E2 F1 EC F7 CA
+       double data hash MD5: 50400
+       7E 79 28 E9 5D 18 1B 9A E7 0C 57 01 9D 43 D0 8F>)
+(   3,<2021-03-12 13:03:06.882 +0100>,<p_keil01>,<Hansen23>,<dirdata>,<TopSpin 4.0.9>,
+      <wrpa from 1 1006104 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       7E 79 28 E9 5D 18 1B 9A E7 0C 57 01 9D 43 D0 8F>)
+(   4,<2021-03-12 13:03:22.542 +0100>,<p_keil01>,<Hansen23>,<dirdata>,<TopSpin 4.0.9>,
+      <wra from 9610400 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       7E 79 28 E9 5D 18 1B 9A E7 0C 57 01 9D 43 D0 8F>)
+(   5,<2021-03-12 13:03:22.648 +0100>,<p_keil01>,<Hansen23>,<dirdata>,<TopSpin 4.0.9>,
+      <Unknown data manipulation detected
+       wra from 9610401 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       00 A5 8E 89 58 45 5B 7B 24 96 29 77 D6 9D F7 F4>)
+$$ /home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr/14N-Glycine-WCPMG-MAS-4mmHFX/9610431/audita.txt
+(   6,<2021-03-12 13:03:22.654 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610402 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       DC DF A7 DD 93 09 66 8B 47 24 9D 71 BA 85 57 9B>)
+(   7,<2021-03-12 13:03:22.661 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610403 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       E4 68 67 0D B4 86 C7 34 E5 8A E9 CF 17 FB 7A 24>)
+(   8,<2021-03-12 13:03:22.669 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610404 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       F0 F1 8D 12 92 78 82 E5 F9 82 E8 D6 7B CC DE 6D>)
+(   9,<2021-03-12 13:03:22.675 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610405 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       7E 9D C6 95 D9 B6 75 81 72 FC 2C 9C AB A8 DC C9>)
+(  10,<2021-03-12 13:03:22.681 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610406 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       84 9E 9E 98 38 EA 92 E1 7D A2 28 92 3D 32 F0 ED>)
+(  11,<2021-03-12 13:03:22.688 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610407 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       86 F6 17 7B 83 54 40 67 AB 54 8A F7 57 57 0D 6B>)
+(  12,<2021-03-12 13:03:22.695 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610408 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       51 EA D0 A8 05 37 F5 4B 1D 35 99 3B 71 58 71 E4>)
+(  13,<2021-03-12 13:03:22.706 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610409 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       E4 EA 10 30 F6 32 BD E2 AA 7C 7F 4F ED B2 55 E4>)
+(  14,<2021-03-12 13:03:22.713 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610410 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       FC 98 50 99 7D 6C 70 86 97 66 59 5D F5 0E DA 6D>)
+(  15,<2021-03-12 13:03:22.721 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610411 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       E7 70 8D E9 2A B6 CA 2F F2 49 3A 57 7D 4A 5F 01>)
+(  16,<2021-03-12 13:03:22.727 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610412 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       69 88 31 D9 49 27 7D 7A 2E 14 99 69 DE D2 D7 D3>)
+(  17,<2021-03-12 13:03:22.734 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610413 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       ED 87 D0 4B 7D 4C 9F A4 5E 79 05 8D 48 CF C7 4B>)
+(  18,<2021-03-12 13:03:22.741 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610414 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       E7 74 EF D4 E7 B9 93 E1 3F 9F C8 E8 4A 40 CD DB>)
+(  19,<2021-03-12 13:03:22.748 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610415 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       03 6A 4D 2A 62 5B 90 FB 2D 7A 14 26 FA 89 2F 1E>)
+(  20,<2021-03-12 13:03:22.755 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610416 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       11 3D 4B 27 92 82 8E 43 EC BD 3B 04 FB B5 52 83>)
+(  21,<2021-03-12 13:03:22.761 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610417 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       5C 34 FC DD FA 63 97 E5 87 49 D5 FE 1D 91 27 83>)
+(  22,<2021-03-12 13:03:22.768 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610418 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       C8 12 7E 68 37 3F 76 F1 84 88 18 B2 F8 85 DE 4B>)
+(  23,<2021-03-12 13:03:22.774 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610419 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       9B 07 5D 19 93 F8 7A D6 D3 D9 0E 41 62 6C 37 45>)
+(  24,<2021-03-12 13:03:22.783 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610420 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       27 C7 B7 E4 50 8A F5 6F C5 D7 88 3C F7 AD E4 00>)
+(  25,<2021-03-12 13:03:22.789 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610421 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       EF A7 FD 7B A5 CD 45 9F 39 F2 C2 1E FA B1 33 6D>)
+(  26,<2021-03-12 13:03:22.797 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610422 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       35 90 C5 BF FC 9B D7 94 BD F4 BA 44 0A 74 14 FC>)
+(  27,<2021-03-12 13:03:22.804 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610423 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       B7 D8 EA 1B 6C A9 54 6A FD 6D 3F CD C2 19 3E 2F>)
+(  28,<2021-03-12 13:03:22.810 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610424 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       D0 86 8D 54 86 2A 32 4B 77 94 F1 A0 47 F4 C0 75>)
+(  29,<2021-03-12 13:03:22.817 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610425 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       79 91 8C 34 13 05 40 61 FA D0 51 B4 B2 D8 74 1D>)
+(  30,<2021-03-12 13:03:22.824 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610426 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       17 5E 5D A1 81 0D 4C 8D 5D 8C D5 A4 3C E9 B9 F8>)
+(  31,<2021-03-12 13:03:22.831 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610427 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       42 31 AF 7C 0A B8 04 14 04 2E 82 01 D5 63 DD 02>)
+(  32,<2021-03-12 13:03:22.838 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610428 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       01 9E ED 20 B1 CA A5 72 D1 12 98 99 14 A1 6E FF>)
+(  33,<2021-03-12 13:03:22.844 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610429 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       56 69 36 2F D7 0B 7E 6F 2C 2F D0 A0 D3 EA 8D 8E>)
+(  34,<2021-03-12 13:03:22.856 +0100>,<p_keil01>,<Hansen23>,<proc1d>,<TopSpin 4.0.9>,
+      <addfid DC = 1 of
+       9610431 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       9610430 "14N-Glycine-WCPMG-MAS-4mmHFX" "/home/p_keil01/Documents/neo500_data/nmrdata/data/p_keil01/nmr"
+       double data hash MD5: 50400
+       70 ED 62 39 7A 25 60 2F E2 FF 52 E2 A0 D0 8D B2>)
+##END=
+
+$$ hash MD5
+$$ B9 A9 2D 35 88 FD D5 AA B6 7E A7 87 D8 7C 1C E5

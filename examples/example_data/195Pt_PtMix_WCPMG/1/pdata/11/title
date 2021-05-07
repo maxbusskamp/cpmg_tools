@@ -1,0 +1,13 @@
+195Pt WCPMG NMR Pt Mix
+################################################
+195Pt reference K2[PtCl6] @ static (12.02.2021) (set to 0 ppm)
+Probe: 4mm30-80er
+Shim: Shim: 30-80.HRMAS.jd
+filter-x: low-pass
+filter-H: high-pass filter
+################################################
+cw decoupling at 50 kHz
+d1: 4 s
+120 160 us echos were recorded
+################################################
+80u W80 1MHz at 31 kHz amplitude

@@ -1,0 +1,40 @@
+14N Glycine @ 12.5 kHz (11.03.2021)
+4.0 mm HFX - HFX (47 pF) shunt for 14N
+0-15N bandpass filter
+1H cable on 1H
+X cable on X
+shim: 4mm_HFX_2020_11_09.sb
+de = 10 us
+
+ref.: NH4Cl (0 ppm, 11.03.2021)
+ns=512
+d1=4s (Jakobsen Paper)
+
+1H / swTPPM decoupling (7.33 us, 80 W), optimiert an NH4Cl (11.03.2021)
+pi/2: 4.0 @ 200 W (62.5 kHz)
+2 pi: 15.3 @ 200 W (21.88 kHz)
+Einstrahler auf NH4Cl (7.4 ppm, 11.03.2021)
+
+14N:
+pi/2: 11.0 @ 200 W (22.73 kHz)
+2 pi: 45.7 @ 200 W (21.88 kHz)
+On-res defined as: Einstrahler auf sim. Glycine (3259 Hz rel. to NH4Cl, 11.03.2021)
+
+de = 20 us
+pi/2: 11.0 @ 200 W (22.73 kHz)
+2 pi: 45.7 @ 200 W (21.88 kHz)
+pi/2:
+ns=2
+d1=4s
+
+
+p1=11.0 us
+
+Wurst-2:
+Delta 0.5 MHz,
+p1 250 us (R = 2 MHz/us)
+0.6*0.264*sqrt(R)=24.25 kHz (329.88 W)
+stepped recording, 6 steps
+o1= on-res -600 kHz
+direction -1
+trying 8* the number of scans (and twice the number of echoes, 2% duty cycle)

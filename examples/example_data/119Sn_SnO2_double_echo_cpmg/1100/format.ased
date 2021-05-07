@@ -1,0 +1,482 @@
+#*******************************************************************
+#
+# $Source: /sc/CvsTree/sc/gen/src/form/ased_acqu.form,v $
+#
+# Copyright (c) 1995 - 2008
+# BRUKER BioSpin GmbH
+# D-76287 Rheinstetten, Germany
+#
+# All Rights Reserved
+#
+#
+# $Id: ased_acqu.form,v 1.37 2019/02/13 07:59:38 chjo Exp $
+#*******************************************************************
+EDIT_PAR COMMAND FILE
+
+DI_MODE         LONG
+ED_ENTRY        ACQU
+ORDER           FILE
+
+
+HEADER		"====== General ======"
+NAME		PULPROG
+END
+NAME		TD
+END
+NAME		SW
+END
+T_NAME		SWH
+		TYPE	R32
+		CLASS	ACQU
+		SUBRANGE 0.0 1e38
+		REL	"SWH=SW*SFO1"
+		INV_REL "SW=SWH/SFO1"
+		UNIT	"Hz"
+		FORMAT	"%14.2f Hz"
+		TEXT	"sweep width"
+END
+T_NAME          AQ
+		TYPE	R32
+		CLASS	ACQU
+		SUBRANGE 0.0 1e38
+		REL	"AQ=aqcalc(SW,SFO1,TD,DIGTYP,FnMODE)"
+		INV_REL	"TD=tdcalc(SW,SFO1,1.0e6*AQ,DIGTYP,FnMODE)"
+		UNIT	"sec"
+		FORMAT	"%14.7f sec"
+                TEXT	"acquisition time"
+END
+NAME		RG
+END
+T_NAME          DW
+		TYPE	R32
+		CLASS	ACQU
+		SUBRANGE 0.0 1e38
+		REL	"DW=1/(2*SW*SFO1)"
+		INV_REL	"SW=1000000/(2*(0.005+DW)*SFO1)"
+		UNIT	"usec"
+		FORMAT	"%14.3f usec"
+		TEXT	"dwell time "
+END
+NAME		DE
+		FORMAT	"%14.2f usec"
+END
+T_NAME		GRPDLY
+		TYPE	R64
+		SUBRANGE 0 1e38
+		CLASS	ACQU
+		REL	"GRPDLY=GRPDLY"
+		INV_REL	"GRPDLY=GRPDLY"				
+		UNIT	"no"
+		TEXT	"group delay of digital filter"
+		FORMAT	"%14.0f"
+		NONEDIT
+END
+T_NAME		D1
+TYPE	R32
+CLASS	ACQU
+SUBRANGE 0.0 1e38
+REL	"D1=D[1]"
+INV_REL	"D[1]=D1"
+UNIT	"sec"
+FORMAT	"%14.9f sec"
+		TEXT		"relaxation delay (5*T1)"
+END
+T_NAME		d2
+		TYPE	R32
+		SUBRANGE 0.0 1e8
+		CLASS	ACQU
+		REL	"d2 = abs(cnst27*d31-p21/2.0-p22/2.0)"
+		INV_REL	"D[0]=d2"
+		UNIT	"sec"
+		TEXT		"first echo delay"
+		FORMAT	"%14.10f sec"
+		NONEDIT
+END
+T_NAME		d3
+		TYPE	R32
+		SUBRANGE 0.0 1e8
+		CLASS	ACQU
+		REL	"d3 = abs(cnst27*d31-p22/2.0)*2.0"
+		INV_REL	"D[0]=d3"
+		UNIT	"sec"
+		TEXT		"second echo delay"
+		FORMAT	"%14.10f sec"
+		NONEDIT
+END
+T_NAME		d6
+		TYPE	R32
+		SUBRANGE 0.0 1e8
+		CLASS	ACQU
+		REL	"d6 = abs((2.0*cnst27*d31)-(2.0*de)-p21)"
+		INV_REL	"D[0]=d6"
+		UNIT	"sec"
+		TEXT	"d6 = abs((2.0*cnst27*d31)-(2.0*de)-p21)"
+		FORMAT	"%14.10f sec"
+		NONEDIT
+END
+T_NAME		d31
+		TYPE	R32
+		SUBRANGE 0.0 1e8
+		CLASS	ACQU
+		REL	"d31 = (1s/cnst31)"
+		INV_REL	"D[0]=d31"
+		UNIT	"sec"
+		TEXT		"rotor period (us)"
+		FORMAT	"%14.10f sec"
+		NONEDIT
+END
+NAME		DS
+		TEXT	"number of dummy scans"
+END
+T_NAME		L22
+TYPE	R32
+CLASS	ACQU
+SUBRANGE 0.0 1e38
+REL	"L22=L[22]"
+INV_REL	"L[22]=L22"
+FORMAT	"%14.0f"
+TEXT	"loop counter 22"
+END
+NAME		NS
+		TEXT	"scans to execute"
+END
+NAME		ZGOPTNS
+		TEXT 	"options for zg"
+END
+HEADER		"======== CHANNEL f1 ========"
+NAME		SFO1
+FORMAT	"%14.7f MHz"
+TEXT	"frequency of ch. 1"
+END
+NAME		O1
+FORMAT	"%14.2f Hz"
+TEXT	"frequency of ch. 1"
+END
+T_NAME		O1P
+TYPE	R64
+CLASS	ACQU
+SUBRANGE -1e38 1e38
+REL	"O1P=O1/BF1"
+INV_REL	"O1=O1P*BF1"
+UNIT	"ppm"
+FORMAT	"%14.3f ppm"
+TEXT	"frequency of ch. 1"
+END
+NAME		NUC1
+NONEDIT
+TEXT	"nucleus for channel 1"
+END
+T_NAME		CNST11
+TYPE	R32
+CLASS	ACQU
+SUBRANGE -1e38 1e38
+REL	"CNST11=CNST[11]"
+INV_REL	"CNST[11]=CNST11"
+FORMAT	"%14.7f"
+		TEXT		"nutation freq. for 1st shaped pulse"
+END
+T_NAME		CNST12
+TYPE	R32
+CLASS	ACQU
+SUBRANGE -1e38 1e38
+REL	"CNST12=CNST[12]"
+INV_REL	"CNST[12]=CNST12"
+FORMAT	"%14.7f"
+		TEXT		"nutation freq. for 2nd shaped pulse"
+END
+T_NAME		CNST13
+TYPE	R32
+CLASS	ACQU
+SUBRANGE -1e38 1e38
+REL	"CNST13=CNST[13]"
+INV_REL	"CNST[13]=CNST13"
+FORMAT	"%14.7f"
+		TEXT		"nutation freq. for 3rd shaped pulse"
+END
+T_NAME		cnst21
+		TYPE	R32
+		SUBRANGE -1e38 1e38
+		CLASS	ACQU
+		REL	"cnst21 = (p31/p1)*(p31/p1)"
+		INV_REL	"D[0]=cnst21"
+		UNIT	"no"
+		TEXT	"cnst21 = (p31/p1)*(p31/p1)"
+		FORMAT	"%14.6f"
+		NONEDIT
+END
+T_NAME		cnst22
+		TYPE	R32
+		SUBRANGE -1e38 1e38
+		CLASS	ACQU
+		REL	"cnst22 = (p32/p1)*(p32/p1)"
+		INV_REL	"D[0]=cnst22"
+		UNIT	"no"
+		TEXT	"cnst22 = (p32/p1)*(p32/p1)"
+		FORMAT	"%14.6f"
+		NONEDIT
+END
+T_NAME		cnst23
+		TYPE	R32
+		SUBRANGE -1e38 1e38
+		CLASS	ACQU
+		REL	"cnst23 = (p33/p1)*(p33/p1)"
+		INV_REL	"D[0]=cnst23"
+		UNIT	"no"
+		TEXT	"cnst23 = (p33/p1)*(p33/p1)"
+		FORMAT	"%14.6f"
+		NONEDIT
+END
+T_NAME		CNST27
+TYPE	R32
+CLASS	ACQU
+SUBRANGE -1e38 1e38
+REL	"CNST27=CNST[27]"
+INV_REL	"CNST[27]=CNST27"
+FORMAT	"%14.7f"
+		TEXT		"Rotorperiod Factor"
+END
+T_NAME		cnst28
+		TYPE	R32
+		SUBRANGE -1e38 1e38
+		CLASS	ACQU
+		REL	"cnst28=((2.0*de)+d6+((p23+2.0*de+d6)*(l22))+p21+d2+p22+d3+p23)/dw"
+		INV_REL	"D[0]=cnst28"
+		UNIT	"no"
+		TEXT	"cnst28=((2.0*de)+d6+((p23+2.0*de+d6)*(l22))+p21+d2+p22+d3+p23)/dw"
+		FORMAT	"%14.6f"
+		NONEDIT
+END
+T_NAME		CNST31
+TYPE	R32
+CLASS	ACQU
+SUBRANGE -1e38 1e38
+REL	"CNST31=CNST[31]"
+INV_REL	"CNST[31]=CNST31"
+FORMAT	"%14.7f"
+		TEXT		"MAS rotor speed"
+END
+T_NAME		P1
+TYPE	R32
+CLASS	ACQU
+SUBRANGE 0.0 1.0e10
+REL	"P1=P[1]"
+INV_REL	"P[1]=P1"
+UNIT	"usec"
+FORMAT	"%14.3f usec"
+		TEXT		"Reference 90-degree pulse length"
+END
+T_NAME		P21
+TYPE	R32
+CLASS	ACQU
+SUBRANGE 0.0 1.0e10
+REL	"P21=P[21]"
+INV_REL	"P[21]=P21"
+UNIT	"usec"
+FORMAT	"%14.3f usec"
+		TEXT		"duration of 1st shaped pulse"
+END
+T_NAME		P22
+TYPE	R32
+CLASS	ACQU
+SUBRANGE 0.0 1.0e10
+REL	"P22=P[22]"
+INV_REL	"P[22]=P22"
+UNIT	"usec"
+FORMAT	"%14.3f usec"
+		TEXT		"duration of 1st shaped pulse"
+END
+T_NAME		P23
+TYPE	R32
+CLASS	ACQU
+SUBRANGE 0.0 1.0e10
+REL	"P23=P[23]"
+INV_REL	"P[23]=P23"
+UNIT	"usec"
+FORMAT	"%14.3f usec"
+		TEXT		"duration of 2nd shaped pulse"
+END
+T_NAME		p31
+		TYPE	R32
+		SUBRANGE -1e38 1e38
+		CLASS	ACQU
+		REL	"p31 = 1000000.0/ (cnst11*4)"
+		INV_REL	"D[0]=p31"
+		UNIT	"usec"
+		TEXT	"p31 = 1000000.0/ (cnst11*4)"
+		FORMAT	"%14.2f usec"
+		NONEDIT
+END
+T_NAME		p32
+		TYPE	R32
+		SUBRANGE -1e38 1e38
+		CLASS	ACQU
+		REL	"p32 = 1000000.0/ (cnst12*4)"
+		INV_REL	"D[0]=p32"
+		UNIT	"usec"
+		TEXT	"p32 = 1000000.0/ (cnst12*4)"
+		FORMAT	"%14.2f usec"
+		NONEDIT
+END
+T_NAME		p33
+		TYPE	R32
+		SUBRANGE -1e38 1e38
+		CLASS	ACQU
+		REL	"p33 = 1000000.0/ (cnst13*4)"
+		INV_REL	"D[0]=p33"
+		UNIT	"usec"
+		TEXT	"p33 = 1000000.0/ (cnst13*4)"
+		FORMAT	"%14.2f usec"
+		NONEDIT
+END
+T_NAME		PLW1
+TYPE	R32
+CLASS	ACQU
+SUBRANGE 0 1097.88
+REL	"PLW1=PLW[1]"
+INV_REL	"PLW[1]=PLW1"
+UNIT	"W"
+FORMAT	"%14.5g W"
+		TEXT		"Reference 90-degree pulse power"
+END
+T_NAME		PLdB1
+TYPE	R32
+CLASS	ACQU
+SUBRANGE -30.5055 1000
+REL	"if(PLW[1]>0)PLdB1=-10*log(PLW[1])/LN10;else PLdB1=1000;"
+INV_REL	"PLW[1]=0;if(PLdB1<1000)PLW[1]=pow(10.0,(-PLdB1)/10.0)"
+UNIT	"dB"
+FORMAT	"%14.2f dB"
+TEXT	"power PL1 in dB"
+END
+NAME		SPNAM[21]
+TEXT	"file name for SP21"
+END
+T_NAME		SPOAL21
+TYPE	R32
+CLASS	ACQU
+SUBRANGE -1.0 1.0
+REL	"SPOAL21=SPOAL[21]"
+INV_REL	"SPOAL[21]=SPOAL21"
+FORMAT	"%14.3f"
+TEXT	"phase alignment of freq. offset in SP21"
+END
+T_NAME		SPOFFS21
+TYPE	R32
+CLASS	ACQU
+SUBRANGE -1e38 1e38
+REL	"SPOFFS21=SPOFFS[21]"
+INV_REL	"SPOFFS[21]=SPOFFS21"
+UNIT	"Hz"
+FORMAT	"%14.2f Hz"
+TEXT	"offset frequency for SP21"
+END
+T_NAME		spw21
+		TYPE	R32
+		SUBRANGE 0 1097.88
+		CLASS	ACQU
+		REL	"spw21 = plw1/cnst21"
+		INV_REL	"D[0]=spw21"
+		UNIT	"dB"
+		TEXT		"power level for 1st shaped pulse"
+		FORMAT	"%14.5g W"
+		NONEDIT
+END
+T_NAME		SPdB21
+TYPE	R32
+CLASS	ACQU
+		NONEDIT
+SUBRANGE -30.5055 1000
+REL	"if(spw21>0)SPdB21=-10*log(spw21)/LN10;elseSPdB21=1000;"
+INV_REL	"SPW[21]=0;if(SPdB21<1000)SPW[21]=pow(10.0,(-SPdB21)/10.0)"
+UNIT	"dB"
+FORMAT	"%14.2f -dBW"
+TEXT	"power SPW21 in -dBW"
+END
+NAME		SPNAM[22]
+TEXT	"file name for SP22"
+END
+T_NAME		SPOAL22
+TYPE	R32
+CLASS	ACQU
+SUBRANGE -1.0 1.0
+REL	"SPOAL22=SPOAL[22]"
+INV_REL	"SPOAL[22]=SPOAL22"
+FORMAT	"%14.3f"
+TEXT	"phase alignment of freq. offset in SP22"
+END
+T_NAME		SPOFFS22
+TYPE	R32
+CLASS	ACQU
+SUBRANGE -1e38 1e38
+REL	"SPOFFS22=SPOFFS[22]"
+INV_REL	"SPOFFS[22]=SPOFFS22"
+UNIT	"Hz"
+FORMAT	"%14.2f Hz"
+TEXT	"offset frequency for SP22"
+END
+T_NAME		spw22
+		TYPE	R32
+		SUBRANGE 0 1097.88
+		CLASS	ACQU
+		REL	"spw22 = plw1/cnst22"
+		INV_REL	"D[0]=spw22"
+		UNIT	"dB"
+		TEXT		"power level for 2nd shaped pulse"
+		FORMAT	"%14.5g W"
+		NONEDIT
+END
+T_NAME		SPdB22
+TYPE	R32
+CLASS	ACQU
+		NONEDIT
+SUBRANGE -30.5055 1000
+REL	"if(spw22>0)SPdB22=-10*log(spw22)/LN10;elseSPdB22=1000;"
+INV_REL	"SPW[22]=0;if(SPdB22<1000)SPW[22]=pow(10.0,(-SPdB22)/10.0)"
+UNIT	"dB"
+FORMAT	"%14.2f -dBW"
+TEXT	"power SPW22 in -dBW"
+END
+NAME		SPNAM[23]
+TEXT	"file name for SP23"
+END
+T_NAME		SPOAL23
+TYPE	R32
+CLASS	ACQU
+SUBRANGE -1.0 1.0
+REL	"SPOAL23=SPOAL[23]"
+INV_REL	"SPOAL[23]=SPOAL23"
+FORMAT	"%14.3f"
+TEXT	"phase alignment of freq. offset in SP23"
+END
+T_NAME		SPOFFS23
+TYPE	R32
+CLASS	ACQU
+SUBRANGE -1e38 1e38
+REL	"SPOFFS23=SPOFFS[23]"
+INV_REL	"SPOFFS[23]=SPOFFS23"
+UNIT	"Hz"
+FORMAT	"%14.2f Hz"
+TEXT	"offset frequency for SP23"
+END
+T_NAME		spw23
+		TYPE	R32
+		SUBRANGE 0 1097.88
+		CLASS	ACQU
+		REL	"spw23 = plw1/cnst23"
+		INV_REL	"D[0]=spw23"
+		UNIT	"dB"
+		TEXT		"power level for 3rd shaped pulse"
+		FORMAT	"%14.5g W"
+		NONEDIT
+END
+T_NAME		SPdB23
+TYPE	R32
+CLASS	ACQU
+		NONEDIT
+SUBRANGE -30.5055 1000
+REL	"if(spw23>0)SPdB23=-10*log(spw23)/LN10;elseSPdB23=1000;"
+INV_REL	"SPW[23]=0;if(SPdB23<1000)SPW[23]=pow(10.0,(-SPdB23)/10.0)"
+UNIT	"dB"
+FORMAT	"%14.2f -dBW"
+TEXT	"power SPW23 in -dBW"
+END

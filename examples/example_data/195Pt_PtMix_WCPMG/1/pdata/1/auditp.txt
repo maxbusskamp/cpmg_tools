@@ -1,0 +1,31 @@
+##TITLE= Audit trail, TopSpin 4.0.8
+##JCAMPDX= 5.01
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= m_buss13
+$$ /home/m_buss13/ownCloud/nmr_data/development/195Pt_Pt-Mix_WCPMG/1/pdata/1/auditp.txt
+##AUDIT TRAIL=  $$ (NUMBER, WHEN, WHO, WHERE, PROCESS, VERSION, WHAT)
+(   1,<2021-02-14 17:08:00.631 +0100>,<j_kopp06>,<nmr300>,<go4>,<TopSpin 3.5.7>,
+      <created by zg
+	started at 2021-02-12 12:20:27.628 +0100,
+	POWCHK disabled, PULCHK disabled,
+       configuration hash MD5:
+       F3 C9 0E A6 39 71 56 3C DF E3 C7 D3 E1 26 AE 53
+       data hash MD5: 63228
+       79 23 5C 4A AD 83 C0 43 BA 12 2A 72 10 33 BC F2>)
+(   2,<2021-04-16 10:25:17.122 +0200>,<m_buss13>,<ubuntuvm>,<dirdata>,<TopSpin 4.0.8>,
+      <wrpa from 1 2 "195Pt_Pt-Mix_WCPMG_4mm_12.02.21" "/home/m_buss13/ownCloud/nmr_data/300_Jonas"
+       data hash MD5: 63228
+       79 23 5C 4A AD 83 C0 43 BA 12 2A 72 10 33 BC F2>)
+(   3,<2021-04-16 10:25:32.670 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <Start of raw data processing
+       ft FT_mod = 6 PKNL = 1 SI = 256K 
+       data hash MD5: 256K
+       61 18 89 22 A3 23 3F B1 A4 5D 66 A5 67 1A D8 2B>)
+(   4,<2021-04-16 10:26:53.340 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <pk fgphup PHC0 = 45.2086 PHC1 = 35430.4 
+       data hash MD5: 256K
+       D9 C4 45 8A 06 46 2D B5 32 14 11 58 BC 55 44 8B>)
+##END=
+
+$$ hash MD5
+$$ EB 7F BF 53 ED 8B A0 08 48 A7 0B 22 3D 8E 82 8B

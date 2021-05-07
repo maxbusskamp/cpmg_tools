@@ -1,0 +1,321 @@
+##TITLE= Audit trail, TopSpin 4.0.8
+##JCAMPDX= 5.01
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= m_buss13
+$$ /home/m_buss13/ownCloud/nmr_data/neo500_Jonas/195Pt_Pt-Mix_WCPMG-MAS_23.02.21/4044/audita.txt
+##AUDIT TRAIL=  $$ (NUMBER, WHEN, WHO, WHERE, PROCESS, VERSION, WHAT)
+(   1,<2021-02-24 19:16:21.328 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <acquisition in progress>)
+$$ /opt/nmrdata/data/j_kopp06/nmr/195Pt_Pt-Mix_WCPMG-MAS_23.02.21/12/audita.txt
+(   2,<2021-02-24 19:16:50.514 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <created by zg on 'AvanceNEO' (neo500) by user 'j_kopp06'
+       on data set with UUID 'c7357c76-76d4-11eb-a63a-00139526ce73'
+       started at 2021-02-24 19:16:21.340 +0000, POWCHK enabled, PULCHK disabled,
+       terminated by command 'halt' at 2021-02-24 19:16:50.513 +0000
+       configuration hash MD5:
+       ED 19 E1 B9 96 B8 76 4B A9 E5 BA E2 F1 EC F7 CA
+       double data hash MD5: 121800
+       B1 75 4D 68 44 2A D5 64 E2 7D D2 C5 6F 50 39 46>)
+(   3,<2021-02-24 19:17:57.735 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <raw data deleted by zg>)
+(   4,<2021-02-24 19:17:57.737 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <acquisition in progress>)
+(   5,<2021-02-24 19:21:50.540 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <created by zg on 'AvanceNEO' (neo500) by user 'j_kopp06'
+       on data set with UUID '00aab3e0-76d5-11eb-a8bf-00139526ce73'
+       started at 2021-02-24 19:17:57.748 +0000, POWCHK enabled, PULCHK disabled,
+       terminated by command 'halt' at 2021-02-24 19:21:50.537 +0000
+       configuration hash MD5:
+       ED 19 E1 B9 96 B8 76 4B A9 E5 BA E2 F1 EC F7 CA
+       double data hash MD5: 121800
+       8B 8F 0D EA 37 83 4E 67 8E 93 F7 E4 74 F3 90 38>)
+(   6,<2021-02-24 19:23:00.180 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <raw data deleted by zg>)
+(   7,<2021-02-24 19:23:00.182 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <acquisition in progress>)
+(   8,<2021-02-24 23:57:46.007 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <created by zg on 'AvanceNEO' (neo500) by user 'j_kopp06'
+       on data set with UUID 'b4f16560-76d5-11eb-8c1f-00139526ce73'
+       started at 2021-02-24 19:23:00.194 +0000, POWCHK enabled, PULCHK disabled,
+       completed at 2021-02-24 23:57:46.007 +0000
+       configuration hash MD5:
+       ED 19 E1 B9 96 B8 76 4B A9 E5 BA E2 F1 EC F7 CA
+       double data hash MD5: 121800
+       CC 8A B4 32 E9 92 DD 09 5E 9C 59 30 0A 1E 16 8D>)
+(   9,<2021-02-25 09:06:34.771 +0100>,<m_buss13>,<ubuntuvm>,<dirdata>,<TopSpin 4.0.8>,
+      <wra from 132 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       CC 8A B4 32 E9 92 DD 09 5E 9C 59 30 0A 1E 16 8D>)
+$$ /home/m_buss13/ownCloud/nmr_data/neo500_Jonas/195Pt_Pt-Mix_WCPMG-MAS_23.02.21/134/audita.txt
+(  10,<2021-02-25 09:06:34.845 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       134 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       133 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       DF 0D 95 69 2F 55 DB A9 ED FE F3 A1 7F D9 5C 7F>)
+(  11,<2021-02-25 09:12:48.333 +0100>,<m_buss13>,<ubuntuvm>,<dirdata>,<TopSpin 4.0.8>,
+      <wra from 4000 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       DF 0D 95 69 2F 55 DB A9 ED FE F3 A1 7F D9 5C 7F>)
+(  12,<2021-02-25 09:12:52.281 +0100>,<m_buss13>,<ubuntuvm>,<dirdata>,<TopSpin 4.0.8>,
+      <Unknown data manipulation detected
+       wra from 4001 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       09 EC 91 D3 2F 68 C5 44 E3 F5 14 CD 2C F3 2E 14>)
+$$ /home/m_buss13/ownCloud/nmr_data/neo500_Jonas/195Pt_Pt-Mix_WCPMG-MAS_23.02.21/4044/audita.txt
+(  13,<2021-02-25 09:12:52.411 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4002 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       DB 07 F6 4A 69 55 97 E5 DF D3 41 96 79 B8 5B 99>)
+(  14,<2021-02-25 09:12:52.478 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4003 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       00 FA EB 8A 79 67 D7 62 69 C3 2F 91 F0 4A 4D F5>)
+(  15,<2021-02-25 09:12:52.535 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4004 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       9A 36 AE 2F 5F 8F 16 BD CA 3B 32 73 85 A0 59 EC>)
+(  16,<2021-02-25 09:12:52.590 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4005 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       2B DF D0 61 CB BD BD 58 0E 1B 13 28 6C 78 FC F7>)
+(  17,<2021-02-25 09:12:52.644 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4006 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       C7 FB 79 61 10 B6 8D BE C2 76 A2 0A 63 D1 3D 25>)
+(  18,<2021-02-25 09:12:52.698 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4007 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       FE 61 07 E1 45 6E 41 C1 12 0C 32 D3 26 6E 98 9A>)
+(  19,<2021-02-25 09:12:52.754 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4008 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       89 30 E3 0F E5 F8 F4 FF D3 1B 0F A2 F4 CB 01 2B>)
+(  20,<2021-02-25 09:12:52.814 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4009 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       D6 D8 B4 F4 A7 76 A3 28 B4 81 67 66 F3 8A 64 C1>)
+(  21,<2021-02-25 09:12:52.871 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4010 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       DC 76 23 28 6F 92 28 08 4F 4D 79 19 54 F6 2D 8E>)
+(  22,<2021-02-25 09:12:52.967 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4011 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       66 1B 7B AC 05 F1 A5 E0 87 E5 D9 26 7C F2 B9 77>)
+(  23,<2021-02-25 09:12:53.080 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4012 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       51 1B E0 EA 1D AA DD 82 EA F9 FD 60 A2 1F 68 27>)
+(  24,<2021-02-25 09:12:53.179 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4013 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       C8 D1 21 11 F5 05 AA E6 35 79 9E 95 6D 00 D8 E8>)
+(  25,<2021-02-25 09:12:53.232 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4014 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       69 5A 39 BB E3 40 9F AB 3D 54 A5 BD E0 7A 18 D3>)
+(  26,<2021-02-25 09:12:53.287 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4015 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       3B 3D 67 46 C9 A4 3A DB C3 44 B2 73 D2 BB AD 9B>)
+(  27,<2021-02-25 09:12:53.343 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4016 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       B0 3C 17 4F 0D 8B F8 24 6D 97 FA 51 6C AA 59 6F>)
+(  28,<2021-02-25 09:12:53.397 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4017 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       C7 9B 8E 65 FC 74 DD D3 D8 F7 75 02 8D 2C D5 5E>)
+(  29,<2021-02-25 09:12:53.544 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4018 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       8E B8 5A A9 E4 EB 08 9A 0B 59 DD F7 31 F7 D9 55>)
+(  30,<2021-02-25 09:12:53.709 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4019 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       FF 40 54 43 1B 9D A9 95 25 93 31 2F DE 48 A2 19>)
+(  31,<2021-02-25 09:12:53.768 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4020 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       96 8E 92 77 D6 61 0B E3 1F E0 70 AF DF A1 EF 57>)
+(  32,<2021-02-25 09:12:53.825 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4021 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       EE FB 1F B5 46 28 1C A7 EB 74 F0 AA 62 BD 55 4B>)
+(  33,<2021-02-25 09:12:53.896 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4022 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       44 6B 29 16 97 85 75 48 81 74 C1 B5 65 4B 31 44>)
+(  34,<2021-02-25 09:12:53.950 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4023 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       99 4C 5A 5D A5 5D DF 0B EA E9 AF 90 75 CA 1D 27>)
+(  35,<2021-02-25 09:12:54.037 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4024 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       58 76 EA B8 F4 89 52 12 20 F0 50 BD 76 35 20 9F>)
+(  36,<2021-02-25 09:12:54.134 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4025 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       11 12 66 84 03 10 21 BA 64 1E 0D 98 5F 32 A5 FB>)
+(  37,<2021-02-25 09:12:54.189 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4026 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       0C A8 F5 21 87 D8 0E 28 50 A9 64 90 91 9C AC CD>)
+(  38,<2021-02-25 09:12:54.242 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4027 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       45 4E 07 FC 9E 97 87 71 60 C1 DC 20 D7 08 24 52>)
+(  39,<2021-02-25 09:12:54.298 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4028 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       DD C9 98 F8 51 5B 0B B7 69 25 92 3B 9D 78 B8 4E>)
+(  40,<2021-02-25 09:12:54.351 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4029 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       0B 8E 17 C7 0A D8 03 17 FF 54 12 09 F6 A0 1E 68>)
+(  41,<2021-02-25 09:12:54.408 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4030 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       D1 A1 8D 9A FE A8 64 D3 3B 86 A5 B4 71 85 6C 38>)
+(  42,<2021-02-25 09:12:54.524 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4031 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       E9 70 67 C3 B0 66 61 78 CC 34 C7 6F FF E9 79 F0>)
+(  43,<2021-02-25 09:12:54.579 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4032 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       B7 EB 35 1A 69 37 F5 3C C0 9A 90 FC AD 9E 09 4D>)
+(  44,<2021-02-25 09:12:54.630 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4033 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       BC 98 99 9E 1A 30 90 7A 53 13 61 4B 97 64 38 C6>)
+(  45,<2021-02-25 09:12:54.683 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4034 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       85 08 7F 76 F7 18 FC E0 4C 67 29 38 0D 83 E9 73>)
+(  46,<2021-02-25 09:12:54.739 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4035 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       2F 2F 4E C8 96 05 E1 EC B4 B9 DC B0 FB C2 D3 6A>)
+(  47,<2021-02-25 09:12:54.839 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4036 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       91 F6 30 C0 7E 78 15 F6 81 F5 62 A3 30 ED 57 E5>)
+(  48,<2021-02-25 09:12:54.990 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4037 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       FA 7C FF 8F BC ED 54 73 D0 76 5F DD 69 F1 47 D8>)
+(  49,<2021-02-25 09:12:55.149 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4038 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       F0 5A 8A C7 83 1F 58 CB A9 0D D5 BB 3C 7B 52 DF>)
+(  50,<2021-02-25 09:12:55.295 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4039 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       5A F1 7B C1 2F D8 E3 83 52 74 67 05 7B 77 BF AD>)
+(  51,<2021-02-25 09:12:55.373 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4040 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       2E 17 5E 9C B3 B2 F8 B1 4F B0 40 FF A0 B6 47 81>)
+(  52,<2021-02-25 09:12:55.457 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4041 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       D7 25 47 F2 AB D0 0F 4B 06 48 03 8E E9 37 79 A0>)
+(  53,<2021-02-25 09:12:55.533 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4042 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       92 0F B9 82 A4 75 30 3E 67 7E 6D C5 40 D9 2A 80>)
+(  54,<2021-02-25 09:12:55.606 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <addfid DC = 1 of
+       4044 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       4043 "195Pt_Pt-Mix_WCPMG-MAS_23.02.21" "/home/m_buss13/ownCloud/nmr_data/neo500_Jonas"
+       double data hash MD5: 121800
+       92 0F B9 82 A4 75 30 3E 67 7E 6D C5 40 D9 2A 80>)
+##END=
+
+$$ hash MD5
+$$ E5 BD 64 74 0F 11 12 F7 4D AE 59 8D B6 24 FB 33

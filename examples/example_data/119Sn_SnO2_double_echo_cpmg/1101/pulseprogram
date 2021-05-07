@@ -1,0 +1,170 @@
+; Original:
+;  onepulse (TopSpin 3.0)
+;  TS3 / 03.06.2011
+;  checked by sewe 03.06.2011
+;  Avance III version
+;
+; Modified:
+;  Max Busskamp 31.10.2019
+;  neo500 version
+;  TS v4.0.7
+
+
+;parameters:
+
+;p1 : Reference 90-degree pulse length
+;pl1 : Reference 90-degree pulse power
+
+;p21:   duration of 1st shaped pulse
+;p22:   duration of 1st shaped pulse
+;p23:   duration of 2nd shaped pulse
+;spw21 : power level for 1st shaped pulse
+;spw22 : power level for 2nd shaped pulse
+;spw23 : power level for 3rd shaped pulse
+;spnam11:   filename for 1st shaped pulse
+;spnam12:   filename for 2nd shaped pulse
+;spnam13:   filename for 3rd shaped pulse
+
+;cnst11:   nutation freq. for 1st shaped pulse
+;cnst12:   nutation freq. for 2nd shaped pulse
+;cnst13:   nutation freq. for 3rd shaped pulse
+
+;d1: relaxation delay (5*T1)
+;d2: first echo delay
+;d3: second echo delay
+;d4: third echo delay (corrected with de)
+
+;cnst31: MAS rotor speed
+;d31: rotor period (us)
+;cnst27: Rotorperiod Factor
+
+;ZGPTNS : options -Dmodulo -Dcpmg -Dnophasecycle
+;
+;$CLASS=Solids
+;$DIM=1D
+;$TYPE=direct excitation
+;$SUBTYPE=simple 1D
+;$COMMENT=Double Echo Pulsesequence after 10.1016/j.cplett.2006.12.056, acquisition without decoupling
+
+; Include libraries
+#include <Avance.incl>
+#include <Delay.incl>
+#include <De.incl>
+
+"p31 = 1000000.0/ (cnst11*4)"
+"p32 = 1000000.0/ (cnst12*4)"
+"p33 = 1000000.0/ (cnst13*4)"
+"cnst21 = (p31/p1)*(p31/p1)"
+"cnst22 = (p32/p1)*(p32/p1)" 
+"cnst23 = (p33/p1)*(p33/p1)"
+"spw21 = plw1/cnst21"
+"spw22 = plw1/cnst22"
+"spw23 = plw1/cnst23"
+
+"d31 = (1s/cnst31)"
+
+#ifdef modulo
+  "d2 = ((abs(cnst27*d31-p21/2.0-p22/2.0)*1000000000)%(d31*1000000000))/1000000000"
+  "d3 = ((abs(cnst27*d31-p22/2.0)*2.0*1000000000)%(d31*1000000000))/1000000000"
+  "d4 = ((abs(cnst27*d31-p22/2.0-de)*1000000000)%(d31*1000000000))/1000000000"
+#endif
+
+#ifndef modulo
+  "d2 = abs(cnst27*d31-p21/2.0-p22/2.0)"
+  "d3 = abs(cnst27*d31-p22/2.0)*2.0"
+  "d4 = abs(cnst27*d31-p22/2.0-de)"
+#endif
+
+#ifdef cpmg
+"d6 = abs((2.0*cnst27*d31)-(2.0*de)-p21)"
+"cnst28=((2.0*de)+d6+((p23+2.0*de+d6)*(l22))+p21+d2+p22+d3+p23)/dw"
+#endif
+
+#ifdef dec
+;pl30 : CW decoupling power on channel 2
+#endif
+
+; Pulse sequence
+1	ze
+	1m fq=cnst27:f1
+	1m fq=cnst28:f1
+	1m fq=cnst31:f1
+	1m fq=0:f1
+
+#ifndef dec
+2 d1
+#else
+  1m pl12:f2
+2 d1 do:f2
+#endif
+
+#ifdef cpmg
+	ACQ_START(ph30,ph31)					; these three comments are used for digital part of receiver
+	0.05u DWELL_HOLD							; acq is immediately prevented if started in the future
+  0.1u START_NEXT_SCAN						; start acq
+#endif
+
+#ifdef dec
+  1u cpds2:f2
+#endif
+
+  (p21:sp21 ph11):f1
+  d2
+  (p22:sp22 ph12):f1
+  d3
+  (p23:sp23 ph13):f1
+#ifndef cpmg
+  d4
+#endif
+
+#ifdef cpmg
+  de DWELL_RELEASE
+	d6 REC_UNBLK
+  de REC_BLK
+
+3	(p23:sp23 ph13):f1
+
+  de 
+	d6 REC_UNBLK
+  de REC_BLK
+
+	lo to 3 times l22							; acquire all echos
+  (1u REC_BLK):f1								; path to receiver is blanked
+
+	0.05u DWELL_RELEASE							; end of acq and used in case data points are left in memory (safety flush)
+#endif
+
+#ifdef dec
+  1u do:f2
+#endif  
+
+#ifdef cpmg
+	rcyc = 2 
+ 	100m wr #0
+exit
+#endif  
+
+#ifndef cpmg
+  go=2 ph31
+  100m wr #0
+exit
+#endif  
+
+
+#ifndef nophasecycle
+ph11= 0 0 1 1 2 2 3 3
+ph12= 1 3 2 0 3 1 0 2
+ph13= 1 3 2 0 3 1 0 2
+
+ph31= 0 0 1 1 2 2 3 3
+ph30= 0
+#endif
+
+#ifdef nophasecycle
+ph11= 0
+ph12= 1
+ph13= 1
+
+ph31= 0
+ph30= 0
+#endif

@@ -1,0 +1,11 @@
+##TITLE= Parameter file, TopSpin 4.0.7
+##JCAMPDX= 5.0
+##DATATYPE= Parameter Values
+##NPOINTS= 2	$$ modification sequence number
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= m_buss13
+$$ 2020-09-24 17:07:51.174 +0200  m_buss13@HansenY
+$$ /home/m_buss13/ownCloud/nmr_data/neo500/2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg/1101/pdata/10/assocs
+$$ process /opt/topspin4.0.7/prog/mod/dataserver
+##$MULTDISP= </home/m_buss13/ownCloud/nmr_data/neo500/2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg/1101/pdata/11>
+##END=

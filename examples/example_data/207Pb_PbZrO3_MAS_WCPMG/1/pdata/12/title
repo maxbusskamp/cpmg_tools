@@ -1,0 +1,11 @@
+WCPMG-MAS N2 20us 2MHz
+207Pb Pb(NO3)2 Std
+mas: 12.5kHz
+d1: 30s
+
+pi/2 pulse: 2.6us@150W
+pi/2 pulse: 5.2us@150W
+
+no filter
+no inserts
+shim: 2.5mmTriple_2020-10-09.sb

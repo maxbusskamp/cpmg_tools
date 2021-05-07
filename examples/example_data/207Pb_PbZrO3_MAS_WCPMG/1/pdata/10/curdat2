@@ -1,0 +1,18 @@
+##TITLE= Parameter file, TopSpin 4.0.8
+##JCAMPDX= 5.0
+##DATATYPE= Parameter Values
+##NPOINTS= 51	$$ modification sequence number
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= m_buss13
+$$ 2021-02-24 20:32:41.382 +0100  m_buss13@ubuntuvm
+$$ /home/m_buss13/ownCloud/nmr_data/neo500_Jonas/207Pb_PbNO3_nutation_2.5mm/54/pdata/1/curdat2
+$$ process /opt/topspin4.0.8/prog/au/bin/85E68CA0161D2F5A7D5F34DAC3D1066E/sa
+##$DATPATH2= </home/m_buss13/ownCloud/nmr_data/neo500_Jonas>
+##$DATPATH3= </home/m_buss13/ownCloud/nmr_data/neo500_Jonas>
+##$EXPNO2= 54
+##$EXPNO3= 53
+##$NAME2= <207Pb_PbNO3_nutation_2.5mm>
+##$NAME3= <207Pb_PbNO3_nutation_2.5mm>
+##$PROCNO2= 1
+##$PROCNO3= 1
+##END=

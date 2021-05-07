@@ -1,0 +1,23 @@
+##TITLE= Audit trail, TopSpin 4.0.8
+##JCAMPDX= 5.01
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= m_buss13
+$$ /mnt/hgfs/ownCloud/nmr_data/neo500/2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg/1100/audita.txt
+##AUDIT TRAIL=  $$ (NUMBER, WHEN, WHO, WHERE, PROCESS, VERSION, WHAT)
+(   1,<2020-08-23 17:52:09.598 +0000>,<root>,<BladeEpu>,<go4>,<TopSpin 4.0.8>,
+      <created by zg on 'AvanceNEO' (neo500) by user 'm_buss13'
+       on data set with UUID '2131d8fe-e568-11ea-8b49-00139526ce73'
+       started at 2020-08-23 17:43:18.815 +0000, POWCHK enabled, PULCHK disabled,
+       completed at 2020-08-23 17:52:09.596 +0000
+       configuration hash MD5:
+       3E 41 48 7F 24 F0 1C D0 16 86 27 26 9B CA 33 46
+       double data hash MD5: 63000
+       74 5D 40 36 D1 8C FF BF 3E BB EE 59 35 1A DB 4D>)
+(   2,<2020-08-24 14:56:51.949 +0200>,<m_buss13>,<ubuntuvm>,<dirdata>,<TopSpin 4.0.8>,
+      <wrpa from 1 801 "2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg" "/mnt/hgfs/ownCloud/nmr_data/neo500"
+       double data hash MD5: 63000
+       74 5D 40 36 D1 8C FF BF 3E BB EE 59 35 1A DB 4D>)
+##END=
+
+$$ hash MD5
+$$ 3C B8 58 D1 E8 C5 DF B3 11 FA 61 99 3A 02 9F C3

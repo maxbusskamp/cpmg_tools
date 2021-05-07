@@ -1,0 +1,119 @@
+CONFIGURATION INFORMATION
+=========================
+
+Path         : /opt/topspin3.2/conf/instr/spect/uxnmr.info
+Date         : Wed Mar 30 13:52:01 2016
+Release      : TOPSPIN Version 3.2-pl6
+Installed in : /opt/topspin3.2
+Host         : nmr300
+OS           : CentOS release 5.6 (Final)
+CPU          : Intel(R) Core(TM)2 Duo CPU E8400 @ 3.00GHz (2 cores at 1998 MHz)
+User         : s_have06 (Sandra Haverkamp)
+Description  : Avance III 300
+Location     : 
+System       : Avance III NMR spectrometer
+1H-frequency : 300.13 MHz
+Order Number : 
+Configured in: /opt/topspin3.2/conf/instr/spect
+
+IPSO: connected to spectrometer subnet
+- TCP/IP address = 149.236.99.252
+- Tctrl : 1
+- Fctrls: 3
+- Gctrl : none
+- Rctrl : none
+- FREDs : none
+- DPP : none
+
+DRU: AQS DRU Z100977/01178 ECL 05.00
+- TCP/IP address = 149.236.99.89
+- Firmware Version = 131205
+- DRU controls AQS-Rack and HPPR/2
+
+AQS: connected to 149.236.99.89:/dev/tty10
+  _Slot_ SBSB _____________________Board_____________________
+  Number Addr Type HW-VS FW-VS ID  ECL Name   Description
+  -----------------------------------------------------------
+     2   0x10 0x62   0x4    AW  R  5.5 REC-1  AQS RXAD-BB Z102119/168 ECL 05.05
+     3   0x34  0x2   0x1        X  5.2 REF-1  REF-400 Reference Board for AQS Receiver
+     4   0x24 0x11   0x8    AD  S  2.6 SGU-1  AQS SGU/2 400 Z103080/01715 ECL 02.06 FPGA-Vs=AF
+     5   0x25 0x11   0x8    AD  S  2.6 SGU-2  AQS SGU/2 400 Z103080/01716 ECL 02.06 FPGA-Vs=AF
+     6   0x26 0x11   0x8    AD  S  2.7 SGU-3  AQS SGU/2 400 Z103080/03317 ECL 02.07 FPGA-Vs=AF
+    --   0x20 0xd1     0        B  3.2 MASTER AQS/3 Chassis
+     1   0x20  0x7     0        B      MASTER AQS Rack Master
+  Logical Receiver/SGU configuration:
+
+
+Router: none installed
+
+
+Transmitters at the spectrometer subnet:
+----------------------------------------
+BLA_W1345095_0223 W1345095/0223 ECL 1:
+- TCP/IP address = 149.236.99.254
+- Firmware VS    = 20120627
+- Amplifier      = BLAX1000 E 6-405MHZ INR: W1345095/0223 ECL 1
+- Router         = BLMMR31 RF AMPLIFIER MODULE: W1345212/1052 ECL 0
+- Controller     = BLA CONTROL BOARD 6 2CH: W1522050/01026 ECL 50
+BLA_W1345088_0123 W1345088/0123 ECL 1:
+- TCP/IP address = 149.236.99.253
+- Firmware VS    = 20120627
+- Amplifier      = BLAH1000 E 200-600MHZ INR: W1345088/0123 ECL 1
+- Router         = BLMMR31 RF AMPLIFIER MODULE: W1345212/1045 ECL 0
+- Controller     = BLA CONTROL BOARD 6 2CH: W1522050/4538 ECL 50
+BLA_W1345093_0502 W1345093/0502 ECL 12:
+- TCP/IP address = 149.236.99.250
+- Firmware VS    = 20120627
+- Amplifier      = BLAX500 E 6-365MHZ INR: W1345093/0502 ECL 12
+- Router         = BLMMR31 RF AMPLIFIER MODULE: W1345212/1885 ECL 20
+- Controller     = BLA CONTROL BOARD 6 2CH: W1522050/5792 ECL 50
+
+BSMS: BSMS/2 connected to ethernet
+- TCP/IP address = 149.236.99.20
+- ELCB firmware version = 20111004
+- SCB channels = 20
+- Shim System = BOSS1-WB
+- 2HTX Amplifier: not available
+- Lock: not available
+
+MAS2 control unit: connected to 149.236.99.252:/dev/tty04
+MAS2: device not yet configured
+MAS1: device could not be configured
+
+Preamplifiers :
+HPPR: - HPPR/2 preamplifier connected to 149.236.99.89:/dev/tty10
+    Type      : HPPR/2
+    Controller: Application firmware = AP
+                15 LEDs for tuning, 15 LEDs for matching
+    Module  1 : HPHP 19F/1H
+                 PN=Z003542, SN=00150 from 20090117
+    Module  2 : HPHP XBB31P
+                 PN=Z003548, SN=00144 from 20090117
+    Module  3 : HPHP XBB31P
+                 PN=Z003548, SN=00172 from 20111214
+
+
+Frequency generation:
+- F1: for SGU
+- F2: for SGU
+- F3: for SGU
+
+
+
+RF cable connections (detected by 'confamp')
+--------------------------------------------------------------------
+SGU1 NORM output -> input 1 of transmitter 1 (BLAX1000 E 6-405MHZ INR W1345095/0223 at TCP/IP 149.236.99.254)
+SGU1 AUX  output -> open
+SGU2 NORM output -> input 1 of transmitter 2 (BLAH1000 E 200-600MHZ INR W1345088/0123 at TCP/IP 149.236.99.253)
+SGU2 AUX  output -> TUNE signal input of HPPR
+SGU3 NORM output -> input 1 of transmitter 3 (BLAX500 E 6-365MHZ INR W1345093/0502 at TCP/IP 149.236.99.250)
+SGU3 AUX  output -> open
+
+Blanking cable connections (detected by 'confamp')
+--------------------------------------------------------------------
+transmitter 1 (BLAX1000 E 6-405MHZ INR W1345095/0223 at TCP/IP 149.236.99.254) amplifier X-1000W uses blanking 1
+transmitter 1 (BLAX1000 E 6-405MHZ INR W1345095/0223 at TCP/IP 149.236.99.254) amplifier X-300W uses blanking 1
+transmitter 2 (BLAH1000 E 200-600MHZ INR W1345088/0123 at TCP/IP 149.236.99.253) amplifier 1H-1000W uses blanking 2
+transmitter 2 (BLAH1000 E 200-600MHZ INR W1345088/0123 at TCP/IP 149.236.99.253) amplifier 1H-100W uses blanking 2
+transmitter 3 (BLAX500 E 6-365MHZ INR W1345093/0502 at TCP/IP 149.236.99.250) amplifier X-500W uses blanking 3
+

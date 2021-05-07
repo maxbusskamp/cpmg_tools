@@ -1,0 +1,264 @@
+# 1 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb"
+# 1 "<built-in>"
+# 1 "<command-line>"
+# 1 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb"
+; Original:
+;  onepulse (TopSpin 3.0)
+;  TS3 / 03.06.2011
+;  checked by sewe 03.06.2011
+;  Avance III version
+;
+; Modified:
+;  Max Busskamp 31.10.2019
+;  neo500 version
+;  TS v4.0.7
+
+
+;parameters:
+# 15 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb"
+;p1 : Reference 90-degree pulse length
+;pl1 : Reference 90-degree pulse power
+
+;p21:   duration of 1st shaped pulse
+;p22:   duration of 1st shaped pulse
+;p23:   duration of 2nd shaped pulse
+;spw21 : power level for 1st shaped pulse
+;spw22 : power level for 2nd shaped pulse
+;spw23 : power level for 3rd shaped pulse
+;spnam11:   filename for 1st shaped pulse
+;spnam12:   filename for 2nd shaped pulse
+;spnam13:   filename for 3rd shaped pulse
+
+;cnst11:   nutation freq. for 1st shaped pulse
+;cnst12:   nutation freq. for 2nd shaped pulse
+;cnst13:   nutation freq. for 3rd shaped pulse
+# 32 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb"
+;d1: relaxation delay (5*T1)
+;d2: first echo delay
+;d3: second echo delay
+;d4: third echo delay (corrected with de)
+
+;cnst31: MAS rotor speed
+;d31: rotor period (us)
+;cnst27: Rotorperiod Factor
+
+;ZGPTNS : options -Dmodulo -Dcpmg -Dnophasecycle
+;
+;$CLASS=Solids
+;$DIM=1D
+;$TYPE=direct excitation
+;$SUBTYPE=simple 1D
+;$COMMENT=Double Echo Pulsesequence after 10.1016/j.cplett.2006.12.056, acquisition without decoupling
+# 49 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb"
+; Include libraries
+
+# 1 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/Avance.incl" 1
+;Avance4.incl
+;   for AV 4
+;
+;avance-version (16/08/18)
+;
+;$CLASS=HighRes Incl
+;$COMMENT=
+
+# 19 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/Avance.incl"
+;setrtp0 denotes TimingController
+
+
+# 50 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/Avance.incl"
+# 51 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/Avance.incl"
+
+
+# 63 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/Avance.incl"
+# 89 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/Avance.incl"
+# 90 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/Avance.incl"
+
+
+# 123 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/Avance.incl"
+;#define LOWQ
+;#define HIGHQ
+
+
+;#define MIX_UP
+;#define MIX_DOWN
+# 136 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/Avance.incl"
+;$Id: Avance4.incl,v 1.11 2016/11/11 13:43:39 ber Exp $
+# 51 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb" 2
+
+# 1 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/Delay.incl" 1
+;Delay.incl  -  include file for commonly used delays
+;
+;version (13/08/07)
+;
+;$CLASS=HighRes Incl
+;$COMMENT=
+
+# 9 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/Delay.incl"
+;general delays
+
+define delay DELTA
+define delay DELTA1
+define delay DELTA2
+define delay DELTA3
+define delay DELTA4
+define delay DELTA5
+define delay DELTA6
+define delay DELTA7
+define delay DELTA8
+define delay DELTA9
+define delay DELTA10
+define delay DELTA11
+define delay DELTA12
+define delay DELTA13
+define delay DELTA14
+define delay DELTA15
+define delay DELTA16
+
+define delay TAU
+define delay TAU1
+define delay TAU2
+define delay TAU3
+define delay TAU4
+define delay TAU5
+define delay TAU6
+define delay TAU7
+define delay TAU8
+define delay TAU9
+# 40 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/Delay.incl"
+define delay INCR1
+define delay INCR2
+define delay INCR3
+define delay INCR4
+define delay INCR5
+define delay INCR6
+
+
+;delays for centering pulses
+# 50 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/Delay.incl"
+define delay CEN_HN1
+define delay CEN_HN2
+define delay CEN_HN3
+define delay CEN_HC1
+define delay CEN_HC2
+define delay CEN_HC3
+define delay CEN_HC4
+define delay CEN_HP1
+define delay CEN_HP2
+define delay CEN_CN1
+define delay CEN_CN2
+define delay CEN_CN3
+define delay CEN_CN4
+define delay CEN_CP1
+define delay CEN_CP2
+
+
+;loop counters
+# 69 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/Delay.incl"
+define loopcounter COUNTER
+define loopcounter SCALEF
+define loopcounter FACTOR1
+define loopcounter FACTOR2
+define loopcounter FACTOR3
+define loopcounter FACTOR4
+define loopcounter FACTOR5
+define loopcounter FACTOR6
+
+
+# 80 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/Delay.incl"
+;$Id: Delay.incl,v 1.15 2013/08/30 09:42:06 ber Exp $
+# 52 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb" 2
+
+# 1 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/De.incl" 1
+;De4.incl
+;   for AV4
+;
+;avance-version (15/08/13)
+;
+;$CLASS=HighRes Incl
+;$COMMENT=
+
+# 18 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/De.incl"
+;for multi receive
+
+
+# 27 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/De.incl"
+;$Id: De4.incl,v 1.3 2015/08/13 12:41:31 ber Exp $
+# 53 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb" 2
+
+"p31 = 1000000.0/ (cnst11*4)"
+"p32 = 1000000.0/ (cnst12*4)"
+"p33 = 1000000.0/ (cnst13*4)"
+"cnst21 = (p31/p1)*(p31/p1)"
+"cnst22 = (p32/p1)*(p32/p1)" 
+"cnst23 = (p33/p1)*(p33/p1)"
+"spw21 = plw1/cnst21"
+"spw22 = plw1/cnst22"
+"spw23 = plw1/cnst23"
+
+"d31 = (1s/cnst31)"
+# 73 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb"
+  "d2 = abs(cnst27*d31-p21/2.0-p22/2.0)"
+  "d3 = abs(cnst27*d31-p22/2.0)*2.0"
+  "d4 = abs(cnst27*d31-p22/2.0-de)"
+
+
+# 79 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb"
+"d6 = abs((2.0*cnst27*d31)-(2.0*de)-p21)"
+"cnst28=((2.0*de)+d6+((p23+2.0*de+d6)*(l22))+p21+d2+p22+d3+p23)/dw"
+
+
+# 87 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb"
+; Pulse sequence
+# 88 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb"
+1	ze
+	1m fq=cnst27:f1
+	1m fq=cnst28:f1
+	1m fq=cnst31:f1
+	1m fq=0:f1
+
+
+2 d1
+# 102 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb"
+	(de adc ph31 syrec) (1u 1u ph30:r):f1					; these three comments are used for digital part of receiver
+	0.05u setrtp1|1							; acq is immediately prevented if started in the future
+  0.1u setrtp1|0						; start acq
+
+
+# 111 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb"
+  (p21:sp21 ph11):f1
+  d2
+  (p22:sp22 ph12):f1
+  d3
+  (p23:sp23 ph13):f1
+
+
+# 121 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb"
+  de setrtp1^1
+	d6 setrtp1|26
+  de setrtp1^26
+
+3	(p23:sp23 ph13):f1
+
+  de 
+	d6 setrtp1|26
+  de setrtp1^26
+# 131 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb"
+	lo to 3 times l22							; acquire all echos
+  (1u setrtp1^26):f1								; path to receiver is blanked
+
+	0.05u setrtp1^1							; end of acq and used in case data points are left in memory (safety flush)
+
+# 142 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb"
+	rcyc = 2 
+ 	100m wr #0
+exit
+
+
+# 155 "/root/.topspin-BladeEpu/local_acqu/simulDirs/ppDirs/double_echo_scripted_neo.mb"
+ph11= 0 0 1 1 2 2 3 3
+ph12= 1 3 2 0 3 1 0 2
+ph13= 1 3 2 0 3 1 0 2
+
+ph31= 0 0 1 1 2 2 3 3
+ph30= 0
+

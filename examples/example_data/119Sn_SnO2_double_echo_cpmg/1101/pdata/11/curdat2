@@ -1,0 +1,18 @@
+##TITLE= Parameter file, TopSpin 4.0.8
+##JCAMPDX= 5.0
+##DATATYPE= Parameter Values
+##NPOINTS= 51	$$ modification sequence number
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= m_buss13
+$$ 2020-08-24 14:57:41.021 +0200  m_buss13@ubuntuvm
+$$ /mnt/hgfs/ownCloud/nmr_data/neo500/2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg/1152/pdata/1/curdat2
+$$ process /opt/topspin4.0.8/prog/au/bin/85E68CA0161D2F5A7D5F34DAC3D1066E/splitadd.c
+##$DATPATH2= </mnt/hgfs/ownCloud/nmr_data/neo500>
+##$DATPATH3= </mnt/hgfs/ownCloud/nmr_data/neo500>
+##$EXPNO2= 1152
+##$EXPNO3= 1151
+##$NAME2= <2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg>
+##$NAME3= <2020_08_23_double_echo_119Sn_4mm_10kHz_cpmg>
+##$PROCNO2= 1
+##$PROCNO3= 1
+##END=

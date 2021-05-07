@@ -6,8 +6,6 @@ from scipy.optimize.optimize import brute
 from scipy.optimize import basinhopping
 from scipy.optimize import minimize
 from nmr_tools import bruker, fileiobase, proc_base
-import numpy.ma as ma
-from scipy import stats
 
 def read_brukerproc(datapath, dict=False):
     """
@@ -31,7 +29,7 @@ def read_brukerproc(datapath, dict=False):
     ppm_scale = uc.ppm_scale()
     hz_scale = uc.hz_scale()
 
-    return (ppm_scale, hz_scale, data, dic) if dict==True else (ppm_scale, hz_scale, data)
+    return (data, ppm_scale, hz_scale, dic) if dict==True else (data, ppm_scale, hz_scale)
 
 
 def read_brukerfid(datapath, dict=False):
@@ -51,14 +49,14 @@ def read_brukerfid(datapath, dict=False):
 
 
     dic, data = bruker.read(datapath)
-    udic = bruker.guess_udic(dic, data)
-    uc = fileiobase.uc_from_udic(udic)
-    ppm_scale = uc.ppm_scale()
-    hz_scale = uc.hz_scale()
-
     td = int(dic['acqus']['TD']/2)
+    sw_h = float(dic['acqus']['SW_h'])
+    dw = 1.0/(sw_h*2.0)
+    timescale = np.linspace(0, 0+(dw*td),td,endpoint=False)
+    data = data[:td]
 
-    return (ppm_scale[:td], hz_scale[:td], data[:td], dic) if dict==True else (ppm_scale[:td], hz_scale[:td], data[:td])
+
+    return (data, timescale, dic) if dict==True else (data, timescale)
 
 
 def read_ascii(datapath, larmor_freq=0.0, skip_header=0, skip_footer=0, delimiter=' '):
@@ -85,7 +83,10 @@ def read_ascii(datapath, larmor_freq=0.0, skip_header=0, skip_footer=0, delimite
     if(larmor_freq!=0.0):
         ppm_scale = hz_scale/larmor_freq
 
-    return (hz_scale, data) if larmor_freq==0.0 else (ppm_scale, hz_scale, data)
+    data = np.transpose(data)
+    data = data[0] + data[1]*1.0j
+
+    return (data, hz_scale) if larmor_freq==0.0 else (data, ppm_scale, hz_scale)
 
 
 def read_ascii_fid(datapath, skip_header=0, skip_footer=0, delimiter=' '):
@@ -109,7 +110,7 @@ def read_ascii_fid(datapath, skip_header=0, skip_footer=0, delimiter=' '):
     data = data_temp[:, 1]+data_temp[:, 2]*1.0j
     timescale = data_temp[:, 0]
 
-    return (timescale, data)
+    return (data, timescale)
 
 
 def read_spe(datapath, larmor_freq=0.0):
@@ -148,7 +149,7 @@ def read_spe(datapath, larmor_freq=0.0):
     if(larmor_freq!=0.0):
         ppm_scale = hz_scale/larmor_freq
 
-    return (hz_scale, data) if larmor_freq==0.0 else (ppm_scale, hz_scale, data)
+    return (data, hz_scale) if larmor_freq==0.0 else (data, ppm_scale, hz_scale)
 
 
 def get_envelope_idx(s, dmin=1, dmax=1, split=False):
@@ -265,26 +266,29 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', su
         index = 0
         for datapath in datasets:
             if(isinstance(datapath, str)):
-                dataset = read_brukerproc(datapath)
-                dataset = np.array(dataset)
+                data_temp, ppm_temp, hz_temp = read_brukerproc(datapath)
             elif(isinstance(datapath, (np.ndarray, np.generic)) or isinstance(datapath, (tuple))):
-                dataset = datapath
-                dataset = np.array(dataset)
+                data_temp, ppm_temp, hz_temp = datapath
             else:
                 print('Wrong input format. Use list of datapath strings, or list of ndarrays.')
+
+            dataset = np.zeros([len(data_temp),3])
+            dataset[:,0] = data_temp
+            dataset[:,1] = ppm_temp
+            dataset[:,2] = hz_temp
 
             if(index == 0):
                 dataset_combine = dataset
             else:
-                dataset_combine = np.hstack((dataset_combine, dataset))
+                dataset_combine = np.vstack((dataset_combine, dataset))
             index = index + 1
 
         # Sort Data
-        dataset_combine = dataset_combine[:,dataset_combine[1].argsort()]
+        dataset_combine = dataset_combine[dataset_combine[:,2].argsort(),:]
         # Generate Envelope
-        high_idx, low_idx = get_envelope_idx(dataset_combine[2], dmin=4, dmax=4)
-        dataset_array_masked = dataset_combine[2][low_idx]
-        dataset_x_masked = dataset_combine[1][low_idx]
+        _, low_idx = get_envelope_idx(dataset_combine[:,0], dmin=4, dmax=4)
+        dataset_array_masked = dataset_combine[low_idx,0]
+        dataset_x_masked = dataset_combine[low_idx,2]
 
         # Generate XRI Dataset
         dataset_new = []
@@ -314,39 +318,6 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', su
             dataset_new.append(elem)
             index = index +1
         dataset_array = np.array(dataset_new)
-    elif(mode=='binning_doNOTuse'):
-        # Combine Data
-        index = 0
-        for datapath in datasets:
-            if(isinstance(datapath, str)):
-                dataset = read_brukerproc(datapath)
-                dataset = np.array(dataset)
-            elif(isinstance(datapath, (np.ndarray, np.generic)) or isinstance(datapath, (tuple))):
-                dataset = datapath
-                dataset = np.array(dataset)
-            else:
-                print('Wrong input format. Use list of datapath strings, or list of ndarrays.')
-
-            if(index == 0):
-                dataset_combine = dataset
-            else:
-                dataset_combine = np.hstack((dataset_combine, dataset))
-            index = index + 1
-
-        # Sort Data
-        dataset_combine = dataset_combine[:,dataset_combine[1].argsort()]
-
-        binned_data = stats.binned_statistic(dataset_combine[1,:], dataset_combine[2,:], 'sum', bins=bins)
-        # binned_data2 = stats.binned_statistic(dataset_array[1,:], dataset_array[2,:], 'sum', bins=bins)
-
-        ppm_binned = np.linspace(dataset_combine[0,:].min(), dataset_combine[0,:].max(), bins)
-
-        hz_binned_mean = np.zeros(len(binned_data[1])-1) 
-        ppm_binned_mean = np.zeros(len(binned_data[1])-1) 
-        for i in range(len(binned_data[1])):
-            if i < len(binned_data[1])-1:
-                hz_binned_mean[i] = (binned_data[1][i]+binned_data[1][i+1])/2.0
-                ppm_binned_mean[i] = (ppm_binned[i]+ppm_binned[i+1])/2.0
     elif(mode=='sum'):
         # Combine Data
         index = 0
@@ -363,14 +334,13 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', su
             datasets_temp.append(dataset)
 
         index = 0
-        interpolator = []
         for datasets in datasets_temp:
             if(index == 0):
-                dataset_scale_hz = datasets[1,:]
-                dataset_scale_ppm = datasets[0,:]
+                dataset_scale_hz = datasets[2,:] 
+                dataset_scale_ppm = datasets[1,:]
             else:
-                dataset_scale_hz = np.hstack((dataset_scale_hz, datasets[1,:]))
-                dataset_scale_ppm = np.hstack((dataset_scale_ppm, datasets[0,:]))
+                dataset_scale_hz = np.hstack((dataset_scale_hz, datasets[2,:]))
+                dataset_scale_ppm = np.hstack((dataset_scale_ppm, datasets[1,:]))
             index = index + 1
 
             # Sort Data
@@ -380,7 +350,7 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', su
         datasets_interpolated = []
         index = 0
         for datasets in datasets_temp:
-            f = interpolate.interp1d(datasets[1,:], datasets[2,:], fill_value=0.0, bounds_error=False)
+            f = interpolate.interp1d(datasets[2,:], datasets[0,:], fill_value=0.0, bounds_error=False)
             datasets_interpolated.append(f(dataset_scale_hz))
             index+=1
         sumdata = [sum(elem) for elem in zip(*datasets_interpolated)]
@@ -418,15 +388,15 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', su
         elem = np.append(elem, 0)
         dataset_new.append(elem)
         index = index +1
-    dataset_array = np.array(dataset_new)
+    data = np.array(dataset_new)
 
     if(verbose==True):
-        precision = np.round((abs(dataset_array[-1,0])+abs(dataset_array[0,0])), -3)-(abs(dataset_array[-1,0])+abs(dataset_array[0,0]))
+        precision = np.round((abs(data[-1,0])+abs(data[0,0])), -3)-(abs(data[-1,0])+abs(data[0,0]))
         print('.spe precision: ' + str(int(precision)) + ' Hz')
-        print('SW raw: ' + str(int(abs(dataset_array[-1,0])+abs(dataset_array[0,0]))) + ' Hz')
-        print('SW rounded: ' + str(int(np.round((abs(dataset_array[-1,0])+abs(dataset_array[0,0])), -3))) + ' Hz')
+        print('SW raw: ' + str(int(abs(data[-1,0])+abs(data[0,0]))) + ' Hz')
+        print('SW rounded: ' + str(int(np.round((abs(data[-1,0])+abs(data[0,0])), -3))) + ' Hz')
 
-    return(dataset_array)
+    return(data)
 
 
 def split_echotrain(datapath, dw, echolength, blankinglength, numecho, dict=False):
@@ -446,9 +416,7 @@ def split_echotrain(datapath, dw, echolength, blankinglength, numecho, dict=Fals
         data
     """  
 
-    dic, data = bruker.read(datapath)
-    udic = bruker.guess_udic(dic, data)
-    uc = fileiobase.uc_from_udic(udic)
+    data, timescale, dic = read_brukerfid(datapath, dict=True)
 
     echopoints = int(echolength/dw/2)
     echotop = np.argmax(np.absolute(data))
@@ -474,10 +442,7 @@ def split_echotrain(datapath, dw, echolength, blankinglength, numecho, dict=Fals
     # Echo Sum
     data = data.sum(axis=0)
 
-    ppm_scale = uc.ppm_scale()
-    hz_scale = uc.hz_scale()
-
-    return (ppm_scale, hz_scale, data, dic) if dict==True else (ppm_scale, hz_scale, data)
+    return (data, timescale, dic) if dict==True else (data, timescale)
 
 
 def calc_mse(data_1, data_2):
@@ -492,7 +457,19 @@ def calc_mse(data_1, data_2):
     data_rms = data_1 - data_2
     rms = np.mean(data_rms**2)
 
-    return(rms)
+    return (rms) if rms<1.0e+100 else (1.0e+100)
+
+
+def calc_residual(data_1, data_2):
+    """
+    This calculates the Mean Square Error loss function of two 1d arrays.
+
+    Args:
+        data_1 (1darray): First data array to be evaluated
+        data_2 (1darray): Second data array to be evaluated
+    """
+
+    return (data_1 - data_2)
 
 
 def calc_mae(data_1, data_2):
@@ -562,7 +539,7 @@ def data_rms(x, data, data_mc, loss_func, int_sum_cutoff):
 
 def phase_minimizer(data, data_mc, bnds, Ns, loss_func, int_sum_cutoff, workers, verb, minimizer, tol, options, stepsize, T, disp, niter):
     resbrute = brute(data_rms, ranges=bnds, args=(data, data_mc, loss_func, int_sum_cutoff,), Ns=Ns, disp=True, workers=workers, finish=None)
-    if(verb==True):
+    if verb:
         print('Brute-Force Optmization Results:')
         print(resbrute)
     if(minimizer=='Nelder-Mead'):
@@ -574,14 +551,14 @@ def phase_minimizer(data, data_mc, bnds, Ns, loss_func, int_sum_cutoff, workers,
         res = basinhopping(data_rms, x0 = resbrute, minimizer_kwargs=minimizer_kwargs, stepsize=stepsize, T=T, disp=disp, niter=niter)
     else:
         sys.exit('Wrong minimizer! Choose from: Nelder-Mead, COBYLA, or basinhopping')
-    if(verb==True):
+    if verb:
         print(minimizer + ' Results:')
         print(res)
 
     return res.x
 
 
-def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum_cutoff=1.0, verb=False, minimizer='basinhopping', tol=1e-14, options={'rhobeg':1000.0, 'maxiter':5000, 'maxfev':5000}, stepsize=1000, T=100, disp=True, niter=200, loss_func='logcosh', workers=4):
+def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum_cutoff=1.0, zf=0, verb=False, minimizer='basinhopping', tol=1e-14, options={'rhobeg':1000.0, 'maxiter':5000, 'maxfev':5000}, stepsize=1000, T=100, disp=True, niter=200, loss_func='logcosh', workers=4):
     """
     !!!WIP!!!
     This automatically calculates the phase of the spectrum
@@ -594,9 +571,8 @@ def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum
         verb (bool, optional): [description]. Defaults to False.
         loss_func (str, optional): [description]. Defaults to 'logcosh'.
     """
-    data_reverse = proc_base.rev(data)    # Reverse Data, for NMR orientation
 
-    data_fft = proc_base.fft(data_reverse)    # Fourier transform
+    data_fft = proc_base.fft(proc_base.rev(proc_base.zf(data, pad=zf)))    # Fourier transform
     data_mc = proc_base.mc(data_fft)      # magnitude mode
 
     # Phasing
@@ -604,14 +580,14 @@ def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum
         sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
     if(len(bnds)==2):
         phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
-        data_auto = proc_base.ps(data_fft, p0=phase[0], p1=phase[1])      # add previously phase values
+        data = proc_base.ps(data_fft, p0=phase[0], p1=phase[1])      # add previously phase values
     elif(len(bnds)==3):
         phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
-        data_auto = proc_base.ps2(data_fft, p0=phase[0], p1=phase[1], p2=phase[2])      # add previously phase values
+        data = proc_base.ps2(data_fft, p0=phase[0], p1=phase[1], p2=phase[2])      # add previously phase values
     else:
         sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
 
-    return(data_auto, phase)
+    return(data, phase)
 
 
 def linebroadening(data, lb_variant, lb_const=0.54, lb_n=2):
@@ -625,7 +601,7 @@ def linebroadening(data, lb_variant, lb_const=0.54, lb_n=2):
         lb_n (int, optional): Shape parameter used by shifted_wurst and hamming (set to 2). Defaults to 2.
 
     Returns:
-        data_lb (1darray): Linebroadened FID
+        data (1darray): Linebroadened FID
         y_range (1darray): Y values of window function
     """
     x_range = np.linspace(0, 1, len(data))    # Calculate x values from 0 to 1
@@ -641,9 +617,9 @@ def linebroadening(data, lb_variant, lb_const=0.54, lb_n=2):
         y_range = 1/np.exp(10*np.power((x_range), 2))
     else:
         sys.exit('Wrong window function! Choose from: hamming, shifted_wurst, gaussian, gaussian_normal')
-    data_lb = np.multiply(y_range, data)    # Apply linebroadening
+    data = np.multiply(y_range, data)    # Apply linebroadening
 
-    return(data_lb, y_range)
+    return(data, y_range)
 
 
 def signaltonoise(a, axis=0, ddof=0):
@@ -704,10 +680,10 @@ def fft(data, dic, si=0, mc=True, phase=[0, 0], dict=False):
     ppm_scale = uc.ppm_scale()
     hz_scale = uc.hz_scale()
 
-    return(ppm_scale, hz_scale, data, dic) if dict==True else (ppm_scale, hz_scale, data)
+    return(data, ppm_scale, hz_scale, dic) if dict==True else (data, ppm_scale, hz_scale)
 
 
-def sfft(data, timescale, si=0, larmor_freq=0.0):
+def asciifft(data, timescale, si=0, larmor_freq=0.0):
     """
     This takes the output of read_ascii_fid (FID and dic) and applies fft and zerofilling. It can return magnitude or phased data.
 
@@ -719,11 +695,11 @@ def sfft(data, timescale, si=0, larmor_freq=0.0):
         dict (bool, optional): Set to True to return the dictionary. Defaults to False.
     """
     data = proc_base.zf_size(data, si)
-    data = np.fft.fftshift(np.fft.fft(data))
+    data = np.flip(np.fft.fftshift(np.fft.fft(data)))
 
-    hz_scale = np.fft.fftshift(np.fft.fftfreq(len(data), d=timescale[1]-timescale[0]))
+    hz_scale = np.flip(np.fft.fftshift(np.fft.fftfreq(len(data), d=timescale[1]-timescale[0])))
 
     if(larmor_freq!=0.0):
             ppm_scale = hz_scale/larmor_freq
 
-    return(ppm_scale, hz_scale, data)
+    return(data, ppm_scale, hz_scale) if larmor_freq!=0.0 else (data, hz_scale)
