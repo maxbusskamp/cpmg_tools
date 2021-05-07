@@ -8,7 +8,17 @@ import sys
 
 
 def constant_factory(value):
+    """This function allows the use of custom values for the initialization of defaultdicts
+    Use:
+    dict = defaultdict(lambda: defaultdict(constant_factory(1.0)))
+    to initialize each new entry as 1.0.
 
+    Args:
+        value (int, float, str): Default value for new entries in the defaultdict
+
+    Returns:
+        Given value
+    """
     return lambda: value
 
 
@@ -18,22 +28,28 @@ def create_simpson(output_path, output_name, input_dict=None, proc_dict=None, pa
     Args:
         output_path (str): Path to save the generated file
         output_name (str): Name of generated inputfile
-        input_dict (dict): Used to specify simulation parameter.
-            nuclei:'1H',
-            cs_iso:0.0,
-            csa:0.0,
-            csa_eta:0.0,
-            alpha:0.0,
-            beta:0.0,
-            gamma:0.0,
-            sw (float): Spectral width in Hz
-            np (float): Number of FID points
-            spin_rate (float): MAS rate in Hz
-            proton_frequency (float): Proton frequency in Hz
-            crystal_file (str, optional): Crystal file chosen from e.g. rep20 rep2000 rep256 rep678 zcw232 zcw4180 zcw28656. Defaults to 'rep2000'.
-            gamma_angles (int, optional): Gamma angles, should be at least sqrt(crystal_file orientations) Defaults to 45.
-            lb (int, optional): Linebroadening in Hz. Defaults to 1000.
-            lb_ratio (float, optional): Ratio between Gauss/Lorentz linebroadening. Defaults to 1.0.
+        input_dict (dict): Used to specify simulation parameter. Not used parameter use the following defaults:
+            "nuclei":'1H',
+            "cs_iso":0.0,
+            "csa":0.0,
+            "csa_eta":0.0,
+            "alpha":0.0,
+            "beta":0.0,
+            "gamma":0.0,
+            "pulse":'',
+            "spin_rate":0.0,
+            "proton_frequency":500.0e6,
+            "start_operator":'Inx',
+            "detect_operator":'Inp',
+            "crystal_file":'rep100',
+            "gamma_angles":10,
+            "method":'direct',
+            "sw":2e6,
+            "np":16384,
+            "lb":1000,
+            "lb_ratio":1.0,
+            "si":'np*2',
+            "scaling_factor":1.0
     """
 
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
@@ -209,7 +225,12 @@ def create_simpson(output_path, output_name, input_dict=None, proc_dict=None, pa
 
 
 def run_simpson(input_file, working_dir, *args):
+    """This function executes a given simpson inputfile in the given directory. *args can be used in simpson via argc and argv.
 
+    Args:
+        input_file (str): Absolute path to the simpson input file
+        working_dir (str): Absolute path to the working directory. Results are saved in this directory
+    """
     os.chdir(working_dir)
     run(['simpson', input_file, *args])
 
@@ -217,7 +238,19 @@ def run_simpson(input_file, working_dir, *args):
 
 
 def fit_helper(params, data, output_path, output_name, input_dict, proc_dict, params_scaling, si, verb):
+    """This function is called by the simpson_fit wrapper. It generates the simpson input file, executes simpson and calculates the residual.
 
+    Args:
+        params (tuple() or tuple(tuple())): Parameter to be fitted
+        data (ndarray): Comparison data for fitting
+        output_path (str): Path to save and execute simpson files
+        output_name (str): Name of simpson file
+        input_dict (dict or nested dict): Dict to specify simulation parameter
+        proc_dict (dict): Dict to specify custom pulseprogs
+        params_scaling (dict): Scaling of each parameter inside the fit. Scales them to the range 0 to 1
+        si (int): Value for zerofilling of simulation
+        verb (bool): Print debugging information
+    """
     if input_dict is not None:
         if any(isinstance(i,dict) for i in input_dict.values()):
             for keys in params.valuesdict():
@@ -260,7 +293,68 @@ def fit_helper(params, data, output_path, output_name, input_dict, proc_dict, pa
     return(residual)
 
 
-def fit_simpson(output_path, output_name, params_input, data, si, input_dict=None, proc_dict=None, verb=True, method='leastsq', **fit_kws):
+def fit_simpson(output_path, output_name, params_input, data, si, input_dict=None, proc_dict=None, verb=True, method='powell', **fit_kws):
+    """This function is a wrapper to combine the simpson-python pipeline with lmfit. Most methods from lmfit can be used,
+       but the easiest method seems to be 'powell'.
+       Both the experimental data and the simpson simulation have to use the same number of points.
+    
+    Args:
+        output_path (str): Path to save and execute simpson files
+        output_name (str): Name of simpson file
+        params_input (tuple() or tuple(tuple())): Parameter to be fitted
+        data (ndarray): Comparison data for fitting
+        si (int): Value for zerofilling of simulation
+        input_dict (dict): Used to specify simulation parameter. Not used parameter use the following defaults:
+            "nuclei":'1H',
+            "cs_iso":0.0,
+            "csa":0.0,
+            "csa_eta":0.0,
+            "alpha":0.0,
+            "beta":0.0,
+            "gamma":0.0,
+            "pulse":'',
+            "spin_rate":0.0,
+            "proton_frequency":500.0e6,
+            "start_operator":'Inx',
+            "detect_operator":'Inp',
+            "crystal_file":'rep100',
+            "gamma_angles":10,
+            "method":'direct',
+            "sw":2e6,
+            "np":16384,
+            "lb":1000,
+            "lb_ratio":1.0,
+            "si":'np*2',
+            "scaling_factor":1.0
+        For multiple species these Parameter have to be given as nested dicts following this scheme:
+            input_dict{'1':{"cs_iso":10.0,}, '2':{"cs_iso":20.0,}}
+        proc_dict (dict, optional): Dict to specify custom pulseprogs
+
+            proc_dict = {}
+
+            proc_dict['spinsys'] = " " " (Remove spaces between " ")
+
+            spinsys {{
+
+                channels 1H
+
+                nuclei 1H 1H
+
+                shift 1 {cs_iso}p {csa}p {csa_eta} {alpha} {beta} {gamma}
+
+                shift 2 50p 50p 0.5 {alpha} {beta} {gamma}
+
+                dipole 1 2 -10000 0 0 0
+
+            }}
+
+            " " " (Remove spaces between " ")
+        verb (bool, optional): [description]. Defaults to True.
+        method (str, optional): [description]. Defaults to 'powell'.
+
+    Returns:
+        lmfit fit report
+    """
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     os.chdir(output_path)
 
