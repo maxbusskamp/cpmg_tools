@@ -85,6 +85,7 @@ params_input = (
                 ('csa_eta_2', 0.25, True, 0, 0.5, None, None),
                 )
 
+# Specify fitting parameter
 results = simpson.fit_simpson(output_path=output_path,
                               output_name=output_name,
                               params_input=params_input,
@@ -93,13 +94,10 @@ results = simpson.fit_simpson(output_path=output_path,
                               si=8192*4,
                               # proc_dict=proc_dict,
                               verb=True,
-                              method='powell',
-                            #   **{'finish':'optimize.fmin'},
-                            #   **{'xtol':1e-15,
-                            #   'ftol':1e-15},
-                            #   **{'options':{'xatol':1e-10}}
+                              method='powell'
                               )
 
+# Print fancy fit report, additionally to the default printed variables
 # print(fit_report(results))
 
 print("-------------------------------")

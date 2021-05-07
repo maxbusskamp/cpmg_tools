@@ -1,3 +1,4 @@
+#%%
 # Example for multiple species
 from nmr_tools import simpson, processing, proc_base
 import matplotlib.pyplot as plt
@@ -10,8 +11,8 @@ output_path = '/home/m_buss13/testfiles/'
 output_name = 'simpson_input'
 ascii_file = 'simpson_input.xy'
 
-# Simulate species 1
-# Create a dictionary containing the custom parameter of species 1
+# Simulate two species
+# Create a dictionary containing the custom parameter of both species
 input_dict = {'1': {
                     "nuclei":'207Pb',
                     "cs_iso":1598-1816,
@@ -50,38 +51,34 @@ data, ppm_scale, hz_scale = processing.asciifft(data, timescale, si=8192*4, larm
 # data_pb, ppm_scale_pb, _ = processing.read_brukerproc('/home/m_buss13/ownCloud/git/nmr_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/10')
 # data_pb, ppm_scale_pb, _ = processing.read_brukerproc('/home/m_buss13/ownCloud/git/nmr_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/11')
 # data_pb, ppm_scale_pb, _ = processing.read_brukerproc('/home/m_buss13/ownCloud/git/nmr_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/12')
-
 data_pb, timescale, dic_pb = processing.read_brukerfid('/home/m_buss13/ownCloud/git/nmr_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1', dict=True)
+
+# If FID is read-in, apply linebroadening
 data_pb, window = processing.linebroadening(data_pb, lb_variant='hamming', lb_const=0.54, lb_n=2)
 
+# Fouriertransform and zerofill the FID
 data_pb = proc_base.zf_size(data_pb, 32768)    # zero fill to 32768 points
 data_pb = proc_base.fft(proc_base.rev(data_pb))               # Fourier transform
 data_pb = proc_base.ps(data_pb, p0=847, p1=-268718)
+# Generate new scales for zerofilled spectrum
 ppm_scale_pb, hz_scale_pb = processing.get_scale(data_pb, dic_pb)
 
+# Scale both spectra to maximum 1.0
 data_pb = data_pb/max(data_pb.real)
 data = data/max(data.real)
 
-# data = np.insert(data, 0, 0)
-# data = np.flip(data)
-# mse = data.real - data_pb.real
+# Calculate residual
 mse = processing.calc_logcosh(data.real, data_pb.real)
 print(mse)
 
 # Plotting
 plt.figure()
-# plt.plot(data.real, c='k', lw=1.0, label='Python Pipeline')
-# plt.plot(data_pb.real, c='r', lw=1.0, label='Experiment')
-# plt.plot(mse, c='grey', lw=1.0, label='Python Pipeline')
-# plt.xlim(18000, 15000)
-
 plt.plot(ppm_scale, data.real, c='k', lw=1.0, label='Python Pipeline')
 plt.plot(ppm_scale_pb, data_pb.real, c='r', lw=1.0, label='Experiment')
-# # plt.plot(ppm_scale, mse, c='grey', lw=1.0, label='Python Pipeline')
+# plt.plot(ppm_scale, mse, c='grey', lw=1.0, label='Python Pipeline')  # If the residual vector is calculated, plot vector
 plt.xlim(1000, -1000)
 plt.yticks([])
-
 plt.legend()
-plt.savefig('simpson_pipeline_rep2000.png', dpi=600)
-# plt.show()
-plt.close()
+plt.show()
+# plt.savefig('simpson_pipeline_rep2000.png', dpi=600)
+# plt.close()

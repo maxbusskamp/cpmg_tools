@@ -39,8 +39,10 @@ data, phase = processing.autophase(data, bnds=((3900, 4100), (-55000, -54000), (
                                    tol=1e-25, options={'rhobeg':1000.0, 'maxiter':100, 'maxfev':100},
                                    zf=4096*32)
 
+# Get scales for spectrum
 ppm_scale, hz_scale = processing.get_scale(data, dic)
 
+# Plotting
 plt.figure()
 plt.plot(ppm_scale_mc, data_mc/max(data_mc), c='k', lw=1.0, label='Magnitude')
 if(len(phase)==2):
