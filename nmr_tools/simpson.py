@@ -6,10 +6,10 @@ import lmfit
 from collections import defaultdict
 import sys
 
+
 def constant_factory(value):
 
     return lambda: value
-
 
 
 def create_simpson(output_path, output_name, input_dict=None, proc_dict=None, params_scaling={}):  # Write simpson input files
@@ -216,15 +216,25 @@ def run_simpson(input_file, working_dir, *args):
     return()
 
 
-def fit_helper(params, data, output_path, output_name, input_dict, proc_dict, params_scaling, si):
+def fit_helper(params, data, output_path, output_name, input_dict, proc_dict, params_scaling, si, verb):
 
+    if input_dict is not None:
+        if any(isinstance(i,dict) for i in input_dict.values()):
+            for keys in params.valuesdict():
+                input_dict[str(keys.rsplit('_', 1)[-1])][str(keys.rsplit('_', 1)[0])] = params.valuesdict()[keys]
+        else:
+            for keys in params.valuesdict():
+                input_dict[keys] = params.valuesdict()[keys]
 
-    for keys in params.valuesdict():
-        input_dict[str(keys.rsplit('_', 1)[-1])][str(keys.rsplit('_', 1)[0])] = params.valuesdict()[keys]
-
-    params_scaling_input = defaultdict(lambda: defaultdict(constant_factory(1.0)))
-    for keys in params_scaling:
-        params_scaling_input[str(keys.rsplit('_', 1)[-1])][str(keys.rsplit('_', 1)[0])] = params_scaling[keys]
+    if input_dict is not None:
+        if any(isinstance(i,dict) for i in input_dict.values()):
+            params_scaling_input = defaultdict(lambda: defaultdict(constant_factory(1.0)))
+            for keys in params_scaling:
+                params_scaling_input[str(keys.rsplit('_', 1)[-1])][str(keys.rsplit('_', 1)[0])] = params_scaling[keys]
+        else:
+            params_scaling_input = defaultdict(lambda: defaultdict(constant_factory(1.0)))
+            for keys in params_scaling:
+                params_scaling_input[keys] = params_scaling[keys]
 
     # print(input_dict)
     data_model, timescale_model  = create_simpson(output_path, output_name, input_dict=input_dict, proc_dict=proc_dict, params_scaling=params_scaling_input)
@@ -241,10 +251,13 @@ def fit_helper(params, data, output_path, output_name, input_dict, proc_dict, pa
     if(len(data_model_fft)!=len(data)):
         sys.exit('Model and comparison data are not of same length. Check SI value. ' + str(len(data_model_fft)) + ' vs. ' + str(len(data)))
 
-    # print(processing.calc_logcosh(data_model_fft.real, data.real))
+    residual = processing.calc_logcosh(data_model_fft.real, data.real)
+
+    if verb:
+        print(residual)
     # print(processing.calc_mse(data_model_fft.real, data.real))
     # return(data_model_fft.real - data.real)
-    return(processing.calc_logcosh(data_model_fft.real, data.real))
+    return(residual)
 
 
 def fit_simpson(output_path, output_name, params_input, data, si, input_dict=None, proc_dict=None, verb=True, method='leastsq', **fit_kws):
@@ -306,7 +319,7 @@ def fit_simpson(output_path, output_name, params_input, data, si, input_dict=Non
         print('Scale parameters are:')
         print(params_scaling)
 
-    out = lmfit.minimize(fit_helper, params, args=(data, output_path, output_name, input_dict, proc_dict, params_scaling, si), method=method, **fit_kws)
+    out = lmfit.minimize(fit_helper, params, args=(data, output_path, output_name, input_dict, proc_dict, params_scaling, si, verb), method=method, **fit_kws)
 
     print('--------------------------------------')
     print('These are the resulting fit parameter:')

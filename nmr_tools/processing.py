@@ -6,8 +6,6 @@ from scipy.optimize.optimize import brute
 from scipy.optimize import basinhopping
 from scipy.optimize import minimize
 from nmr_tools import bruker, fileiobase, proc_base
-import numpy.ma as ma
-from scipy import stats
 
 def read_brukerproc(datapath, dict=False):
     """
@@ -471,7 +469,7 @@ def calc_residual(data_1, data_2):
         data_2 (1darray): Second data array to be evaluated
     """
 
-    return (abs(data_1 - data_2))
+    return (data_1 - data_2)
 
 
 def calc_mae(data_1, data_2):
@@ -697,9 +695,9 @@ def asciifft(data, timescale, si=0, larmor_freq=0.0):
         dict (bool, optional): Set to True to return the dictionary. Defaults to False.
     """
     data = proc_base.zf_size(data, si)
-    data = np.fft.fftshift(np.fft.fft(data))
+    data = np.flip(np.fft.fftshift(np.fft.fft(data)))
 
-    hz_scale = np.fft.fftshift(np.fft.fftfreq(len(data), d=timescale[1]-timescale[0]))
+    hz_scale = np.flip(np.fft.fftshift(np.fft.fftfreq(len(data), d=timescale[1]-timescale[0])))
 
     if(larmor_freq!=0.0):
             ppm_scale = hz_scale/larmor_freq
