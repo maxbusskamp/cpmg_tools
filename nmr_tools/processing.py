@@ -7,6 +7,7 @@ from scipy.optimize import basinhopping
 from scipy.optimize import minimize
 from nmr_tools import bruker, fileiobase, proc_base
 
+
 def read_brukerproc(datapath, dict=False):
     """
     This reads in an Bruker processed dataset.
