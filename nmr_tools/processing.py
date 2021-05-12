@@ -7,6 +7,8 @@ from scipy.optimize import basinhopping
 from scipy.optimize import minimize
 from nmr_tools import bruker, fileiobase, proc_base
 from scipy.signal import windows
+import scipy.linalg as sp_linalg
+from nmr_tools import svd_auto
 
 
 def read_brukerproc(datapath, dict=False):
@@ -777,3 +779,114 @@ def interleave_complex(real, imag):
     data[1::2] = imag
 
     return(data)
+
+
+def denoise(data, k_thres=0, max_err=7.5):
+    """This function enables the use of svd denoise from already read-in bruker fids
+    @authors: Guillaume Laurent & Pierre-Aymeric Gilles
+    https://doi.org/10.1080/05704928.2018.1523183
+
+    Input:  data_dir    directory of data to denoise (string)
+            k_thres     if 0, allows automatic thresholding
+                        if > 0 and <= min(row, col), manual threshold (integer)
+            max_err     error level for automatic thresholding
+                        from 5 to 10 % (float)
+
+    Output: data_den
+    """
+
+
+    def vector_toeplitz(data):
+        """
+        Convert one-dimensional data to Toeplitz matrix
+        Usage:  mat = vector_toeplitz(data)
+        Input:  data        1D data (array)
+        Output: mat         2D matrix (array)
+        """
+        row = int(np.ceil(data.size / 2))                   # almost square matrix
+        # col = data.size - row + 1
+        mat = sp_linalg.toeplitz(data[row-1::-1], data[row-1::1])
+        return mat
+
+
+    def toeplitz_vector(mat):
+        """
+        Convert Toeplitz matrix to one-dimensional data
+        Usage:  data = toeplitz_vector(mat)
+        Input:  mat         2D matrix (array)
+        Output: data        1D data (array)
+        """
+        row, col = mat.shape
+        points = row+col-1
+        data = np.zeros(points, dtype=mat.dtype)
+        for i in range (0, points):
+            data[i] = np.mean(np.diag(mat[:,:],i-row+1))
+        return data
+
+
+    def denoise_mat(data, k_thres, max_err):
+        """
+        Denoise one- or two-dimensional data using Singular Value Decomposition
+        Usage:  data_den, k_thres = denoise_mat(data)
+        Input:  data        noisy data (array)
+                k_thres     if 0, allows automatic thresholding
+                            if > 0 and <= min(row, col), manual threshold (integer)
+                max_err     error level for automatic thresholding (float)
+                            from 5 to 10 %
+        Output: data_den    denoised data (array)
+                k_thres     number of values used for thresholding
+        """
+        if data.ndim == 1:          # convert to Toeplitz matrix and denoise
+            mat = vector_toeplitz(data)
+            mat_den, k_thres = svd_auto.svd_auto(mat, k_thres, max_err)
+            data_den = toeplitz_vector(mat_den)
+        elif data.ndim == 2:                                # denoise directly
+            data_den, k_thres = svd_auto.svd_auto(data, k_thres, max_err)
+        else:
+            raise NotImplementedError \
+            ('Data of {:d} dimensions is not yet supported'.format(data.ndim))
+        return data_den, k_thres
+
+
+    def precision_single(data):
+        """
+        Convert data to single precision
+        Usage:  data, typ = precision_single(data)
+        Input:  data        data with original precision (array)
+        Output: data        data with single precision (array)
+                typ         original precision (string)
+        """
+        typ = data.dtype                                    # data type
+        if typ in ['float32', 'complex64']:                 # single precision
+            pass
+        elif typ == 'float64':                      # convert to single float
+            data = data.astype('float32')
+        elif typ == 'complex128':                   # convert to single complex
+            data = data.astype('complex64')
+        else:
+            raise ValueError('Unsupported data type')
+        return data, typ
+
+
+    def precision_original(data, typ):
+        """
+        Revert data to original precision
+        Usage:  data = precision_original(data, typ)
+        Input:  data        data with single precision (array)
+                typ         original precision (string)
+        Output: data        data with original precision
+        """
+        data = data.astype(typ)
+        return data
+
+
+    # Import data with single precision to decrease computation time
+    data, typ = precision_single(data)
+
+    # Denoise data
+    data_den, k_thres = denoise_mat(data, k_thres, max_err)
+
+    # Export data with original precision
+    data_den = precision_original(data_den, typ)
+
+    return(data_den)
