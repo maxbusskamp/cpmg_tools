@@ -255,7 +255,7 @@ def shift_bit_length(x):
     return 1<<(x-1).bit_length()
 
 
-def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', sum_tol=1.0, verbose=False, bins=1000):
+def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', sum_tol=1.0, verbose=False, bins=1000, dmin=4, dmax=4):
     """
     This combines multiple Bruker Datasets into one spectrum, using a calculation of the envelope to determine the highest x-values, if multiple exist.
 
@@ -290,7 +290,7 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', su
         # Sort Data
         dataset_combine = dataset_combine[dataset_combine[:,2].argsort(),:]
         # Generate Envelope
-        _, low_idx = get_envelope_idx(dataset_combine[:,0], dmin=4, dmax=4)
+        _, low_idx = get_envelope_idx(dataset_combine[:,0], dmin=dmin, dmax=dmax)
         dataset_array_masked = dataset_combine[low_idx,0]
         dataset_x_masked = dataset_combine[low_idx,2]
 
