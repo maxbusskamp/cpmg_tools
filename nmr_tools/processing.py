@@ -192,7 +192,7 @@ def get_envelope_idx(s, dmin=1, dmax=1, split=False):
     return(lmin, lmax)
 
 
-def save_xri(output_path, output_name, dataset_array):
+def save_xri(output_path, output_name, data, hz_scale):
     """
     Saves numpy array as ASCII file
 
@@ -202,15 +202,20 @@ def save_xri(output_path, output_name, dataset_array):
         dataset_array (np array): a numpy array containing freq., real, imag. columns
     """
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    
-    f = open(output_path + output_name + '.dat', 'w')
-    np.savetxt(f, dataset_array, delimiter=' ')
-    f.close()
+    try:
+        with open(output_path + output_name + '.dat', 'w') as outfile:
+            np.savetxt(outfile, np.column_stack((hz_scale, data.real, data.imag)), delimiter=' ')
+            # np.savetxt(outfile, (hz_scale, data.real, data.imag), delimiter=' ')
+            # (hz_scale, data.real, data.imag).tofile(outfile, sep=' ')
+            # hz_scale.tofile(outfile, sep=' ')
+        print('File written successfully')
+    except:
+        print('Something went wrong when writing to the file')
 
     return()
 
 
-def save_spe(output_path, output_name, dataset_array):
+def save_spe(output_path, output_name, data, hz_scale):
     """
     Saves numpy array as SPE file for use in Simpson
 
@@ -221,16 +226,19 @@ def save_spe(output_path, output_name, dataset_array):
     """
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     
-    f = open(output_path + output_name + '.spe', 'w')
-    f.write('SIMP\n')
-    f.write('NP='+str(int(len(dataset_array)))+'\n')
-    f.write('SW='+str(np.round((abs(dataset_array[-1,0])+abs(dataset_array[0,0])), -3))+'\n')
-    f.write('REF=0.0\n')
-    f.write('TYPE=SPE\n')
-    f.write('DATA\n')
-    np.savetxt(f, dataset_array[:,1:], delimiter=' ')
-    f.write('END')
-    f.close()
+    try:
+        with open(output_path + output_name + '.spe', 'w') as outfile:
+            outfile.write('SIMP\n')
+            outfile.write('NP='+str(int(len(data)))+'\n')
+            outfile.write('SW='+str(np.round((abs(hz_scale[-1])+abs(hz_scale[0])), -3))+'\n')
+            outfile.write('REF=0.0\n')
+            outfile.write('TYPE=SPE\n')
+            outfile.write('DATA\n')
+            np.savetxt(outfile, np.column_stack((data.real, data.imag)), delimiter=' ')
+            outfile.write('END')
+            print('File written successfully')
+    except:
+        print('Something went wrong when writing to the file')
 
     return()
 
@@ -255,7 +263,7 @@ def shift_bit_length(x):
     return 1<<(x-1).bit_length()
 
 
-def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', sum_tol=1.0, verbose=False, bins=1000, dmin=4, dmax=4):
+def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', sum_tol=1.0, verbose=False, bins=1000, dmin=4, dmax=4, larmor_freq=0.0):
     """
     This combines multiple Bruker Datasets into one spectrum, using a calculation of the envelope to determine the highest x-values, if multiple exist.
 
@@ -400,7 +408,13 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', su
         print('SW raw: ' + str(int(abs(data[-1,0])+abs(data[0,0]))) + ' Hz')
         print('SW rounded: ' + str(int(np.round((abs(data[-1,0])+abs(data[0,0])), -3))) + ' Hz')
 
-    return(data)
+    hz_scale = data[:,0]
+    data = data[:,1] + data[:,2]*1.0j
+
+    if(larmor_freq!=0.0):
+            ppm_scale = hz_scale/larmor_freq
+
+    return(data, ppm_scale, hz_scale) if larmor_freq!=0.0 else (data, hz_scale)
 
 
 def split_echotrain(datapath, dw, echolength, blankinglength, numecho, dict=False):

@@ -45,19 +45,17 @@ output_path = '/home/m_buss13/'
 output_name = 'combined'
 
 # Combine Datsets
-data = processing.combine_stepped_aq(datasets, set_sw=2e6, precision_multi=8, mode='skyline', verbose=True)
+data, ppm_scale, hz_scale = processing.combine_stepped_aq(datasets, set_sw=2e6, precision_multi=2, mode='skyline', verbose=True, larmor_freq=36.1597680)
 print('Finished combining Datasets')
 
 # Just some plotting for the example
 plt.figure()
-plt.plot(data[:,0], data[:,1], lw=.3, c='k', label='Combined Spectrum')
+plt.plot(hz_scale, data.real, lw=.3, c='k', label='Combined Spectrum')
 plt.yticks([])
 plt.show()
 
-# # Save to XRI file
-# processing.save_xri(output_path, output_name, data)
-# print('Saved XRI')
+# Save to XRI file
+processing.save_xri(output_path, output_name, data, hz_scale)
 
-# # Save to .spe file
-# processing.save_spe(output_path, output_name, data)
-# print('Saved SPE')
+# Save to .spe file
+processing.save_spe(output_path, output_name, data, hz_scale)
