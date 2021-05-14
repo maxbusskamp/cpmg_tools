@@ -9,6 +9,7 @@ from nmr_tools import bruker, fileiobase, proc_base
 from scipy.signal import windows
 import scipy.linalg as sp_linalg
 from nmr_tools import svd_auto
+from scipy.signal import find_peaks
 
 
 def read_brukerproc(datapath, dict=False):
@@ -530,7 +531,13 @@ def calc_int_sum(data, data_mc, int_sum_cutoff):
     return(integral)
 
 
-def data_rms(x, data, data_mc, loss_func, int_sum_cutoff):
+def calc_phaseloss(data, prominence=1000000000):
+    peaks, _ = find_peaks(data.real, prominence=prominence)
+
+    return(sum(abs(np.angle(data[peaks], deg=True))))
+
+
+def data_rms(x, data, data_mc, loss_func, int_sum_cutoff, prominence):
     if(len(x)==2):
         data_phased = proc_base.ps(data, p0=x[0], p1=x[1])      # phase correction
     elif(len(x)==3):
@@ -538,34 +545,36 @@ def data_rms(x, data, data_mc, loss_func, int_sum_cutoff):
     else:
         sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
 
-    data_phased = proc_base.di(data_phased)
-    data_mc = proc_base.di(data_mc)
+    # data_phased = proc_base.di(data_phased)
+    # data_mc = proc_base.di(data_mc)
 
     if(loss_func=='logcosh'):
-        rms = calc_logcosh(data_mc, data_phased)
+        rms = calc_logcosh(data_mc.real, data_phased.real)
     elif(loss_func=='mse'):
-        rms = calc_mse(data_mc, data_phased)
+        rms = calc_mse(data_mc.real, data_phased.real)
     elif(loss_func=='mae'):
-        rms = calc_mae(data_mc, data_phased)
+        rms = calc_mae(data_mc.real, data_phased.real)
     elif(loss_func=='int_sum'):
-        rms = -1.0*calc_int_sum(data_phased, data_mc, int_sum_cutoff)
+        rms = -1.0*calc_int_sum(data_phased.real, data_mc.real, int_sum_cutoff)
+    elif(loss_func=='phaseloss'):
+        rms = calc_phaseloss(data_phased, prominence)
     else:
         print('Wrong loss function')
 
     return rms
 
 
-def phase_minimizer(data, data_mc, bnds, Ns, loss_func, int_sum_cutoff, workers, verb, minimizer, tol, options, stepsize, T, disp, niter):
-    resbrute = brute(data_rms, ranges=bnds, args=(data, data_mc, loss_func, int_sum_cutoff,), Ns=Ns, disp=True, workers=workers, finish=None)
+def phase_minimizer(data, data_mc, bnds, Ns, loss_func, int_sum_cutoff, prominence, workers, verb, minimizer, tol, options, stepsize, T, disp, niter):
+    resbrute = brute(data_rms, ranges=bnds, args=(data, data_mc, loss_func, int_sum_cutoff, prominence,), Ns=Ns, disp=True, workers=workers, finish=None)
     if verb:
         print('Brute-Force Optmization Results:')
         print(resbrute)
     if(minimizer=='Nelder-Mead'):
-        res = minimize(data_rms, x0 = resbrute, args=(data, data_mc, loss_func, int_sum_cutoff,), method='Nelder-Mead', tol=tol, options=options)
+        res = minimize(data_rms, x0 = resbrute, args=(data, data_mc, loss_func, int_sum_cutoff, prominence,), method='Nelder-Mead', tol=tol, options=options)
     elif(minimizer=='COBYLA'):
-        res = minimize(data_rms, x0 = resbrute, args=(data, data_mc, loss_func, int_sum_cutoff,),method='COBYLA', tol=tol, options=options)
+        res = minimize(data_rms, x0 = resbrute, args=(data, data_mc, loss_func, int_sum_cutoff, prominence,),method='COBYLA', tol=tol, options=options)
     elif(minimizer=='basinhopping'):
-        minimizer_kwargs={"method":"Nelder-Mead", "args":(data, data_mc, loss_func, int_sum_cutoff,)}
+        minimizer_kwargs={"method":"Nelder-Mead", "args":(data, data_mc, loss_func, int_sum_cutoff, prominence,)}
         res = basinhopping(data_rms, x0 = resbrute, minimizer_kwargs=minimizer_kwargs, stepsize=stepsize, T=T, disp=disp, niter=niter)
     else:
         sys.exit('Wrong minimizer! Choose from: Nelder-Mead, COBYLA, or basinhopping')
@@ -576,7 +585,7 @@ def phase_minimizer(data, data_mc, bnds, Ns, loss_func, int_sum_cutoff, workers,
     return res.x
 
 
-def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum_cutoff=1.0, zf=0, verb=False, minimizer='basinhopping', tol=1e-14, options={'rhobeg':1000.0, 'maxiter':5000, 'maxfev':5000}, stepsize=1000, T=100, disp=True, niter=200, loss_func='logcosh', workers=4):
+def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum_cutoff=1.0, prominence=1000000000, zf=0, verb=False, minimizer='basinhopping', tol=1e-14, options={'rhobeg':1000.0, 'maxiter':5000, 'maxfev':5000}, stepsize=1000, T=100, disp=True, niter=200, loss_func='logcosh', workers=4):
     """
     !!!WIP!!!
     This automatically calculates the phase of the spectrum
@@ -597,10 +606,10 @@ def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum
     if(type(bnds[0])==int):
         sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
     if(len(bnds)==2):
-        phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
+        phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, prominence=prominence, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
         data = proc_base.ps(data_fft, p0=phase[0], p1=phase[1])      # add previously phase values
     elif(len(bnds)==3):
-        phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
+        phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, prominence=prominence, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
         data = proc_base.ps2(data_fft, p0=phase[0], p1=phase[1], p2=phase[2])      # add previously phase values
     else:
         sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
