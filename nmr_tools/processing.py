@@ -531,8 +531,8 @@ def calc_int_sum(data, data_mc, int_sum_cutoff):
     return(integral)
 
 
-def calc_phaseloss(data, prominence=1000000000):
-    peaks, _ = find_peaks(data.real, prominence=prominence)
+def calc_phaseloss(data, prominence=0.05):
+    peaks, _ = find_peaks(data.real, prominence=max(abs(data))*prominence)
 
     return(sum(abs(np.angle(data[peaks], deg=True))))
 
@@ -601,6 +601,7 @@ def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum
 
     data_fft = proc_base.fft(proc_base.rev(proc_base.zf(data, pad=zf)))    # Fourier transform
     data_mc = proc_base.mc(data_fft)      # magnitude mode
+
 
     # Phasing
     if(type(bnds[0])==int):

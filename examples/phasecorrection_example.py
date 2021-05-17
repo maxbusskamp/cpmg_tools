@@ -35,11 +35,10 @@ data, _, dic = processing.read_brukerfid(datapath, dict=True)
 # Note! The starting variables are highly optimized to enable the use of very short optimizations for testing.
 # Original Data should be optimized much longer, or in multiple steps
 data, phase = processing.autophase(data, bnds=((3900, 4100), (-55000, -54000), (-15000, -14000)),
-# data, phase = processing.autophase(data, bnds=((3900, 4100), (-55000, -54000), (-11000, -10000)),
                                    Ns=4, verb=True, loss_func='phaseloss', workers=4, int_sum_cutoff=0.5,
                                    minimizer='Nelder-Mead', T=1000, niter=100, disp=False, stepsize=1000,
                                    tol=1e-25, options={'rhobeg':1000.0, 'maxiter':100, 'maxfev':100},
-                                   zf=4096*32, prominence=1000000000)
+                                   zf=4096*32, prominence=0.05)
 
 # Get scales for spectrum
 ppm_scale, hz_scale = processing.get_scale(data, dic)
@@ -54,6 +53,8 @@ elif(len(phase)==3):
 else:
     ('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
 
+peaks, _ = processing.find_peaks(data.real, prominence=max(abs(data))*0.05)
+plt.plot(ppm_scale[peaks], data[peaks].real/max(abs(data.real)), 'gs')
 
 # plt.plot(ppm_scale[peaks], data[peaks].real/max(abs(data[peaks].real)), "vg")
 # plt.xlim(1000, -1000)
