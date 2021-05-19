@@ -245,7 +245,15 @@ def save_spe(output_path, output_name, data, hz_scale):
 
 
 def find_nearest_index(array, value):
+    """Function to find the number nearest to the given number and return its index.
 
+    Args:
+        array (1darray): Array to be searched
+        value (float): Comparison number
+
+    Returns:
+        int: Index of nearest neighbour
+    """
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
     
@@ -253,7 +261,15 @@ def find_nearest_index(array, value):
 
 
 def find_nearest(array, value):
+    """Function to find the number nearest to the given number and return it.
 
+    Args:
+        array (1darray): Array to be searched
+        value (float): Comparison number
+
+    Returns:
+        float: Nearest neighbour
+    """
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
 
@@ -261,6 +277,14 @@ def find_nearest(array, value):
 
 
 def shift_bit_length(x):
+    """Function to return next highest 2^n value
+
+    Args:
+        x (int): original integer
+
+    Returns:
+        int: Next highest 2^n integer
+    """
     return 1<<(x-1).bit_length()
 
 
@@ -522,6 +546,13 @@ def calc_logcosh(data_1, data_2):
 
 
 def calc_int_sum(data, data_mc, int_sum_cutoff):
+    """Function to calculate the integral of peaks. The cutoff is used to ignore the noise and use negative peaks as punishment for the loss function.
+
+    Args:
+        data (1darray): Input data
+        data_mc (1darray): Comparison data to calculate the peaks
+        int_sum_cutoff (float): Value to cut off noise
+    """
     index = np.where(data.real > int_sum_cutoff*np.std(data_mc.real))
     index_sub = np.where(data.real < -int_sum_cutoff*np.std(data_mc.real))
     # integral = simps(data.real[index])
@@ -532,12 +563,31 @@ def calc_int_sum(data, data_mc, int_sum_cutoff):
 
 
 def calc_phaseloss(data, prominence=0.05):
+    """Function to calculate the loss function using the phase of automatically found peaks.
+
+    Args:
+        data (1darray): Input data
+        prominence (float, optional): Difference between lowest peak and baseline in percent. Defaults to 0.05.
+    """
     peaks, _ = find_peaks(data.real, prominence=max(abs(data))*prominence)
 
     return(sum(abs(np.angle(data[peaks], deg=True))))
 
 
 def data_rms(x, data, data_mc, loss_func, int_sum_cutoff, prominence):
+    """Function to help the automatic phase correction. Applies phasing and calculates loss.
+
+    Args:
+        x (tuple): Phase values
+        data (1darray): Input data
+        data_mc (1darray): Input magnitude data for comparison
+        loss_func (str): Function to calculate loss
+        int_sum_cutoff (float): Noise cut-off
+        prominence (float): Difference between lowest peak and baseline in percent
+
+    Returns:
+        float: Returned loss
+    """
     if(len(x)==2):
         data_phased = proc_base.ps(data, p0=x[0], p1=x[1])      # phase correction
     elif(len(x)==3):
@@ -565,6 +615,29 @@ def data_rms(x, data, data_mc, loss_func, int_sum_cutoff, prominence):
 
 
 def phase_minimizer(data, data_mc, bnds, Ns, loss_func, int_sum_cutoff, prominence, workers, verb, minimizer, tol, options, stepsize, T, disp, niter):
+    """Function to coordinate phase minimizer. Choose minimization function etc.
+
+    Args:
+        data ([type]): [description]
+        data_mc ([type]): [description]
+        bnds ([type]): [description]
+        Ns ([type]): [description]
+        loss_func ([type]): [description]
+        int_sum_cutoff ([type]): [description]
+        prominence ([type]): [description]
+        workers ([type]): [description]
+        verb ([type]): [description]
+        minimizer ([type]): [description]
+        tol ([type]): [description]
+        options ([type]): [description]
+        stepsize ([type]): [description]
+        T ([type]): [description]
+        disp ([type]): [description]
+        niter ([type]): [description]
+
+    Returns:
+        res: results file from minimizer
+    """
     resbrute = brute(data_rms, ranges=bnds, args=(data, data_mc, loss_func, int_sum_cutoff, prominence,), Ns=Ns, disp=True, workers=workers, finish=None)
     if verb:
         print('Brute-Force Optmization Results:')
