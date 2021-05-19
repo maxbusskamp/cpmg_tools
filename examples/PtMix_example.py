@@ -9,8 +9,8 @@ data1, timescale1, dic1 = processing.read_brukerfid('/home/m_buss13/ownCloud/nmr
 data2, timescale2, dic2 = processing.read_brukerfid('/home/m_buss13/ownCloud/nmr_data/development/195Pt_Pt-Mix_WCPMG-MAS_23.02.21/3999/pdata/1', dict=True)
 
 # Then apply some processing:
-data1, null = processing.linebroadening(data1, lb_variant='hamming', lb_const=0.1)
-data2, null = processing.linebroadening(data2, lb_variant='hamming', lb_const=0.1)
+data1, null = processing.linebroadening(data1, lb_variant='scipy_hamming')
+data2, null = processing.linebroadening(data2, lb_variant='scipy_hamming')
 
 # Automatically phase spectrum
 data1, phase1 = processing.autophase(data1, bnds=((0, 360), (-100000, -50000), (-10000, 0)),
@@ -38,6 +38,7 @@ ppm_scale2, hz_scale2 = processing.get_scale(data2, dic2)
 plt.figure()
 plt.plot(ppm_scale1, data1.real, c='r', lw=1.0, label='p0={:.0f}°, p1={:.0f}°, p2={:.0f}°'.format(phase1[0],phase1[1],phase1[2]))
 plt.plot(ppm_scale2, data2.real, c='b', lw=1.0, label='p0={:.0f}°, p1={:.0f}°, p2={:.0f}°'.format(phase2[0],phase2[1],phase2[2]))
+plt.xlim(5000, -8000)
 plt.legend()
 
 # Combine processed datasets
@@ -49,7 +50,7 @@ output_path = '/home/m_buss13/'
 output_name = 'combined'
 
 # Combine Datsets
-data = processing.combine_stepped_aq(datasets, set_sw=2000e3, precision_multi=8, verbose=True)
+data, hz_scale = processing.combine_stepped_aq(datasets, set_sw=2000e3, precision_multi=8, verbose=True)
 print('Finished combining Datasets')
 
 # Combine magnitude datasets
@@ -58,14 +59,14 @@ datasets_mc = ['/home/m_buss13/ownCloud/nmr_data/development/195Pt_Pt-Mix_WCPMG-
               ]
 
 # Combine Datsets
-data_mc = processing.combine_stepped_aq(datasets_mc, set_sw=2000e3, precision_multi=8, verbose=True)
+data_mc, hz_scale_mc = processing.combine_stepped_aq(datasets_mc, set_sw=2000e3, precision_multi=8, verbose=True)
 print('Finished combining Datasets')
 
 # Just some plotting for the example
 plt.figure()
-plt.plot(data_mc[:,0], data_mc[:,1], lw=1.0, c='r', label='Combined Spectrum')
-plt.plot(data[:,0], data[:,1], lw=1.0, c='k', label='Combined Spectrum')
+plt.plot(hz_scale, data, lw=1.0, c='r', label='Combined Spectrum')
+plt.plot(hz_scale_mc, data_mc, lw=1.0, c='k', label='Combined Spectrum')
 plt.yticks([])
-plt.xlim(-200000, -400000)
+plt.xlim(400000, -650000)
 plt.savefig('PtMix_example_zoom.png', dpi=600)
 plt.show()
