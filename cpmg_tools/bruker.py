@@ -716,6 +716,10 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, procs_files=None,
     read : Read Bruker files.
 
     """
+
+    # guess data dimensionality
+    # ndim = len(data.shape)
+
     # determine parameters automatically
     if bin_file is None:
         if data.ndim == 1:
@@ -758,9 +762,9 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, procs_files=None,
             pdata_path = dir
 
         for f in procs_files:
-            write_jcamp(dic[f], os.path.join(pdata_path, f))
+            write_jcamp(dic[f], os.path.join(pdata_path, f), overwrite=overwrite)
         for f in proc_files:
-            write_jcamp(dic[f+'s'], os.path.join(pdata_path, f))
+            write_jcamp(dic[f+'s'], os.path.join(pdata_path, f), overwrite=overwrite)
 
     # write out the pulse program
     if write_prog:

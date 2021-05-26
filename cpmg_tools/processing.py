@@ -156,6 +156,13 @@ def read_spe(datapath, larmor_freq=0.0):
     return (data, hz_scale) if larmor_freq==0.0 else (data, ppm_scale, hz_scale)
 
 
+def write_fid(savepath, data, dic, overwrite=False):
+    bruker.write(dir=savepath, data=data, dic=dic,
+                write_prog=False, write_acqus=True, write_procs=True,
+                pdata_folder=True, overwrite=overwrite)
+    return
+
+
 def get_envelope_idx(s, dmin=1, dmax=1, split=False):
     """[summary]
 
@@ -441,7 +448,7 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', su
     return(data, ppm_scale, hz_scale) if larmor_freq!=0.0 else (data, hz_scale)
 
 
-def split_echotrain(datapath, dw, echolength, blankinglength, numecho, dict=False):
+def split_echotrain(datapath, dw, echolength, blankinglength, numecho, savepath=None):
     """This splits the echo train of a given Bruker Dataset and coadds each echo.
 
     Args:
@@ -484,7 +491,14 @@ def split_echotrain(datapath, dw, echolength, blankinglength, numecho, dict=Fals
     # Echo Sum
     data = data.sum(axis=0)
 
-    return (data, timescale, dic) if dict==True else (data, timescale)
+    dic['acqus']['TD'] = data.size*2
+    dic['procs']['TDeff'] = data.size*2
+    if savepath:
+        bruker.write(dir=savepath, data=data, dic=dic,
+                write_prog=False, write_acqus=True, write_procs=True,
+                pdata_folder=True, overwrite=True)
+
+    return (data, timescale, dic)
 
 
 def calc_mse(data_1, data_2):

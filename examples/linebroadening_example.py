@@ -39,7 +39,7 @@ plt.plot(np.linspace(0, len(data)*2, num=size(data)), window*max(processing.inte
 
 #%%
 import matplotlib.pyplot as plt
-from nmr_tools import processing, proc_base
+from cpmg_tools import processing, proc_base
 import numpy as np
 plt.rcParams['figure.dpi'] = 200
 
