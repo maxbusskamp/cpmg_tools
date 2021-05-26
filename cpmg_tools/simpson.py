@@ -1,6 +1,6 @@
 import os
 from subprocess import run
-from nmr_tools import processing
+from cpmg_tools import processing
 import numpy as np
 import lmfit
 from collections import defaultdict

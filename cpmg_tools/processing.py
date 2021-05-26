@@ -5,10 +5,9 @@ import os, sys
 from scipy.optimize.optimize import brute
 from scipy.optimize import basinhopping
 from scipy.optimize import minimize
-from nmr_tools import bruker, fileiobase, proc_base
+from cpmg_tools import bruker, fileiobase, proc_base, svd_auto
 from scipy.signal import windows
 import scipy.linalg as sp_linalg
-from nmr_tools import svd_auto
 from scipy.signal import find_peaks
 
 

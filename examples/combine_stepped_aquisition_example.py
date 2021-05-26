@@ -1,39 +1,39 @@
 #%%
-from nmr_tools import proc_base, processing
+from cpmg_tools import proc_base, processing
 import matplotlib.pyplot as plt
 import numpy as np
 
 plt.rcParams['figure.dpi'] = 200
 
 # You can use direct paths to the processed bruker files:
-datasets = ['/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9510131/pdata/1',
-            '/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9510231/pdata/1',
-            '/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9510331/pdata/1',
-            '/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9510431/pdata/1',
-            '/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9510531/pdata/1',
-            '/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9510631/pdata/1',
-            '/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9610131/pdata/1',
-            '/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9610231/pdata/1',
-            '/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9610331/pdata/1',
-            '/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9610431/pdata/1',
-            '/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9610531/pdata/1',
-            '/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9610631/pdata/1'
+datasets = ['/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9510131/pdata/1',
+            '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9510231/pdata/1',
+            '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9510331/pdata/1',
+            '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9510431/pdata/1',
+            '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9510531/pdata/1',
+            '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9510631/pdata/1',
+            '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9610131/pdata/1',
+            '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9610231/pdata/1',
+            '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9610331/pdata/1',
+            '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9610431/pdata/1',
+            '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9610531/pdata/1',
+            '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9610631/pdata/1'
             ]
 
 
 # # Or you can read in the unprocessed bruker files:
-# data1, _, dic1 =   processing.read_brukerfid('/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9510131/pdata/1', dict=True)
-# data2, _, dic2 =   processing.read_brukerfid('/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9510231/pdata/1', dict=True)
-# data3, _, dic3 =   processing.read_brukerfid('/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9510331/pdata/1', dict=True)
-# data4, _, dic4 =   processing.read_brukerfid('/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9510431/pdata/1', dict=True)
-# data5, _, dic5 =   processing.read_brukerfid('/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9510531/pdata/1', dict=True)
-# data6, _, dic6 =   processing.read_brukerfid('/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9510631/pdata/1', dict=True)
-# data7, _, dic7 =   processing.read_brukerfid('/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9610131/pdata/1', dict=True)
-# data8, _, dic8 =   processing.read_brukerfid('/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9610231/pdata/1', dict=True)
-# data9, _, dic9 =   processing.read_brukerfid('/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9610331/pdata/1', dict=True)
-# data10, _, dic10 = processing.read_brukerfid('/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9610431/pdata/1', dict=True)
-# data11, _, dic11 = processing.read_brukerfid('/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9610531/pdata/1', dict=True)
-# data12, _, dic12 = processing.read_brukerfid('/home/m_buss13/ownCloud/nmr_data/development/glycine_wcpmg/9610631/pdata/1', dict=True)
+# data1, _, dic1 =   processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9510131/pdata/1', dict=True)
+# data2, _, dic2 =   processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9510231/pdata/1', dict=True)
+# data3, _, dic3 =   processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9510331/pdata/1', dict=True)
+# data4, _, dic4 =   processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9510431/pdata/1', dict=True)
+# data5, _, dic5 =   processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9510531/pdata/1', dict=True)
+# data6, _, dic6 =   processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9510631/pdata/1', dict=True)
+# data7, _, dic7 =   processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9610131/pdata/1', dict=True)
+# data8, _, dic8 =   processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9610231/pdata/1', dict=True)
+# data9, _, dic9 =   processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9610331/pdata/1', dict=True)
+# data10, _, dic10 = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9610431/pdata/1', dict=True)
+# data11, _, dic11 = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9610531/pdata/1', dict=True)
+# data12, _, dic12 = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/14N_Glycine_MAS_WCPMG/9610631/pdata/1', dict=True)
 
 # # Then apply some processing:
 # data1, _ =  processing.linebroadening(data1, lb_variant='scipy_general_hamming',  **{'alpha':0.78})

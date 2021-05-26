@@ -1,14 +1,14 @@
 #%%
 import matplotlib.pyplot as plt
 from numpy.core.fromnumeric import size
-from nmr_tools import processing
+from cpmg_tools import processing
 import numpy as np
 import scipy.signal as signal
 
 plt.rcParams['figure.dpi'] = 200
 
 # Set path to dataset
-datapath = '/home/m_buss13/ownCloud/nmr_data/development/195Pt_PtMix_stepped/2999/pdata/1'
+datapath = '/home/m_buss13/ownCloud/cpmg_tools/development/195Pt_PtMix_stepped/2999/pdata/1'
 
 # Read Bruker FID
 data, _ = processing.read_brukerfid(datapath)
@@ -44,11 +44,11 @@ import numpy as np
 plt.rcParams['figure.dpi'] = 200
 
 # Read magnitude data
-data_mc, ppm_scale_mc, hz_scale_mc = processing.read_brukerproc('/home/m_buss13/ownCloud/git/nmr_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1')
+data_mc, ppm_scale_mc, hz_scale_mc = processing.read_brukerproc('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1')
 
 # Read bruker FID
-data, timescale, dic = processing.read_brukerfid('/home/m_buss13/ownCloud/git/nmr_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1', dict=True)
-data2, timescale2, dic2 = processing.read_brukerfid('/home/m_buss13/ownCloud/git/nmr_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1', dict=True)
+data, timescale, dic = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1', dict=True)
+data2, timescale2, dic2 = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1', dict=True)
 # Save data for comaprison
 data_before_lb = data
 # Apply linebroadening
