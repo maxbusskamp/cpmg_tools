@@ -839,7 +839,7 @@ def fft(data, dic, si=0, mc=True, phase=[0, 0], dict=False):
         dict (bool, optional): Set to True to return the dictionary. Defaults to False.
     """
     data = proc_base.zf_size(data, si)
-    data = proc_base.fft(data)
+    data = proc_base.fft(proc_base.rev(data))
     if(mc==True):
         data = proc_base.mc(data)
     else:
