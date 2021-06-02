@@ -5,7 +5,11 @@ import os, sys
 from scipy.optimize.optimize import brute
 from scipy.optimize import basinhopping
 from scipy.optimize import minimize
-from nmr_tools import bruker, fileiobase, proc_base
+from cpmg_tools import bruker, fileiobase, proc_base, svd_auto
+from scipy.signal import windows
+import scipy.linalg as sp_linalg
+from scipy.signal import find_peaks
+
 
 def read_brukerproc(datapath, dict=False):
     """
@@ -152,6 +156,13 @@ def read_spe(datapath, larmor_freq=0.0):
     return (data, hz_scale) if larmor_freq==0.0 else (data, ppm_scale, hz_scale)
 
 
+def write_fid(savepath, data, dic, overwrite=False):
+    bruker.write(dir=savepath, data=data, dic=dic,
+                write_prog=False, write_acqus=True, write_procs=True,
+                pdata_folder=True, overwrite=overwrite)
+    return
+
+
 def get_envelope_idx(s, dmin=1, dmax=1, split=False):
     """[summary]
 
@@ -188,7 +199,7 @@ def get_envelope_idx(s, dmin=1, dmax=1, split=False):
     return(lmin, lmax)
 
 
-def save_xri(output_path, output_name, dataset_array):
+def save_xri(output_path, output_name, data, hz_scale):
     """
     Saves numpy array as ASCII file
 
@@ -198,15 +209,20 @@ def save_xri(output_path, output_name, dataset_array):
         dataset_array (np array): a numpy array containing freq., real, imag. columns
     """
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    
-    f = open(output_path + output_name + '.dat', 'w')
-    np.savetxt(f, dataset_array, delimiter=' ')
-    f.close()
+    try:
+        with open(output_path + output_name + '.dat', 'w') as outfile:
+            np.savetxt(outfile, np.column_stack((hz_scale, data.real, data.imag)), delimiter=' ')
+            # np.savetxt(outfile, (hz_scale, data.real, data.imag), delimiter=' ')
+            # (hz_scale, data.real, data.imag).tofile(outfile, sep=' ')
+            # hz_scale.tofile(outfile, sep=' ')
+        print('File written successfully')
+    except:
+        print('Something went wrong when writing to the file')
 
     return()
 
 
-def save_spe(output_path, output_name, dataset_array):
+def save_spe(output_path, output_name, data, hz_scale):
     """
     Saves numpy array as SPE file for use in Simpson
 
@@ -217,22 +233,33 @@ def save_spe(output_path, output_name, dataset_array):
     """
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     
-    f = open(output_path + output_name + '.spe', 'w')
-    f.write('SIMP\n')
-    f.write('NP='+str(int(len(dataset_array)))+'\n')
-    f.write('SW='+str(np.round((abs(dataset_array[-1,0])+abs(dataset_array[0,0])), -3))+'\n')
-    f.write('REF=0.0\n')
-    f.write('TYPE=SPE\n')
-    f.write('DATA\n')
-    np.savetxt(f, dataset_array[:,1:], delimiter=' ')
-    f.write('END')
-    f.close()
+    try:
+        with open(output_path + output_name + '.spe', 'w') as outfile:
+            outfile.write('SIMP\n')
+            outfile.write('NP='+str(int(len(data)))+'\n')
+            outfile.write('SW='+str(np.round((abs(hz_scale[-1])+abs(hz_scale[0])), -3))+'\n')
+            outfile.write('REF=0.0\n')
+            outfile.write('TYPE=SPE\n')
+            outfile.write('DATA\n')
+            np.savetxt(outfile, np.column_stack((data.real, data.imag)), delimiter=' ')
+            outfile.write('END')
+            print('File written successfully')
+    except:
+        print('Something went wrong when writing to the file')
 
     return()
 
 
 def find_nearest_index(array, value):
+    """Function to find the number nearest to the given number and return its index.
 
+    Args:
+        array (1darray): Array to be searched
+        value (float): Comparison number
+
+    Returns:
+        int: Index of nearest neighbour
+    """
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
     
@@ -240,7 +267,15 @@ def find_nearest_index(array, value):
 
 
 def find_nearest(array, value):
+    """Function to find the number nearest to the given number and return it.
 
+    Args:
+        array (1darray): Array to be searched
+        value (float): Comparison number
+
+    Returns:
+        float: Nearest neighbour
+    """
     array = np.asarray(array)
     idx = (np.abs(array - value)).argmin()
 
@@ -248,10 +283,18 @@ def find_nearest(array, value):
 
 
 def shift_bit_length(x):
+    """Function to return next highest 2^n value
+
+    Args:
+        x (int): original integer
+
+    Returns:
+        int: Next highest 2^n integer
+    """
     return 1<<(x-1).bit_length()
 
 
-def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', sum_tol=1.0, verbose=False, bins=1000):
+def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', sum_tol=1.0, verbose=False, bins=1000, dmin=4, dmax=4, larmor_freq=0.0):
     """
     This combines multiple Bruker Datasets into one spectrum, using a calculation of the envelope to determine the highest x-values, if multiple exist.
 
@@ -286,7 +329,7 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', su
         # Sort Data
         dataset_combine = dataset_combine[dataset_combine[:,2].argsort(),:]
         # Generate Envelope
-        _, low_idx = get_envelope_idx(dataset_combine[:,0], dmin=4, dmax=4)
+        _, low_idx = get_envelope_idx(dataset_combine[:,0], dmin=dmin, dmax=dmax)
         dataset_array_masked = dataset_combine[low_idx,0]
         dataset_x_masked = dataset_combine[low_idx,2]
 
@@ -396,10 +439,16 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', su
         print('SW raw: ' + str(int(abs(data[-1,0])+abs(data[0,0]))) + ' Hz')
         print('SW rounded: ' + str(int(np.round((abs(data[-1,0])+abs(data[0,0])), -3))) + ' Hz')
 
-    return(data)
+    hz_scale = data[:,0]
+    data = data[:,1] + data[:,2]*1.0j
+
+    if(larmor_freq!=0.0):
+            ppm_scale = hz_scale/larmor_freq
+
+    return(data, ppm_scale, hz_scale) if larmor_freq!=0.0 else (data, hz_scale)
 
 
-def split_echotrain(datapath, dw, echolength, blankinglength, numecho, dict=False):
+def split_echotrain(datapath, dw, echolength, blankinglength, numecho, savepath=None):
     """This splits the echo train of a given Bruker Dataset and coadds each echo.
 
     Args:
@@ -442,7 +491,14 @@ def split_echotrain(datapath, dw, echolength, blankinglength, numecho, dict=Fals
     # Echo Sum
     data = data.sum(axis=0)
 
-    return (data, timescale, dic) if dict==True else (data, timescale)
+    dic['acqus']['TD'] = data.size*2
+    dic['procs']['TDeff'] = data.size*2
+    if savepath:
+        bruker.write(dir=savepath, data=data, dic=dic,
+                write_prog=False, write_acqus=True, write_procs=True,
+                pdata_folder=True, overwrite=True)
+
+    return (data, timescale, dic)
 
 
 def calc_mse(data_1, data_2):
@@ -503,6 +559,13 @@ def calc_logcosh(data_1, data_2):
 
 
 def calc_int_sum(data, data_mc, int_sum_cutoff):
+    """Function to calculate the integral of peaks. The cutoff is used to ignore the noise and use negative peaks as punishment for the loss function.
+
+    Args:
+        data (1darray): Input data
+        data_mc (1darray): Comparison data to calculate the peaks
+        int_sum_cutoff (float): Value to cut off noise
+    """
     index = np.where(data.real > int_sum_cutoff*np.std(data_mc.real))
     index_sub = np.where(data.real < -int_sum_cutoff*np.std(data_mc.real))
     # integral = simps(data.real[index])
@@ -512,7 +575,32 @@ def calc_int_sum(data, data_mc, int_sum_cutoff):
     return(integral)
 
 
-def data_rms(x, data, data_mc, loss_func, int_sum_cutoff):
+def calc_phaseloss(data, prominence=0.05):
+    """Function to calculate the loss function using the phase of automatically found peaks.
+
+    Args:
+        data (1darray): Input data
+        prominence (float, optional): Difference between lowest peak and baseline in percent. Defaults to 0.05.
+    """
+    peaks, _ = find_peaks(data.real, prominence=max(abs(data))*prominence)
+
+    return(sum(abs(np.angle(data[peaks], deg=True))))
+
+
+def data_rms(x, data, data_mc, loss_func, int_sum_cutoff, prominence):
+    """Function to help the automatic phase correction. Applies phasing and calculates loss.
+
+    Args:
+        x (tuple): Phase values
+        data (1darray): Input data
+        data_mc (1darray): Input magnitude data for comparison
+        loss_func (str): Function to calculate loss
+        int_sum_cutoff (float): Noise cut-off
+        prominence (float): Difference between lowest peak and baseline in percent
+
+    Returns:
+        float: Returned loss
+    """
     if(len(x)==2):
         data_phased = proc_base.ps(data, p0=x[0], p1=x[1])      # phase correction
     elif(len(x)==3):
@@ -520,34 +608,59 @@ def data_rms(x, data, data_mc, loss_func, int_sum_cutoff):
     else:
         sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
 
-    data_phased = proc_base.di(data_phased)
-    data_mc = proc_base.di(data_mc)
+    # data_phased = proc_base.di(data_phased)
+    # data_mc = proc_base.di(data_mc)
 
     if(loss_func=='logcosh'):
-        rms = calc_logcosh(data_mc, data_phased)
+        rms = calc_logcosh(data_mc.real, data_phased.real)
     elif(loss_func=='mse'):
-        rms = calc_mse(data_mc, data_phased)
+        rms = calc_mse(data_mc.real, data_phased.real)
     elif(loss_func=='mae'):
-        rms = calc_mae(data_mc, data_phased)
+        rms = calc_mae(data_mc.real, data_phased.real)
     elif(loss_func=='int_sum'):
-        rms = -1.0*calc_int_sum(data_phased, data_mc, int_sum_cutoff)
+        rms = -1.0*calc_int_sum(data_phased.real, data_mc.real, int_sum_cutoff)
+    elif(loss_func=='phaseloss'):
+        rms = calc_phaseloss(data_phased, prominence)
     else:
         print('Wrong loss function')
 
     return rms
 
 
-def phase_minimizer(data, data_mc, bnds, Ns, loss_func, int_sum_cutoff, workers, verb, minimizer, tol, options, stepsize, T, disp, niter):
-    resbrute = brute(data_rms, ranges=bnds, args=(data, data_mc, loss_func, int_sum_cutoff,), Ns=Ns, disp=True, workers=workers, finish=None)
+def phase_minimizer(data, data_mc, bnds, Ns, loss_func, int_sum_cutoff, prominence, workers, verb, minimizer, tol, options, stepsize, T, disp, niter):
+    """Function to coordinate phase minimizer. Choose minimization function etc.
+
+    Args:
+        data ([type]): [description]
+        data_mc ([type]): [description]
+        bnds ([type]): [description]
+        Ns ([type]): [description]
+        loss_func ([type]): [description]
+        int_sum_cutoff ([type]): [description]
+        prominence ([type]): [description]
+        workers ([type]): [description]
+        verb ([type]): [description]
+        minimizer ([type]): [description]
+        tol ([type]): [description]
+        options ([type]): [description]
+        stepsize ([type]): [description]
+        T ([type]): [description]
+        disp ([type]): [description]
+        niter ([type]): [description]
+
+    Returns:
+        res: results file from minimizer
+    """
+    resbrute = brute(data_rms, ranges=bnds, args=(data, data_mc, loss_func, int_sum_cutoff, prominence,), Ns=Ns, disp=True, workers=workers, finish=None)
     if verb:
         print('Brute-Force Optmization Results:')
         print(resbrute)
     if(minimizer=='Nelder-Mead'):
-        res = minimize(data_rms, x0 = resbrute, args=(data, data_mc, loss_func, int_sum_cutoff,), method='Nelder-Mead', tol=tol, options=options)
+        res = minimize(data_rms, x0 = resbrute, args=(data, data_mc, loss_func, int_sum_cutoff, prominence,), method='Nelder-Mead', tol=tol, options=options)
     elif(minimizer=='COBYLA'):
-        res = minimize(data_rms, x0 = resbrute, args=(data, data_mc, loss_func, int_sum_cutoff,),method='COBYLA', tol=tol, options=options)
+        res = minimize(data_rms, x0 = resbrute, args=(data, data_mc, loss_func, int_sum_cutoff, prominence,),method='COBYLA', tol=tol, options=options)
     elif(minimizer=='basinhopping'):
-        minimizer_kwargs={"method":"Nelder-Mead", "args":(data, data_mc, loss_func, int_sum_cutoff,)}
+        minimizer_kwargs={"method":"Nelder-Mead", "args":(data, data_mc, loss_func, int_sum_cutoff, prominence,)}
         res = basinhopping(data_rms, x0 = resbrute, minimizer_kwargs=minimizer_kwargs, stepsize=stepsize, T=T, disp=disp, niter=niter)
     else:
         sys.exit('Wrong minimizer! Choose from: Nelder-Mead, COBYLA, or basinhopping')
@@ -558,7 +671,7 @@ def phase_minimizer(data, data_mc, bnds, Ns, loss_func, int_sum_cutoff, workers,
     return res.x
 
 
-def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum_cutoff=1.0, zf=0, verb=False, minimizer='basinhopping', tol=1e-14, options={'rhobeg':1000.0, 'maxiter':5000, 'maxfev':5000}, stepsize=1000, T=100, disp=True, niter=200, loss_func='logcosh', workers=4):
+def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum_cutoff=1.0, prominence=1000000000, zf=0, verb=False, minimizer='basinhopping', tol=1e-14, options={'rhobeg':1000.0, 'maxiter':5000, 'maxfev':5000}, stepsize=1000, T=100, disp=True, niter=200, loss_func='logcosh', workers=4):
     """
     !!!WIP!!!
     This automatically calculates the phase of the spectrum
@@ -575,14 +688,15 @@ def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum
     data_fft = proc_base.fft(proc_base.rev(proc_base.zf(data, pad=zf)))    # Fourier transform
     data_mc = proc_base.mc(data_fft)      # magnitude mode
 
+
     # Phasing
     if(type(bnds[0])==int):
         sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
     if(len(bnds)==2):
-        phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
+        phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, prominence=prominence, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
         data = proc_base.ps(data_fft, p0=phase[0], p1=phase[1])      # add previously phase values
     elif(len(bnds)==3):
-        phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
+        phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, prominence=prominence, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
         data = proc_base.ps2(data_fft, p0=phase[0], p1=phase[1], p2=phase[2])      # add previously phase values
     else:
         sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
@@ -590,23 +704,58 @@ def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum
     return(data, phase)
 
 
-def linebroadening(data, lb_variant, lb_const=0.54, lb_n=2):
+def linebroadening(data, lb_variant, lb_const=0.54, lb_n=2, num_windows=1, **kwargs):
     """
     This applies linebroadening to a 1darray containing FID data as generated by read_brukerfid().
 
+    It is possible to either use the custom window functions supplied by us, or the window functions given in scipy.windows.
+    The custom window functions are: compressed_wurst, shifted_wurst, gaussian, gaussian_normal. Custom arguments can be supplied via arguments.
+    The scipy window functions can be accessed as: scipy_<window> e.g. scipy_hamming. Custom arguments can be supplied via **kwargs.
+    List of scipy window functions (05.2021) at end of docstring and at this page:
+    https://docs.scipy.org/doc/scipy/reference/signal.windows.html
+
     Args:
         data (1darray): 1darray containing FID data as generated by read_brukerfid()
-        lb_variant (str): Window function (WF) used. Use: hamming, shifted_wurst, gaussian
+        lb_variant (str): Window function (WF) used. Possible commands see above.
         lb_const (float, optional): Used for hamming WF. Corresponds to the lowest y value on either side. Defaults to 0.54.
         lb_n (int, optional): Shape parameter used by shifted_wurst and hamming (set to 2). Defaults to 2.
 
     Returns:
         data (1darray): Linebroadened FID
         y_range (1darray): Y values of window function
+
+    -----------------------------------------
+    List of scipy window functions (05.2021):\n
+        get_window(window, Nx[, fftbins]) Return a window of a given length and type.\n
+        barthann(M[, sym]) Return a modified Bartlett-Hann window.\n
+        bartlett(M[, sym]) Return a Bartlett window.\n
+        blackman(M[, sym]) Return a Blackman window.\n
+        blackmanharris(M[, sym]) Return a minimum 4-term Blackman-Harris window.\n
+        bohman(M[, sym]) Return a Bohman window.\n
+        boxcar(M[, sym]) Return a boxcar or rectangular window.\n
+        chebwin(M, at[, sym]) Return a Dolph-Chebyshev window.\n
+        cosine(M[, sym]) Return a window with a simple cosine shape.\n
+        dpss(M, NW[, Kmax, sym, norm, return_ratios]) Compute the Discrete Prolate Spheroidal Sequences (DPSS).\n
+        exponential(M[, center, tau, sym]) Return an exponential (or Poisson) window.\n
+        flattop(M[, sym]) Return a flat top window.\n
+        gaussian(M, std[, sym]) Return a Gaussian window.\n
+        general_cosine(M, a[, sym]) Generic weighted sum of cosine terms window\n
+        general_gaussian(M, p, sig[, sym]) Return a window with a generalized Gaussian shape.\n
+        general_hamming(M, alpha[, sym]) Return a generalized Hamming window.\n
+        hamming(M[, sym]) Return a Hamming window.\n
+        hann(M[, sym]) Return a Hann window.\n
+        hanning(*args, **kwds) hanning is deprecated, use scipy.signal.windows.hann instead!\n
+        kaiser(M, beta[, sym]) Return a Kaiser window.\n
+        nuttall(M[, sym]) Return a minimum 4-term Blackman-Harris window according to Nuttall.\n
+        parzen(M[, sym]) Return a Parzen window.\n
+        taylor(M[, nbar, sll, norm, sym]) Return a Taylor window.\n
+        triang(M[, sym]) Return a triangular window.\n
+        tukey(M[, alpha, sym]) Return a Tukey window, also known as a tapered cosine window.\n
+    -----------------------------------------
     """
     x_range = np.linspace(0, 1, len(data))    # Calculate x values from 0 to 1
     # Calculate y value depending on chosen window function
-    if(lb_variant=='hamming'):
+    if(lb_variant=='compressed_wurst'):
         y_range = lb_const+(1-lb_const)*(1-np.power(abs(np.cos(np.pi*x_range)), lb_n))
     elif(lb_variant=='shifted_wurst'):
         y_range = 1-np.power(abs(np.cos(np.pi*x_range)), lb_n)+lb_const
@@ -615,8 +764,18 @@ def linebroadening(data, lb_variant, lb_const=0.54, lb_n=2):
         y_range = 1/np.exp(10*np.power((x_range-0.5), 2))
     elif(lb_variant=='gaussian_normal'):
         y_range = 1/np.exp(10*np.power((x_range), 2))
+    elif('scipy' in lb_variant):
+        y_range = getattr(windows, lb_variant.replace('scipy_', ''))(len(x_range), **kwargs)
     else:
         sys.exit('Wrong window function! Choose from: hamming, shifted_wurst, gaussian, gaussian_normal')
+    
+    if(num_windows>1):
+        y_range_temp = np.tile(y_range,num_windows)
+        x_range_temp = np.linspace(0, 1, len(y_range_temp))
+        f = interpolate.interp1d(x_range_temp, y_range_temp, fill_value='extrapolate')
+        y_range = f(x_range)
+
+
     data = np.multiply(y_range, data)    # Apply linebroadening
 
     return(data, y_range)
@@ -636,6 +795,26 @@ def signaltonoise(a, axis=0, ddof=0):
     """
     a = np.asanyarray(a)
     sino = np.sqrt(np.power(a.mean(axis), 2))/a.std(axis=axis, ddof=ddof)
+
+    return sino
+
+
+def signaltonoise_region(a, noisepts=(0, 100), axis=0, ddof=0):
+    """
+    Calculates the signal-to-noise ratio from the mean and std of the whole spectrum. Not sure if correct or comparable.
+
+    Args:
+        a (ndarray): Processed dataset
+        axis (int, optional): Axis which to look at. Defaults to 0.
+        ddof (int, optional): Degree of freedom for std calculation. Defaults to 0.
+
+    Returns:
+        sino (float): Signal-to-noise
+    """
+    a = np.asanyarray(a)
+    noise = a[noisepts[0]:noisepts[1]]
+
+    sino = np.max(a)/noise.std(axis=axis, ddof=ddof)
 
     return sino
 
@@ -668,7 +847,7 @@ def fft(data, dic, si=0, mc=True, phase=[0, 0], dict=False):
         dict (bool, optional): Set to True to return the dictionary. Defaults to False.
     """
     data = proc_base.zf_size(data, si)
-    data = proc_base.fft(data)
+    data = proc_base.fft(proc_base.rev(data))
     if(mc==True):
         data = proc_base.mc(data)
     else:
@@ -703,3 +882,129 @@ def asciifft(data, timescale, si=0, larmor_freq=0.0):
             ppm_scale = hz_scale/larmor_freq
 
     return(data, ppm_scale, hz_scale) if larmor_freq!=0.0 else (data, hz_scale)
+
+
+def interleave_complex(real, imag):
+    """This function returns a 1D data array with real and imaginary numbers interleaved, similiar to the Topspin FID.
+
+    Args:
+        real (1darray): 1D Array of real FID datapoints
+        imag (1darray): 1D Array of iamginary FID datapoints
+    """
+    data = np.empty((real.size + imag.size,))
+
+    data[0::2] = real
+    data[1::2] = imag
+
+    return(data)
+
+
+def denoise(data, k_thres=0, max_err=7.5):
+    """This function enables the use of svd denoise from already read-in bruker fids
+    @authors: Guillaume Laurent & Pierre-Aymeric Gilles
+    https://doi.org/10.1080/05704928.2018.1523183
+
+    Input:  data_dir    directory of data to denoise (string)
+            k_thres     if 0, allows automatic thresholding
+                        if > 0 and <= min(row, col), manual threshold (integer)
+            max_err     error level for automatic thresholding
+                        from 5 to 10 % (float)
+
+    Output: data_den
+    """
+
+
+    def vector_toeplitz(data):
+        """
+        Convert one-dimensional data to Toeplitz matrix
+        Usage:  mat = vector_toeplitz(data)
+        Input:  data        1D data (array)
+        Output: mat         2D matrix (array)
+        """
+        row = int(np.ceil(data.size / 2))                   # almost square matrix
+        # col = data.size - row + 1
+        mat = sp_linalg.toeplitz(data[row-1::-1], data[row-1::1])
+        return mat
+
+
+    def toeplitz_vector(mat):
+        """
+        Convert Toeplitz matrix to one-dimensional data
+        Usage:  data = toeplitz_vector(mat)
+        Input:  mat         2D matrix (array)
+        Output: data        1D data (array)
+        """
+        row, col = mat.shape
+        points = row+col-1
+        data = np.zeros(points, dtype=mat.dtype)
+        for i in range (0, points):
+            data[i] = np.mean(np.diag(mat[:,:],i-row+1))
+        return data
+
+
+    def denoise_mat(data, k_thres, max_err):
+        """
+        Denoise one- or two-dimensional data using Singular Value Decomposition
+        Usage:  data_den, k_thres = denoise_mat(data)
+        Input:  data        noisy data (array)
+                k_thres     if 0, allows automatic thresholding
+                            if > 0 and <= min(row, col), manual threshold (integer)
+                max_err     error level for automatic thresholding (float)
+                            from 5 to 10 %
+        Output: data_den    denoised data (array)
+                k_thres     number of values used for thresholding
+        """
+        if data.ndim == 1:          # convert to Toeplitz matrix and denoise
+            mat = vector_toeplitz(data)
+            mat_den, k_thres = svd_auto.svd_auto(mat, k_thres, max_err)
+            data_den = toeplitz_vector(mat_den)
+        elif data.ndim == 2:                                # denoise directly
+            data_den, k_thres = svd_auto.svd_auto(data, k_thres, max_err)
+        else:
+            raise NotImplementedError \
+            ('Data of {:d} dimensions is not yet supported'.format(data.ndim))
+        return data_den, k_thres
+
+
+    def precision_single(data):
+        """
+        Convert data to single precision
+        Usage:  data, typ = precision_single(data)
+        Input:  data        data with original precision (array)
+        Output: data        data with single precision (array)
+                typ         original precision (string)
+        """
+        typ = data.dtype                                    # data type
+        if typ in ['float32', 'complex64']:                 # single precision
+            pass
+        elif typ == 'float64':                      # convert to single float
+            data = data.astype('float32')
+        elif typ == 'complex128':                   # convert to single complex
+            data = data.astype('complex64')
+        else:
+            raise ValueError('Unsupported data type')
+        return data, typ
+
+
+    def precision_original(data, typ):
+        """
+        Revert data to original precision
+        Usage:  data = precision_original(data, typ)
+        Input:  data        data with single precision (array)
+                typ         original precision (string)
+        Output: data        data with original precision
+        """
+        data = data.astype(typ)
+        return data
+
+
+    # Import data with single precision to decrease computation time
+    data, typ = precision_single(data)
+
+    # Denoise data
+    data_den, k_thres = denoise_mat(data, k_thres, max_err)
+
+    # Export data with original precision
+    data_den = precision_original(data_den, typ)
+
+    return(data_den)

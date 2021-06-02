@@ -1,2 +1,3 @@
 *.pyc
 __pychache__
+examples/example_max_only.py

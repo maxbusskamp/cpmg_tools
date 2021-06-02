@@ -1,6 +1,6 @@
 #%%
 # Example for the different loss function calculations
-from nmr_tools import simpson, processing
+from cpmg_tools import simpson, processing
 import matplotlib.pyplot as plt
 
 

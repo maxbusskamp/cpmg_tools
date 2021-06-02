@@ -1,0 +1,14 @@
+##TITLE= Audit trail, TopSpin 4.0.8
+##JCAMPDX= 5.01
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= m_buss13
+$$ /home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/writetest/1/pdata/1/auditp.txt
+##AUDIT TRAIL=  $$ (NUMBER, WHEN, WHO, WHERE, PROCESS, VERSION, WHAT)
+(   1,<2021-05-26 17:49:32.656 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <fmc FT_mod = 6 PKNL = 1 STSR = 0 STSI = 64K SI = 64K 
+       data hash MD5: 64K
+       96 9B 06 9F 28 4B 3C 36 98 FD D0 4A 41 50 B9 DF>)
+##END=
+
+$$ hash MD5
+$$ A8 EA F3 58 D7 91 5A 85 15 EA 4C 7F 43 FD 54 3F
