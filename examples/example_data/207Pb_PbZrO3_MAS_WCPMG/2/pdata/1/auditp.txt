@@ -1,0 +1,96 @@
+##TITLE= Audit trail, TopSpin 4.0.8
+##JCAMPDX= 5.01
+##ORIGIN= Bruker BioSpin GmbH
+##OWNER= m_buss13
+$$ /home/m_buss13/ownCloud/nmr_data/neo500_Jonas/207Pb_PbNO3_nutation_2.5mm/2/pdata/1/auditp.txt
+##AUDIT TRAIL=  $$ (NUMBER, WHEN, WHO, WHERE, PROCESS, VERSION, WHAT)
+(   1,<2021-02-24 14:57:28.403 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <acquisition in progress>)
+$$ /opt/nmrdata/data/j_kopp06/nmr/207Pb_PbNO3_nutation_2.5mm/2/audita.txt
+(   2,<2021-02-24 14:57:36.123 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <created by zg on 'AvanceNEO' (neo500) by user 'j_kopp06'
+       on data set with UUID '9ce4de7c-76b0-11eb-9c34-00139526ce73'
+       started at 2021-02-24 14:57:28.413 +0000, POWCHK enabled, PULCHK disabled,
+       completed at 2021-02-24 14:57:36.121 +0000
+       configuration hash MD5:
+       ED 19 E1 B9 96 B8 76 4B A9 E5 BA E2 F1 EC F7 CA
+       double data hash MD5: 64K
+       10 26 71 CA E1 9D DA F5 3F 5A 74 40 77 D6 C3 41>)
+(   3,<2021-02-24 15:03:00.675 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <raw data deleted by zg>)
+(   4,<2021-02-24 15:03:00.676 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <acquisition in progress>)
+(   5,<2021-02-24 15:03:03.687 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <
+       started at 2021-02-24 15:03:00.692 +0000, POWCHK enabled, PULCHK disabled,
+       terminated by command 'stop' at 2021-02-24 15:03:03.685 +0000
+       configuration hash MD5:
+       ED 19 E1 B9 96 B8 76 4B A9 E5 BA E2 F1 EC F7 CA>)
+(   6,<2021-02-24 15:05:24.147 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <raw data deleted by zg>)
+(   7,<2021-02-24 15:05:24.148 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <acquisition in progress>)
+(   8,<2021-02-24 15:06:23.550 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <
+       started at 2021-02-24 15:05:24.163 +0000, POWCHK enabled, PULCHK disabled,
+       terminated by command 'stop' at 2021-02-24 15:06:23.549 +0000
+       configuration hash MD5:
+       ED 19 E1 B9 96 B8 76 4B A9 E5 BA E2 F1 EC F7 CA>)
+(   9,<2021-02-24 15:06:45.720 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <raw data deleted by zg>)
+(  10,<2021-02-24 15:06:45.721 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <acquisition in progress>)
+(  11,<2021-02-24 15:09:30.873 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <created by zg on 'AvanceNEO' (neo500) by user 'j_kopp06'
+       on data set with UUID 'e90f4b7e-76b1-11eb-a70e-00139526ce73'
+       started at 2021-02-24 15:06:45.734 +0000, POWCHK enabled, PULCHK disabled,
+       completed at 2021-02-24 15:09:30.872 +0000
+       configuration hash MD5:
+       ED 19 E1 B9 96 B8 76 4B A9 E5 BA E2 F1 EC F7 CA
+       double data hash MD5: 288400
+       AD 01 78 E7 68 9B 15 88 60 75 AD B0 07 DC EC 56>)
+(  12,<2021-02-24 15:12:03.873 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <raw data deleted by zg>)
+(  13,<2021-02-24 15:12:03.875 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <acquisition in progress>)
+(  14,<2021-02-24 15:15:13.343 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <
+       started at 2021-02-24 15:12:03.888 +0000, POWCHK enabled, PULCHK disabled,
+       terminated by command 'stop' at 2021-02-24 15:15:13.340 +0000
+       configuration hash MD5:
+       ED 19 E1 B9 96 B8 76 4B A9 E5 BA E2 F1 EC F7 CA>)
+(  15,<2021-02-24 15:16:01.574 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <raw data deleted by zg>)
+(  16,<2021-02-24 15:16:01.576 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <acquisition in progress>)
+(  17,<2021-02-24 15:18:45.943 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <created by zg on 'AvanceNEO' (neo500) by user 'j_kopp06'
+       on data set with UUID '345eb352-76b3-11eb-bd05-00139526ce73'
+       started at 2021-02-24 15:16:01.589 +0000, POWCHK enabled, PULCHK disabled,
+       terminated by command 'halt' at 2021-02-24 15:18:45.942 +0000
+       configuration hash MD5:
+       ED 19 E1 B9 96 B8 76 4B A9 E5 BA E2 F1 EC F7 CA
+       double data hash MD5: 164800
+       E7 BC 34 F1 D5 3F 15 2F 75 3A 94 FD F6 C4 58 88>)
+(  18,<2021-02-24 15:30:16.918 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <raw data deleted by zg>)
+(  19,<2021-02-24 15:30:16.920 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <acquisition in progress>)
+(  20,<2021-02-24 16:13:14.476 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
+      <created by zg on 'AvanceNEO' (neo500) by user 'j_kopp06'
+       on data set with UUID '32330e82-76b5-11eb-a2fd-00139526ce73'
+       started at 2021-02-24 15:30:16.929 +0000, POWCHK enabled, PULCHK disabled,
+       completed at 2021-02-24 16:13:14.474 +0000
+       configuration hash MD5:
+       ED 19 E1 B9 96 B8 76 4B A9 E5 BA E2 F1 EC F7 CA
+       double data hash MD5: 164800
+       A9 5B AE 8D A2 16 2C 80 E5 4E 5D E7 5D 6F 59 5B>)
+(  21,<2021-02-24 20:26:08.746 +0100>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+      <Start of raw data processing
+       fmc FT_mod = 6 PKNL = 1 TDeff = 32K SI = 64K 
+       data hash MD5: 64K
+       C3 E2 C8 4A 55 66 B7 7C 64 30 06 D7 FB 90 F1 D9>)
+##END=
+
+$$ hash MD5
+$$ D1 9F 3B 0C E8 DF D8 6C CB E8 C2 FC 4F E6 89 73

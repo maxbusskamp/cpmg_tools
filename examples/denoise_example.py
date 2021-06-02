@@ -13,7 +13,8 @@ plt.rcParams['figure.dpi'] = 160
 data, timescale, dic = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1', dict=True)
 # data, timescale, dic = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_PtMix_WCPMG/1/pdata/1', dict=True)
 # data, timescale, dic = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_PtMix_MAS_WCPMG_stepped/3999/pdata/1', dict=True)
-fid_before = data
+# fid_before = data
+fid_before, _ = processing.linebroadening(data, lb_variant='scipy_general_hamming', **{'alpha':0.6})
 
 # Apply SVD denoising
 data = processing.denoise(data, k_thres=0, max_err=10)
@@ -60,14 +61,16 @@ f1_ax2.plot(np.linspace(0, len(fid_before)*2, num=len(fid_before)), window*max(a
 f1_ax2.set_yticks([])
 f1_ax2.set_xticks([])
 
-f1_ax1.plot(ppm_scale, abs(data_before)/max(abs(data_before)), c='k', lw=1, label='Only FFT+ZF - SNR = {:.0f}'.format(snr_fft))
+f1_ax1.plot(ppm_scale, abs(data_before)/max(abs(data_before)), c='k', lw=1, label='FFT+LB - SNR = {:.0f}'.format(snr_fft))
 f1_ax1.plot(ppm_scale, abs(data_after_sg)/max(abs(data_after_sg)), c='grey', lw=1, label='After SVD - SNR = {:.0f}'.format(snr_svd))
 f1_ax1.plot(ppm_scale, abs(data_after_sglb)/max(abs(data_after_sglb)), c='firebrick', lw=1, label='After SVD+LB - SNR = {:.0f}'.format(snr_svdlb))
-# f1_ax1.set_xlim(1500, -1500)
+f1_ax1.set_xlim(1000, -1000)
 # f1_ax1.set_xlim(-4000, -6500)
-f1_ax1.set_xlim(4000, -6500)
+# f1_ax1.set_xlim(4000, -6500)
 f1_ax1.legend()
 f1_ax1.set_yticks([])
+f1_ax1.set_xlabel('$^{207}$Pb / ppm')
 
-plt.savefig('/home/m_buss13/ownCloud/svd_test.png', dpi=600)
+plt.savefig('/home/m_buss13/ownCloud/plots/cpmg_tools/SVD', dpi=600)
+
 plt.show()

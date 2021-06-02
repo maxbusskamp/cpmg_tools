@@ -8,7 +8,7 @@ plt.rcParams['figure.dpi'] = 200
 
 # Split FID echotrain and sum all echos
 data, _, dic = processing.split_echotrain(datapath='/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/119Sn_SnO2_double_echo_cpmg/1100/pdata/1',
-                                  dw=0.5, echolength=300, blankinglength=300, numecho=50, dict=True)
+                                  dw=0.5, echolength=300, blankinglength=300, numecho=50)
 
 # Process the resulting echo FID
 data_sum_proc = proc_base.zf_size(data, 32768)    # zero fill to 32768 points

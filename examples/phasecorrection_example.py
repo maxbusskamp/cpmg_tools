@@ -54,18 +54,21 @@ else:
     ('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
 
 peaks, _ = processing.find_peaks(data.real, prominence=max(abs(data))*0.05)
-plt.plot(ppm_scale[peaks], data[peaks].real/max(abs(data.real)), 'gs')
+# plt.plot(ppm_scale[peaks], data[peaks].real/max(abs(data.real)), 'gs')
 
 # plt.plot(ppm_scale[peaks], data[peaks].real/max(abs(data[peaks].real)), "vg")
 # plt.xlim(1000, -1000)
+plt.xlim(-4800, -5100)
 # plt.xlim(1000, -5500)
-plt.xlim(4000, -6500)
+# plt.xlim(4000, -6500)
 # plt.xlim(-1000, -1100)
 # plt.xlim(-1500, 1500)
+plt.xlabel('$^{195}$Pt / ppm')
 plt.legend()
-# plt.yticks([])
+plt.yticks([])
 
-plt.savefig('automatic_phasecorrection_example_thick.png', dpi=300)
+plt.savefig('/home/m_buss13/ownCloud/plots/cpmg_tools/auto_phasecorrection_PtMix_zoom', dpi=600)
+
 plt.show()
 # plt.close()
 
