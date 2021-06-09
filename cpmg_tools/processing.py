@@ -448,8 +448,14 @@ def combine_stepped_aq(datasets, set_sw=0, precision_multi=1, mode='skyline', su
     return(data, ppm_scale, hz_scale) if larmor_freq!=0.0 else (data, hz_scale)
 
 
-def split_echotrain(datapath, dw, echolength, blankinglength, numecho, savepath=None):
+def split_echotrain(datapath, dw, echolength, blankinglength=None, numecho=None, echotop=None, savepath=None):
     """This splits the echo train of a given Bruker Dataset and coadds each echo.
+    There are multiple ways to achieve the correct coaddition:
+        - Supply length of echo aquisition, length between echo aqusitions and echo maximum for full manual control
+        - Supply length of echo aquisition and length between echo aqusitions. The echo maximum will then be calculated automatically and shifted to the first echo.
+        - Supply length of a full aquisition window (echo + blanking) and echo maximum. The echo maximum should be half the number of points in the aquisition windoe.
+        - Supply length of a full aquisition window (echo + blanking) only. All remaining parameter are calculated automatically.
+    For each option, the number of echos can be stated, if not the FID will be split into the maximum number possible.
 
     Args:
         datapath (str): Path string to the Bruker Dataset, ending with '/pdata/1'
@@ -457,22 +463,36 @@ def split_echotrain(datapath, dw, echolength, blankinglength, numecho, savepath=
         echolength (float): length of aquisition
         blankinglength (float): Length of blank time between aquisitions
         numecho (int): Number of recorded echos (e.g. l22)
-        dict (bool, optional): Set True to export the dictionary. Defaults to False.
+        echotop (int): Number of recorded echos (e.g. l22)
+        savepath (str, optional): Set to a directory. The finished FID will be saved here.
 
     Return:
-        ppm_scale
-        hz_scale
-        data
+        data (1darray)
+        timescale (1darray)
+        dic (dictionary)
     """  
 
     data, timescale, dic = read_brukerfid(datapath, dict=True)
 
     echopoints = int(echolength/dw/2)
-    echotop = np.argmax(np.absolute(data))
-    echostart = int(echotop-echopoints/2)
-
-    blankingpoints = int(blankinglength/dw/2)
+    if blankinglength is None:
+        blankingpoints = 0
+    else:
+        blankingpoints = int(blankinglength/dw/2)
     fullechopoints = int(echopoints + blankingpoints)
+
+    if echotop is None:
+        echotop = np.argmax(np.absolute(data))
+        if blankingpoints == 0:
+            echotop = fullechopoints/2
+    echostart = int(echotop-echopoints/2)
+    if echostart < 0:
+        sys.exit('Starting point of echotrain is negative. Please choose appropriate echotop.')
+    while (echostart-fullechopoints)>0:
+        echostart = echostart - fullechopoints
+
+    if numecho is None:
+        numecho = int(np.floor(len(data)/fullechopoints))
 
     data = data[echostart:(int(echopoints+blankingpoints)*numecho+echostart)]
 
