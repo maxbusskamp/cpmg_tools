@@ -1,7 +1,8 @@
 #%%
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
-from cpmg_tools import processing, proc_base
+from cpmg_tools import processing
+from nmrglue import proc_base
 
 
 plt.rcParams['figure.dpi'] = 200

@@ -2,7 +2,6 @@
 import matplotlib.pyplot as plt
 from cpmg_tools import processing
 import time
-import numpy as np
 plt.rcParams['figure.dpi'] = 200
 
 
@@ -58,9 +57,9 @@ peaks, _ = processing.find_peaks(data.real, prominence=max(abs(data))*0.05)
 
 # plt.plot(ppm_scale[peaks], data[peaks].real/max(abs(data[peaks].real)), "vg")
 # plt.xlim(1000, -1000)
-plt.xlim(-4800, -5100)
+# plt.xlim(-4800, -5100)
 # plt.xlim(1000, -5500)
-# plt.xlim(4000, -6500)
+plt.xlim(4000, -6500)
 # plt.xlim(-1000, -1100)
 # plt.xlim(-1500, 1500)
 plt.xlabel('$^{195}$Pt / ppm')
