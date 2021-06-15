@@ -3,28 +3,38 @@ import matplotlib.pyplot as plt
 from numpy.core.fromnumeric import size
 from cpmg_tools import processing
 import numpy as np
-import scipy.signal as signal
 
 plt.rcParams['figure.dpi'] = 200
 
 # Set path to dataset
-datapath = '/home/m_buss13/ownCloud/cpmg_tools/development/195Pt_PtMix_stepped/2999/pdata/1'
+datapath = '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_PtMix_MAS_WCPMG_stepped/2999/pdata/1'
 
 # Read Bruker FID
 data, _ = processing.read_brukerfid(datapath)
 
 # Apply linebroadening
 data_lb, window = processing.linebroadening(data,
-                                            lb_variant='scipy_chebwin',
+                                            # lb_variant='scipy_exponential',
+                                            # lb_variant='scipy_chebwin',
+                                            # lb_variant='scipy_taylor',
+                                            # lb_variant='scipy_parzen',
+                                            # lb_variant='scipy_nuttall',
                                             # lb_variant='scipy_general_hamming',
+                                            # lb_variant='scipy_blackmanharris',
+                                            # lb_variant='scipy_kaiser',
+                                            # lb_variant='scipy_dpss',
                                             # lb_variant='compressed_wurst',
-                                            # lb_variant='shifted_wurst',
+                                            lb_variant='shifted_wurst',
                                             # lb_variant='gaussian',
                                             # lb_variant='scipy',
-                                            lb_const=0.2,
+                                            lb_const=0.24,
                                             lb_n=2,
-                                            # **{'alpha':0.5}
-                                            **{'at':100}
+                                            # **{'nbar':2, 'sll':50}
+                                            # **{'NW':1.0}
+                                            # **{'beta':4}
+                                            # **{'alpha':0.62}
+                                            # **{'at':50}
+                                            # **{'tau':600}
                                             )
 
 # Plotting
@@ -41,8 +51,9 @@ plt.plot(np.linspace(0, len(data)*2, num=size(data)), window*max(processing.inte
 import matplotlib.pyplot as plt
 from cpmg_tools import processing, proc_base
 import numpy as np
-plt.rcParams['figure.dpi'] = 200
 import matplotlib.gridspec as gridspec
+
+plt.rcParams['figure.dpi'] = 200
 
 # Read magnitude data
 data_mc, ppm_scale_mc, hz_scale_mc = processing.read_brukerproc('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1')
@@ -55,27 +66,9 @@ data2, timescale2, dic2 = processing.read_brukerfid('/home/m_buss13/ownCloud/git
 data_before_lb = data
 # Apply linebroadening
 data, window = processing.linebroadening(data,
-                                        # lb_variant='scipy_exponential',
-                                        # lb_variant='scipy_chebwin',
-                                        # lb_variant='scipy_taylor',
-                                        # lb_variant='scipy_parzen',
-                                        # lb_variant='scipy_nuttall',
-                                        # lb_variant='scipy_general_hamming',
-                                        # lb_variant='scipy_blackmanharris',
-                                        # lb_variant='scipy_kaiser',
-                                        # lb_variant='scipy_dpss',
-                                        # lb_variant='compressed_wurst',
                                         lb_variant='shifted_wurst',
-                                        # lb_variant='gaussian',
-                                        # lb_variant='scipy',
                                         lb_const=0.24,
-                                        lb_n=2,
-                                        # **{'nbar':2, 'sll':50}
-                                        # **{'NW':1.0}
-                                        # **{'beta':4}
-                                        # **{'alpha':0.62}
-                                        # **{'at':50}
-                                        # **{'tau':600}
+                                        lb_n=2
                                         )
 
 
@@ -91,23 +84,8 @@ ppm_scale, hz_scale = processing.get_scale(data, dic)
 
 # Apply linebroadening
 data2, window2 = processing.linebroadening(data2,
-                                        # lb_variant='scipy_exponential',
-                                        # lb_variant='scipy_chebwin',
                                         lb_variant='scipy_general_hamming',
-                                        # lb_variant='scipy_blackmanharris',
-                                        # lb_variant='scipy_kaiser',
-                                        # lb_variant='scipy_dpss',
-                                        # lb_variant='compressed_wurst',
-                                        # lb_variant='shifted_wurst',
-                                        # lb_variant='gaussian',
-                                        # lb_variant='scipy',
-                                        # lb_const=0.1,
-                                        # lb_n=5, 
-                                        # **{'NW':1.5}
-                                        # **{'beta':4}
                                         **{'alpha':0.8}
-                                        # **{'at':50}
-                                        # **{'tau':600}
                                         )
 
 # Fouriertransform, zerofilling and phasing
@@ -155,7 +133,6 @@ plt.savefig('/home/m_buss13/ownCloud/plots/cpmg_tools/linebroadening', dpi=600)
 
 plt.show()
 # plt.savefig('automatic_phasecorrection_example.png', dpi=300)
-# plt.close()
 
 print('Data before LB:')
 print(processing.signaltonoise_region(data_before_lb.real, noisepts=(1000, 15000)))
@@ -168,8 +145,9 @@ print(processing.signaltonoise_region(data2.real, noisepts=(1000, 15000)))
 import matplotlib.pyplot as plt
 from cpmg_tools import processing, proc_base
 import numpy as np
-plt.rcParams['figure.dpi'] = 200
 import matplotlib.gridspec as gridspec
+
+plt.rcParams['figure.dpi'] = 200
 
 # Read magnitude data
 data_mc, ppm_scale_mc, hz_scale_mc = processing.read_brukerproc('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/11')
@@ -184,61 +162,19 @@ data, timescale, dic = processing.split_echotrain('/home/m_buss13/ownCloud/git/c
 data_before_lb = data
 # Apply linebroadening
 data, window = processing.linebroadening(data,
-                                        # lb_variant='scipy_exponential',
-                                        # lb_variant='scipy_chebwin',
-                                        # lb_variant='scipy_taylor',
-                                        # lb_variant='scipy_parzen',
-                                        # lb_variant='scipy_nuttall',
-                                        # lb_variant='scipy_general_hamming',
-                                        # lb_variant='scipy_blackmanharris',
-                                        # lb_variant='scipy_kaiser',
-                                        # lb_variant='scipy_dpss',
                                         lb_variant='compressed_wurst',
-                                        # lb_variant='shifted_wurst',
-                                        # lb_variant='gaussian',
-                                        # lb_variant='scipy',
                                         lb_const=0.1,
                                         num_windows=7,
                                         lb_n=4,
-                                        # **{'nbar':2, 'sll':50}
-                                        # **{'NW':1.0}
-                                        # **{'beta':4}
-                                        # **{'alpha':0.54}
-                                        # **{'at':50}
-                                        # **{'tau':600}
                                         )
 
-# data, window = processing.linebroadening(data,
-#                                         # lb_variant='scipy_exponential',
-#                                         # lb_variant='scipy_chebwin',
-#                                         # lb_variant='scipy_taylor',
-#                                         # lb_variant='scipy_parzen',
-#                                         # lb_variant='scipy_nuttall',
-#                                         lb_variant='scipy_general_hamming',
-#                                         # lb_variant='scipy_blackmanharris',
-#                                         # lb_variant='scipy_kaiser',
-#                                         # lb_variant='scipy_dpss',
-#                                         # lb_variant='compressed_wurst',
-#                                         # lb_variant='shifted_wurst',
-#                                         # lb_variant='gaussian',
-#                                         # lb_variant='scipy',
-#                                         # lb_const=0.1,
-#                                         # num_windows=7,
-#                                         # lb_n=4,
-#                                         # **{'nbar':2, 'sll':50}
-#                                         # **{'NW':1.0}
-#                                         # **{'beta':4}
-#                                         **{'alpha':0.64}
-#                                         # **{'at':50}
-#                                         # **{'tau':600}
-#                                         )
 
 fid_before = data_before_lb
 fid_after = data
+
 # Fouriertransform, zerofilling and phasing
 data = proc_base.zf_size(data, 32768)    # zero fill to 32768 points
 data = proc_base.fft(proc_base.rev(data))               # Fourier transform
-# data = proc_base.ps(data, p0=847, p1=-268718)
 
 # Generate new scales
 ppm_scale, hz_scale = processing.get_scale(data, dic)
@@ -246,7 +182,6 @@ ppm_scale, hz_scale = processing.get_scale(data, dic)
 # Process comparison data equally
 data_before_lb = proc_base.zf_size(data_before_lb, 32768)    # zero fill to 32768 points
 data_before_lb = proc_base.fft(proc_base.rev(data_before_lb))               # Fourier transform
-# data_before_lb = proc_base.ps(data_before_lb, p0=847, p1=-268718)
 
 # Plotting
 fig = plt.figure(figsize=(7, 7), facecolor='#f4f4f4')
@@ -272,7 +207,6 @@ f1_ax1.set_yticks([])
 # plt.savefig('/home/m_buss13/ownCloud/plots/cpmg_tools/linebroadening', dpi=600)
 
 plt.show()
-# plt.close()
 
 print('Data before LB:')
 print(processing.signaltonoise_region(data_before_lb.real, noisepts=(1000, 15000)))

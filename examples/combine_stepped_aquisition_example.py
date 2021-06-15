@@ -1,7 +1,6 @@
 #%%
-from cpmg_tools import proc_base, processing
+from cpmg_tools import processing
 import matplotlib.pyplot as plt
-import numpy as np
 
 plt.rcParams['figure.dpi'] = 200
 
@@ -75,7 +74,6 @@ print('Finished combining Datasets')
 # Just some plotting for the example
 plt.figure()
 plt.plot(hz_scale/1e6, data.real, lw=.3, c='k', label='Combined Spectrum')
-# plt.plot(hz_scale, data.real, lw=.3, c='k', label='Combined Spectrum')
 plt.yticks([])
 plt.xlabel('$^{14}$N / MHz')
 

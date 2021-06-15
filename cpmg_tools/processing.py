@@ -5,7 +5,11 @@ import os, sys
 from scipy.optimize.optimize import brute
 from scipy.optimize import basinhopping
 from scipy.optimize import minimize
-from cpmg_tools import bruker, fileiobase, proc_base, svd_auto
+from nmrglue import bruker
+from nmrglue import fileiobase
+from nmrglue import proc_base
+from cpmg_tools import svd_auto
+
 from scipy.signal import windows
 import scipy.linalg as sp_linalg
 from scipy.signal import find_peaks
@@ -622,9 +626,9 @@ def data_rms(x, data, data_mc, loss_func, int_sum_cutoff, prominence):
         float: Returned loss
     """
     if(len(x)==2):
-        data_phased = proc_base.ps(data, p0=x[0], p1=x[1])      # phase correction
+        data_phased = ps(data, p0=x[0], p1=x[1])      # phase correction
     elif(len(x)==3):
-        data_phased = proc_base.ps2(data, p0=x[0], p1=x[1], p2=x[2])      # phase correction
+        data_phased = ps2(data, p0=x[0], p1=x[1], p2=x[2])      # phase correction
     else:
         sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
 
@@ -691,6 +695,74 @@ def phase_minimizer(data, data_mc, bnds, Ns, loss_func, int_sum_cutoff, prominen
     return res.x
 
 
+def ps(data, p0=0.0, p1=0.0, inv=False):
+    """
+    Linear phase correction
+
+    Parameters
+    ----------
+    data : ndarray
+        Array of NMR data.
+    p0 : float
+        Zero order phase in degrees.
+    p1 : float
+        First order phase in degrees.
+    inv : bool, optional
+        True for inverse phase correction
+
+    Returns
+    -------
+    ndata : ndarray
+        Phased NMR data.
+
+    """
+    p0 = p0 * np.pi / 180.  # convert to radians
+    p1 = p1 * np.pi / 180.
+    size = data.shape[-1]
+    apod = np.exp(1.0j * (p0 + (p1 * ((np.arange(size) / size)-0.5)))
+                 ).astype(data.dtype)
+    
+    if inv:
+        apod = 1 / apod
+    return apod * data
+
+
+def ps2(data, p0=0.0, p1=0.0, p2=0.0, inv=False):
+    """
+    Linear phase correction
+
+    Parameters
+    ----------
+    data : ndarray
+        Array of NMR data.
+    p0 : float
+        Zero order phase in degrees.
+    p1 : float
+        First order phase in degrees.
+    p2 : float
+        Second order phase in degrees.    
+    inv : bool, optional
+        True for inverse phase correction
+
+    Returns
+    -------
+    ndata : ndarray
+        Phased NMR data.
+
+    """
+    p0 = p0 * np.pi / 180.  # convert to radians
+    p1 = p1 * np.pi / 180.
+    p2 = p2 * np.pi / 180.
+    size = data.shape[-1]
+    apod = np.exp(1.0j * (p0 + (p1 * ((np.arange(size) / size)-0.5)) + (p2 * np.power((np.arange(size) / size)-0.5, 2)))
+    # apod = np.exp(1.0j * (p0 + (p1 * ((np.arange(size) / size))) + (p2 * np.power((np.arange(size) / size), 2)))
+                 ).astype(data.dtype)
+    
+    if inv:
+        apod = 1 / apod
+    return apod * data
+
+
 def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum_cutoff=1.0, prominence=1000000000, zf=0, verb=False, minimizer='basinhopping', tol=1e-14, options={'rhobeg':1000.0, 'maxiter':5000, 'maxfev':5000}, stepsize=1000, T=100, disp=True, niter=200, loss_func='logcosh', workers=4):
     """
     !!!WIP!!!
@@ -714,10 +786,10 @@ def autophase(data, bnds=((-360, 360), (0, 200000), (0, 200000)), Ns=50, int_sum
         sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
     if(len(bnds)==2):
         phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, prominence=prominence, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
-        data = proc_base.ps(data_fft, p0=phase[0], p1=phase[1])      # add previously phase values
+        data = ps(data_fft, p0=phase[0], p1=phase[1])      # add previously phase values
     elif(len(bnds)==3):
         phase = phase_minimizer(data_fft, data_mc, bnds=bnds, Ns=Ns, loss_func=loss_func, int_sum_cutoff=int_sum_cutoff, prominence=prominence, workers=workers, verb=verb, minimizer=minimizer, tol=tol, options=options, stepsize=stepsize, T=T, disp=disp, niter=niter)      # automatically calculate phase
-        data = proc_base.ps2(data_fft, p0=phase[0], p1=phase[1], p2=phase[2])      # add previously phase values
+        data = ps2(data_fft, p0=phase[0], p1=phase[1], p2=phase[2])      # add previously phase values
     else:
         sys.exit('Wrong number of boundary conditions! Please set only 2 or 3 conditions')
 
@@ -871,7 +943,7 @@ def fft(data, dic, si=0, mc=True, phase=[0, 0], dict=False):
     if(mc==True):
         data = proc_base.mc(data)
     else:
-        data = proc_base.ps(data, p0=phase[0], p1=phase[1])
+        data = ps(data, p0=phase[0], p1=phase[1])
 
     udic = bruker.guess_udic(dic, data)
     uc = fileiobase.uc_from_udic(udic)
