@@ -8,6 +8,7 @@ plt.rcParams['figure.dpi'] = 200
 
 # Set path to dataset
 datapath = '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_PtMix_MAS_WCPMG_stepped/2999/pdata/1'
+# datapath = "C:\sciebo\git\cpmg_tools\examples\example_data\\195Pt_PtMix_MAS_WCPMG_stepped\\2999\pdata\\1"
 
 # Read Bruker FID
 data, _ = processing.read_brukerfid(datapath)
