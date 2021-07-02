@@ -68,7 +68,7 @@ output_path = '/home/m_buss13/'
 output_name = 'combined'
 
 # Combine Datsets
-data, ppm_scale, hz_scale = processing.combine_stepped_aq(datasets, set_sw=2e6, precision_multi=4, mode='sum', verbose=True, larmor_freq=36.1597680)
+data, ppm_scale, hz_scale = processing.combine_stepped_aq(datasets, set_sw=2e6, precision_multi=4, mode='skyline', verbose=True, larmor_freq=36.1597680)
 print('Finished combining Datasets')
 
 # Just some plotting for the example

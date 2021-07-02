@@ -1,12 +1,12 @@
-##TITLE= Parameter file, TOPSPIN		Version 3.2
+##TITLE= Parameter file, TopSpin 4.0.8
 ##JCAMPDX= 5.0
 ##DATATYPE= Parameter Values
-##NPOINTS= 9	$$ modification sequence number
+##NPOINTS= 12	$$ modification sequence number
 ##ORIGIN= Bruker BioSpin GmbH
 ##OWNER= j_kopp06
-$$ 2016-11-10 10:33:38.212 +0100  j_kopp06@nmr300
-$$ /opt/akeckert/data/j_kopp06/nmr/195Pt_[Pt(NH3)4]Cl2_WCPMG_14.06.16/7/acqu
-$$ process /opt/topspin3.2/prog/mod/go
+$$ 2021-06-25 15:03:37.671 +0200  m_buss13@ubuntuvm
+$$ /home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_Reiset_WCPMG_300er/7/acqu
+$$ process /opt/topspin4.0.8/prog/mod/dataserver
 ##$ACQT0= 0
 ##$AMP= (0..31)
 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100
@@ -203,7 +203,7 @@ $$ process /opt/topspin3.2/prog/mod/go
 -1 1 0 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 ##$PRGAIN= 0
 ##$PROBHD= <>
-##$PULPROG= <wcpmg.mrh>
+##$PULPROG= <wcpmg_avance.jk>
 ##$PW= 0
 ##$PYNM= <acqu.py>
 ##$QNP= 1

@@ -1,12 +1,12 @@
-##TITLE= Parameter file, TopSpin 4.1.1
+##TITLE= Parameter file, TopSpin 4.0.8
 ##JCAMPDX= 5.0
 ##DATATYPE= Parameter Values
-##NPOINTS= 5	$$ modification sequence number
+##NPOINTS= 11	$$ modification sequence number
 ##ORIGIN= Bruker BioSpin GmbH
 ##OWNER= j_kopp06
-$$ 2021-04-20 15:38:46.461 +0200  m_buss13@hansen24
-$$ /home/m_buss13/Desktop/jonas-test/195Pt_[Pt(NH3)4]Cl2_WCPMG_14.06.16/7/pdata/1/proc
-$$ process /opt/topspin4.1.1/prog/mod/dataserver
+$$ 2021-06-25 11:14:20.291 +0200  m_buss13@ubuntuvm
+$$ /home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_Reiset_WCPMG_300er/7/pdata/1/proc
+$$ process /opt/topspin4.0.8/prog/mod/dataserver
 ##$ABSF1= 1431.603
 ##$ABSF2= -1513.987
 ##$ABSG= 5
@@ -96,11 +96,11 @@ $$ process /opt/topspin4.1.1/prog/mod/dataserver
 ##$PYNMP= <proc.py>
 ##$REVERSE= no
 ##$SF= 64.5012179902344
-##$SI= 65536
+##$SI= 32768
 ##$SIGF1= 40
 ##$SIGF2= 20
 ##$SINO= 16
-##$SIOLD= 65536
+##$SIOLD= 32768
 ##$SPECTYP= <>
 ##$SREGLST= <RRRRRRRR>
 ##$SSB= 0
@@ -109,7 +109,7 @@ $$ process /opt/topspin4.1.1/prog/mod/dataserver
 ##$SW_p= 999999.999999999
 ##$SYMM= 0
 ##$S_DEV= 0
-##$TDeff= 0
+##$TDeff= 680
 ##$TDoff= 0
 ##$TI= <>
 ##$TILT= no

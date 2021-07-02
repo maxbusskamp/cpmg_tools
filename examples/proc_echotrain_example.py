@@ -10,14 +10,14 @@ plt.rcParams['figure.dpi'] = 200
 # Split FID echotrain and sum all echos
 # Choose one of the possible options below by un/commenting one of the lines starting with dw=0.5,...
 data, _, dic = processing.split_echotrain(datapath='/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/119Sn_SnO2_double_echo_cpmg/1100/pdata/1',
-                                  dw=0.5, echolength=300, blankinglength=300, numecho=52, echotop=219)
+                                  # dw=0.5, echolength=300, blankinglength=300, numecho=52, echotop=219)
                                 #   dw=0.5, echolength=300, blankinglength=300, numecho=52, echotop=None)
                                 #   dw=0.5, echolength=600, blankinglength=None, numecho=52, echotop=300)
                                 #   dw=0.5, echolength=600, blankinglength=None, numecho=52, echotop=None)
                                 #   dw=0.5, echolength=300, blankinglength=300, numecho=None, echotop=219)
                                 #   dw=0.5, echolength=300, blankinglength=300, numecho=None, echotop=None)
                                 #   dw=0.5, echolength=600, blankinglength=None, numecho=None, echotop=300)
-                                #   dw=0.5, echolength=600, blankinglength=None, numecho=None, echotop=None)
+                                  dw=0.5, echolength=600, blankinglength=None, numecho=None, echotop=None)
 
 # Process the resulting echo FID
 data_sum_proc = proc_base.zf_size(data, 32768)    # zero fill to 32768 points

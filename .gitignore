@@ -2,3 +2,4 @@
 __pychache__
 examples/example_max_only.py
 *.png
+.vscode/settings.json

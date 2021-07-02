@@ -1,8 +1,8 @@
-##TITLE= Audit trail, TOPSPIN		Version 3.2
+##TITLE= Audit trail, TopSpin 4.0.8
 ##JCAMPDX= 5.01
 ##ORIGIN= Bruker BioSpin GmbH
-##OWNER= j_kopp06
-$$ /opt/akeckert/data/j_kopp06/nmr/195Pt_test2/7/pdata/1/auditp.txt
+##OWNER= m_buss13
+$$ /home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_Reiset_WCPMG_300er/7/pdata/1/auditp.txt
 ##AUDIT TRAIL=  $$ (NUMBER, WHEN, WHO, WHERE, PROCESS, VERSION, WHAT)
 (   1,<2016-06-15 07:57:05.163 +0200>,<j_kopp06>,<nmr300>,<go>,<TOPSPIN 3.2>,
       <created by zg
@@ -12,42 +12,12 @@ $$ /opt/akeckert/data/j_kopp06/nmr/195Pt_test2/7/pdata/1/auditp.txt
        61 2E D7 C8 3E 82 7C C4 26 6A B8 53 B4 3B 1B D3
        data hash MD5: 53208
        F1 AF AD B6 8E 17 BA 43 13 FE 47 23 AA C4 87 F9>)
-(   2,<2016-06-20 17:29:54.746 +0200>,<j_kopp06>,<nmr300>,<proc1d>,<TOPSPIN 3.2>,
+(   2,<2021-06-25 11:14:21.305 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
       <Start of raw data processing
-       efp LB = 0 FT_mod = 6 PKNL = 1 PHC0 = 68.8 PHC1 = 0 SI = 64K 
-       data hash MD5: 64K
-       39 47 89 DE A2 15 1F FC 94 D9 C1 E5 97 D7 87 72>)
-(   3,<2016-06-20 17:29:57.476 +0200>,<j_kopp06>,<nmr300>,<proc1d>,<TOPSPIN 3.2>,
-      <mc 
-       data hash MD5: 64K
-       EF A2 F2 91 96 63 2B CE 72 0C 73 53 9C 39 64 5C>)
-$$ /home/m_buss13/Desktop/jonas-test/195Pt_[Pt(NH3)4]Cl2_WCPMG_14.06.16/7/pdata/1/auditp.txt
-(   4,<2021-04-20 15:37:46.633 +0200>,<m_buss13>,<hansen24>,<proc1d>,<TopSpin 4.1.1>,
-      <Start of raw data processing
-       fp FT_mod = 6 PKNL = 1 PHC0 = 68.8 PHC1 = 0 SI = 64K 
-       data hash MD5: 64K
-       39 47 89 DE A2 15 1F FC 94 D9 C1 E5 97 D7 87 72>)
-(   5,<2021-04-20 15:37:48.937 +0200>,<m_buss13>,<hansen24>,<proc1d>,<TopSpin 4.1.1>,
-      <Start of raw data processing
-       ft FT_mod = 6 PKNL = 1 SI = 64K 
-       data hash MD5: 64K
-       C3 62 AA F3 C8 DD 21 5D 85 96 10 77 AB EE BA D5>)
-(   6,<2021-04-20 15:38:46.505 +0200>,<m_buss13>,<hansen24>,<proc1d>,<TopSpin 4.1.1>,
-      <pk fgphup PHC0 = -59.75469 PHC1 = 42649.6 
-       data hash MD5: 64K
-       65 DF 78 7B 68 6F 3E F6 46 3D F6 26 7A CD 68 C6>)
-$$ /home/m_buss13/ownCloud/nmr_data/development/195Pt_[Pt(NH3)4]Cl2_WCPMG_14.06.16/7/pdata/1/auditp.txt
-(   7,<2021-04-20 15:43:53.639 +0200>,<m_buss13>,<hansen24>,<proc1d>,<TopSpin 4.1.1>,
-      <Start of raw data processing
-       fmc FT_mod = 6 PKNL = 1 SI = 64K 
-       data hash MD5: 64K
-       65 D6 87 5F D8 FC B9 BD 48 4E 5D DE EF FC D0 65>)
-(   8,<2021-04-20 15:44:07.164 +0200>,<m_buss13>,<hansen24>,<proc1d>,<TopSpin 4.1.1>,
-      <Start of raw data processing
-       fp FT_mod = 6 PKNL = 1 PHC0 = -59.75469 PHC1 = 42649.6 SI = 64K 
-       data hash MD5: 64K
-       CE FF DB 07 58 EA 05 56 8A FB 6D F9 F4 05 D8 C7>)
+       fmc FT_mod = 6 PKNL = 1 TDeff = 680 SI = 32K 
+       data hash MD5: 32K
+       DE BC 15 DA A0 F2 B1 F9 FF 0A 4B 7B B4 6E 92 45>)
 ##END=
 
 $$ hash MD5
-$$ 3A CE 9D 4C EE C7 9D 77 47 6B 3B 4D 1E F9 D0 75
+$$ 5F 61 47 2C B1 A8 36 25 BA 4E 6E 7A 4A FF 88 98

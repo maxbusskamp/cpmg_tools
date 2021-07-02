@@ -20,20 +20,20 @@ data_lb, window = processing.linebroadening(data,
                                             # lb_variant='scipy_taylor',
                                             # lb_variant='scipy_parzen',
                                             # lb_variant='scipy_nuttall',
-                                            # lb_variant='scipy_general_hamming',
+                                    lb_variant='scipy_general_hamming',
                                             # lb_variant='scipy_blackmanharris',
                                             # lb_variant='scipy_kaiser',
                                             # lb_variant='scipy_dpss',
                                             # lb_variant='compressed_wurst',
-                                            lb_variant='shifted_wurst',
+                                            # lb_variant='shifted_wurst',
                                             # lb_variant='gaussian',
                                             # lb_variant='scipy',
-                                            lb_const=0.24,
-                                            lb_n=2,
+                                            # lb_const=0.24,
+                                            # lb_n=2,
                                             # **{'nbar':2, 'sll':50}
                                             # **{'NW':1.0}
                                             # **{'beta':4}
-                                            # **{'alpha':0.62}
+                                            **{'alpha':0.62}
                                             # **{'at':50}
                                             # **{'tau':600}
                                             )
@@ -159,14 +159,14 @@ data, timescale, dic = processing.split_echotrain('/home/m_buss13/ownCloud/git/c
                                                   dw=0.2, echolength=560, blankinglength=80, numecho=48)
 
 
-# Save data for comaprison
+# Save data for comparison
 data_before_lb = data
 # Apply linebroadening
 data, window = processing.linebroadening(data,
                                         lb_variant='compressed_wurst',
-                                        lb_const=0.1,
+                                        lb_const=0.01,
                                         num_windows=7,
-                                        lb_n=4,
+                                        lb_n=10,
                                         )
 
 
