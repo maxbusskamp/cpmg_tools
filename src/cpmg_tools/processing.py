@@ -959,7 +959,7 @@ def fft(data, si=0, dic=None, mc=True, phase=[0, 0], return_dict=False):
         return(data[::-1])
 
 
-def fftw(data, dic=None, si=0, mc=True, phase=[0, 0], dict=False, numcore=4):
+def fftw(data, dic=None, si=0, mc=True, phase=[0, 0], dict=False, numcore=4, return_dict=False):
     """
     Use the pyFFTW package to enable FT by FFTW.
     pyFFTW has to be installed manually. Watch out for the correct FFTW version (>v3.3 at time of writing)
@@ -974,6 +974,10 @@ def fftw(data, dic=None, si=0, mc=True, phase=[0, 0], dict=False, numcore=4):
     """
     import pyfftw
 
+    if si==0:
+        si = len(data)
+    elif si < len(data):
+        sys.exit('SI has to be greater than TD!')
 
     a = pyfftw.empty_aligned(data.shape, dtype=data.dtype)
     a[:] = data
@@ -991,9 +995,31 @@ def fftw(data, dic=None, si=0, mc=True, phase=[0, 0], dict=False, numcore=4):
         uc = fileiobase.uc_from_udic(udic)
         ppm_scale = uc.ppm_scale()
         hz_scale = uc.hz_scale()
-        return(data_fftw[::-1], ppm_scale, hz_scale, dic) if dict==True else (data_fftw[::-1], ppm_scale, hz_scale)
+        return(data_fftw[::-1], ppm_scale, hz_scale, dic) if return_dict==True else (data_fftw[::-1], ppm_scale, hz_scale)
     else:
         return(data_fftw[::-1])
+
+
+def asciifft(data, timescale, si=0, larmor_freq=0.0):
+    """
+    This takes the output of read_ascii_fid (FID and dic) and applies fft and zerofilling. It can return magnitude or phased data.
+
+    Args:
+        data (ndarray complex): FID data
+        dic (dict): Bruker dictionary
+        si (int, optional): Number of points to zerofill. Defaults to 0.
+        mc (bool, optional): Set to False for phased data. Defaults to True.
+        dict (bool, optional): Set to True to return the dictionary. Defaults to False.
+    """
+    data = proc_base.zf_size(data, si)
+    data = np.flip(np.fft.fftshift(np.fft.fft(data)))
+
+    hz_scale = np.flip(np.fft.fftshift(np.fft.fftfreq(len(data), d=timescale[1]-timescale[0])))
+
+    if(larmor_freq!=0.0):
+            ppm_scale = hz_scale/larmor_freq
+
+    return(data, ppm_scale, hz_scale) if larmor_freq!=0.0 else (data, hz_scale)
 
 
 def gen_window(window_length, lb_variant, lb_const=0.54, lb_n=2, num_windows=1, **kwargs):
@@ -1119,28 +1145,6 @@ def sweeping_window(data, window, si, stepping=1, manual_idx=None, use_fftw=Fals
         else:
             ft_temp = fft(fid_temp, si=si, mc=mc)
     return(ft_temp)
-
-
-def asciifft(data, timescale, si=0, larmor_freq=0.0):
-    """
-    This takes the output of read_ascii_fid (FID and dic) and applies fft and zerofilling. It can return magnitude or phased data.
-
-    Args:
-        data (ndarray complex): FID data
-        dic (dict): Bruker dictionary
-        si (int, optional): Number of points to zerofill. Defaults to 0.
-        mc (bool, optional): Set to False for phased data. Defaults to True.
-        dict (bool, optional): Set to True to return the dictionary. Defaults to False.
-    """
-    data = proc_base.zf_size(data, si)
-    data = np.flip(np.fft.fftshift(np.fft.fft(data)))
-
-    hz_scale = np.flip(np.fft.fftshift(np.fft.fftfreq(len(data), d=timescale[1]-timescale[0])))
-
-    if(larmor_freq!=0.0):
-            ppm_scale = hz_scale/larmor_freq
-
-    return(data, ppm_scale, hz_scale) if larmor_freq!=0.0 else (data, hz_scale)
 
 
 def interleave_complex(real, imag):
