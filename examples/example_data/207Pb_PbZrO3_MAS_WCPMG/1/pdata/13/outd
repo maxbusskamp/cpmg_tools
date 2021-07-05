@@ -4,8 +4,8 @@
 ##NPOINTS= 1	$$ modification sequence number
 ##ORIGIN= Bruker BioSpin GmbH
 ##OWNER= m_buss13
-$$ 2021-06-23 18:15:17.532 +0200  m_buss13@ubuntuvm
-$$ /home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/11/outd
+$$ 2021-06-23 18:15:00.524 +0200  m_buss13@ubuntuvm
+$$ /home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/13/outd
 $$ process /opt/topspin4.0.8/prog/mod/dirdata
 ##$CURPLOT= <>
 ##$CURPRIN= <$>

@@ -4,8 +4,8 @@
 ##NPOINTS= 1	$$ modification sequence number
 ##ORIGIN= Bruker BioSpin GmbH
 ##OWNER= m_buss13
-$$ 2021-04-21 10:15:52.316 +0200  m_buss13@ubuntuvm
-$$ /home/m_buss13/ownCloud/nmr_data/development/207Pb_wcpmg_mas/1/pdata/11/procs
+$$ 2021-06-23 18:15:17.534 +0200  m_buss13@ubuntuvm
+$$ /home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/11/procs
 $$ process /opt/topspin4.0.8/prog/mod/dirdata
 ##$ABSF1= 0
 ##$ABSF2= 0
@@ -39,7 +39,7 @@ $$ process /opt/topspin4.0.8/prog/mod/dirdata
 ##$F1P= 40.9607965697774
 ##$F2P= -76.5753095622413
 ##$FCOR= 1
-##$FTSIZE= 32768
+##$FTSIZE= 4096
 ##$FT_mod= 6
 ##$GAMMA= 0
 ##$GB= 0
@@ -106,7 +106,7 @@ $$ process /opt/topspin4.0.8/prog/mod/dirdata
 ##$RDPOS= 0
 ##$REVERSE= no
 ##$SF= 104.565402367777
-##$SI= 32768
+##$SI= 4096
 ##$SIGF1= 0
 ##$SIGF2= 0
 ##$SINO= 0
@@ -115,7 +115,7 @@ $$ process /opt/topspin4.0.8/prog/mod/dirdata
 ##$SREF_mod= 1
 ##$SREGLST= <1H.CDCl3>
 ##$SSB= 0
-##$STSI= 32768
+##$STSI= 4096
 ##$STSR= 0
 ##$SW_p= 2500000
 ##$SYMM= 0
@@ -135,5 +135,5 @@ $$ process /opt/topspin4.0.8/prog/mod/dirdata
 ##$WDW= 0
 ##$XDIM= 0
 ##$YMAX_p= 394992135
-##$YMIN_p= 24036
+##$YMIN_p= 135637
 ##END=

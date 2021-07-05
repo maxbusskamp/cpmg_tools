@@ -4,8 +4,8 @@
 ##NPOINTS= 1	$$ modification sequence number
 ##ORIGIN= Bruker BioSpin GmbH
 ##OWNER= m_buss13
-$$ 2021-04-21 10:15:52.312 +0200  m_buss13@ubuntuvm
-$$ /home/m_buss13/ownCloud/nmr_data/development/207Pb_wcpmg_mas/1/pdata/11/assocs
+$$ 2021-06-23 18:15:17.530 +0200  m_buss13@ubuntuvm
+$$ /home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/11/assocs
 $$ process /opt/topspin4.0.8/prog/mod/dirdata
-##$MULTDISP= </home/m_buss13/ownCloud/nmr_data/neo500_Jonas/207Pb_PbNO3_nutation_2.5mm/1052/pdata/1|/home/m_buss13/ownCloud/nmr_data/neo500_Jonas/207Pb_PbNO3_nutation_2.5mm/2052/pdata/1|/home/m_buss13/ownCloud/nmr_data/neo500_Jonas/207Pb_PbNO3_nutation_2.5mm/3052/pdata/1|/home/m_buss13/ownCloud/nmr_data/neo500_Jonas/207Pb_PbNO3_nutation_2.5mm/4052/pdata/1>
+##$MULTDISP= </home/m_buss13/ownCloud/git/nmr_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/11>
 ##END=

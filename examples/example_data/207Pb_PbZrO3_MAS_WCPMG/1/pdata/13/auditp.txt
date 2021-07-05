@@ -2,7 +2,7 @@
 ##JCAMPDX= 5.01
 ##ORIGIN= Bruker BioSpin GmbH
 ##OWNER= m_buss13
-$$ /home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/11/auditp.txt
+$$ /home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/13/auditp.txt
 ##AUDIT TRAIL=  $$ (NUMBER, WHEN, WHO, WHERE, PROCESS, VERSION, WHAT)
 (   1,<2021-02-24 14:57:28.403 +0000>,<j_kopp06>,<neo500>,<go4>,<TopSpin 4.1.1>,
       <acquisition in progress>)
@@ -400,16 +400,20 @@ $$ /home/m_buss13/ownCloud/nmr_data/neo500_Jonas/207Pb_PbNO3_nutation_2.5mm/54/a
        wrpa from 1 99 "207Pb_PbNO3_nutation_2.5mm" "/home/m_buss13/ownCloud/nmr_data/mas_wcpmg_paper"
        double data hash MD5: 3000
        7E A8 40 77 67 85 7D 56 AD D2 EA 7B BF 1A 9D BE>)
-(  74,<2021-06-23 18:15:11.689 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+(  74,<2021-04-21 10:15:46.967 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
       <Start of raw data processing
-       fmc FT_mod = 6 PKNL = 1 SI = 4K 
-       data hash MD5: 4K
-       2A 59 94 C0 41 5F 6D BF B4 A7 26 01 9F 53 4C 13>)
-(  75,<2021-06-23 18:15:17.544 +0200>,<m_buss13>,<ubuntuvm>,<dirdata>,<TopSpin 4.0.8>,
-      <wrp from 1 1 "207Pb_PbZrO3_MAS_WCPMG" "/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data" overriding existing data
-       data hash MD5: 4K
-       2A 59 94 C0 41 5F 6D BF B4 A7 26 01 9F 53 4C 13>)
+       fmc FT_mod = 6 PKNL = 1 SI = 32K 
+       data hash MD5: 32K
+       8B 8B 02 59 A2 8E 3F F5 2F 09 E9 FB 6D 77 A0 CC>)
+(  75,<2021-04-21 10:15:52.326 +0200>,<m_buss13>,<ubuntuvm>,<dirdata>,<TopSpin 4.0.8>,
+      <wrp from 1 1 "207Pb_wcpmg_mas" "/home/m_buss13/ownCloud/nmr_data/development"
+       data hash MD5: 32K
+       8B 8B 02 59 A2 8E 3F F5 2F 09 E9 FB 6D 77 A0 CC>)
+(  76,<2021-06-23 18:15:00.540 +0200>,<m_buss13>,<ubuntuvm>,<dirdata>,<TopSpin 4.0.8>,
+      <wrp from 11 1 "207Pb_PbZrO3_MAS_WCPMG" "/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data"
+       data hash MD5: 32K
+       8B 8B 02 59 A2 8E 3F F5 2F 09 E9 FB 6D 77 A0 CC>)
 ##END=
 
 $$ hash MD5
-$$ 25 BB 67 F9 6D FC 96 BD CA 91 F1 F8 EE DB 77 9D
+$$ 81 D9 CA 5E 9A C9 24 30 A2 7C DC D0 39 02 3B 9A

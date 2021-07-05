@@ -4,8 +4,8 @@
 ##NPOINTS= 1	$$ modification sequence number
 ##ORIGIN= Bruker BioSpin GmbH
 ##OWNER= m_buss13
-$$ 2021-04-21 10:15:52.315 +0200  m_buss13@ubuntuvm
-$$ /home/m_buss13/ownCloud/nmr_data/development/207Pb_wcpmg_mas/1/pdata/11/proc
+$$ 2021-06-23 18:15:17.532 +0200  m_buss13@ubuntuvm
+$$ /home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/11/proc
 $$ process /opt/topspin4.0.8/prog/mod/dirdata
 ##$ABSF1= 10.99263
 ##$ABSF2= -11.04602
@@ -87,8 +87,8 @@ $$ process /opt/topspin4.0.8/prog/mod/dirdata
 ##$NZP= 0
 ##$OFFSET= 14340.01
 ##$PC= 1
-##$PHC0= -274.275
-##$PHC1= 99430.4
+##$PHC0= -177.5531
+##$PHC1= 244889.6
 ##$PH_mod= 1
 ##$PKNL= yes
 ##$PPARMOD= 0
@@ -106,11 +106,11 @@ $$ process /opt/topspin4.0.8/prog/mod/dirdata
 ##$RDPOS= 0
 ##$REVERSE= no
 ##$SF= 104.31946078125
-##$SI= 32768
+##$SI= 4096
 ##$SIGF1= 0
 ##$SIGF2= 0
 ##$SINO= 0
-##$SIOLD= 32768
+##$SIOLD= 4096
 ##$SPECTYP= <>
 ##$SREF_mod= 1
 ##$SREGLST= <1H.CDCl3>
