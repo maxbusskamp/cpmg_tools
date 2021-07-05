@@ -44,8 +44,8 @@ proc_dict['spinsys'] = """
 # Read-in comparison file
 # data, _, _ = processing.read_ascii(output_path+'PbZrO3_mas_scaled_combined.xy', larmor_freq=104.609)
 # data, _, _ = processing.read_ascii(output_path+'PbZrO3_mas_scaled_combined.xy', larmor_freq=104.609)
-# data, _, _ = processing.read_brukerproc('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/11')
-data, _, _ = processing.read_brukerproc('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1')
+# data, _, _ = processing.read_brukerproc(r'example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/11')
+data, _, _ = processing.read_brukerproc(r'example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1')
 
 
 # Define parameter to be optimized

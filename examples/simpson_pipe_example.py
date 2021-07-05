@@ -80,10 +80,10 @@ data, ppm_scale, hz_scale = processing.asciifft(data, timescale, si=8192*4, larm
 
 # For read-in of comparison file, uncomment on of the following options:
 # Either a already processed spectrum:
-data_pb, ppm_scale_pb, _ = processing.read_brukerproc('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/12')
+data_pb, ppm_scale_pb, _ = processing.read_brukerproc(r'example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/12')
 
 # # Or a Bruker FID processed directly in python:
-# data_pb, timescale, dic_pb = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1', dict=True)
+# data_pb, timescale, dic_pb = processing.read_brukerfid(r'example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1', dict=True)
 # # If FID is read-in, apply linebroadening
 # data_pb, window = processing.linebroadening(data_pb, lb_variant='scipy_general_hamming', **{'alpha': 0.7})
 # # Fouriertransform and zerofill the FID

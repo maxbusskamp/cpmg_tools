@@ -13,7 +13,7 @@ from cpmg_tools import svd_auto
 from scipy.signal import windows
 import scipy.linalg as sp_linalg
 from scipy.signal import find_peaks
-
+from pathlib import Path
 
 def read_brukerproc(datapath, dict=False):
     """
@@ -29,7 +29,6 @@ def read_brukerproc(datapath, dict=False):
         data (ndarray)
         dic (dictionary, optional)
     """
-
 
     dic, data = bruker.read_pdata(datapath)
     udic = bruker.guess_udic(dic, data)
@@ -54,7 +53,6 @@ def read_brukerfid(datapath, dict=False):
         data (ndarray)
         dic (dictionary, optional)
     """
-
 
     dic, data = bruker.read(datapath)
     td = int(dic['acqus']['TD']/2)

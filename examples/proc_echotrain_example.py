@@ -10,7 +10,7 @@ plt.rcParams['figure.dpi'] = 200
 
 # Split FID echotrain and sum all echos
 # Choose one of the possible options below by un/commenting one of the lines starting with dw=0.5,...
-data, _, dic = processing.split_echotrain(datapath='/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/119Sn_SnO2_double_echo_cpmg/1100/pdata/1',
+data, _, dic = processing.split_echotrain(datapath=r'example_data/119Sn_SnO2_double_echo_cpmg/1100/pdata/1',
                                   # dw=0.5, echolength=300, blankinglength=300, numecho=52, echotop=219)
                                 #   dw=0.5, echolength=300, blankinglength=300, numecho=52, echotop=None)
                                 #   dw=0.5, echolength=600, blankinglength=None, numecho=52, echotop=300)
@@ -26,7 +26,7 @@ data_sum_proc = proc_base.fft(proc_base.rev(data_sum_proc))               # Four
 ppm_scale, hz_scale = processing.get_scale(data_sum_proc, dic)
 
 # Read comparison spikelet spectrum
-data_mc, ppm_scale_mc, hz_scale_mc = processing.read_brukerproc('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/119Sn_SnO2_double_echo_cpmg/1101/pdata/11')
+data_mc, ppm_scale_mc, hz_scale_mc = processing.read_brukerproc(r'example_data/119Sn_SnO2_double_echo_cpmg/1101/pdata/11')
 
 # Plotting
 fig = plt.figure(figsize=(6.5, 4), facecolor='#f4f4f4')

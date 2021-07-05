@@ -7,8 +7,8 @@ plt.rcParams['figure.dpi'] = 120
 
 
 # Or you can read in the unprocessed bruker files:
-data1, timescale1, dic1 = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_PtMix_MAS_WCPMG_stepped/2999/pdata/1', dict=True)
-data2, timescale2, dic2 = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_PtMix_MAS_WCPMG_stepped/3999/pdata/1', dict=True)
+data1, timescale1, dic1 = processing.read_brukerfid(r'example_data/195Pt_PtMix_MAS_WCPMG_stepped/2999/pdata/1', dict=True)
+data2, timescale2, dic2 = processing.read_brukerfid(r'example_data/195Pt_PtMix_MAS_WCPMG_stepped/3999/pdata/1', dict=True)
 
 
 # Then apply some processing:
@@ -22,7 +22,7 @@ data1, phase1 = processing.autophase(data1, bnds=((0, 360), (-100000, -50000), (
                                    tol=1e-25, options={'rhobeg':1000.0, 'maxiter':1000, 'maxfev':1000})
 
 # Fouriertransform, zerofill and phase spectrum. Then calculate new scales
-data1, timescale1, dic1 = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_PtMix_MAS_WCPMG_stepped/2999/pdata/1', dict=True)
+data1, timescale1, dic1 = processing.read_brukerfid(r'example_data/195Pt_PtMix_MAS_WCPMG_stepped/2999/pdata/1', dict=True)
 data1 = processing.ps2(proc_base.fft(proc_base.rev(proc_base.zf(data1, pad=4096*32))), p0=phase1[0], p1=phase1[1], p2=phase1[2])    # Fourier transform
 ppm_scale1, hz_scale1 = processing.get_scale(data1, dic1)
 
@@ -33,7 +33,7 @@ data2, phase2 = processing.autophase(data2, bnds=((0, 360), (-100000, -50000), (
                                    tol=1e-25, options={'rhobeg':1000.0, 'maxiter':1000, 'maxfev':1000})
 
 # Fouriertransform, zerofill and phase spectrum. Then calculate new scales
-data2, timescale2, dic2 = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_PtMix_MAS_WCPMG_stepped/3999/pdata/1', dict=True)
+data2, timescale2, dic2 = processing.read_brukerfid(r'example_data/195Pt_PtMix_MAS_WCPMG_stepped/3999/pdata/1', dict=True)
 data2 = processing.ps2(proc_base.fft(proc_base.rev(proc_base.zf(data2, pad=4096*32))), p0=phase2[0], p1=phase2[1], p2=phase2[2])    # Fourier transform
 ppm_scale2, hz_scale2 = processing.get_scale(data2, dic2)
 
@@ -57,8 +57,8 @@ data, hz_scale = processing.combine_stepped_aq(datasets, set_sw=2000e3, precisio
 print('Finished combining Datasets')
 
 # Combine magnitude datasets
-datasets_mc = ['/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_PtMix_MAS_WCPMG_stepped/2999/pdata/1',
-               '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_PtMix_MAS_WCPMG_stepped/3999/pdata/1',
+datasets_mc = [r'example_data/195Pt_PtMix_MAS_WCPMG_stepped/2999/pdata/1',
+               r'example_data/195Pt_PtMix_MAS_WCPMG_stepped/3999/pdata/1',
               ]
 
 # Combine Datsets
@@ -73,5 +73,5 @@ plt.yticks([])
 # plt.xlim(500, -700)
 plt.xlim(-400, -600)
 plt.xlabel('$^{195}$Pt / kHz')
-plt.savefig('/home/m_buss13/ownCloud/plots/cpmg_tools/PtMix_example_zoom', dpi=600)
+
 plt.show()

@@ -7,7 +7,7 @@ import time
 
 start_time = time.time()
 
-output_path = '/home/m_buss13/testfiles/'
+output_path = 'testfiles/'
 output_name = 'simpson_input'
 ascii_file = 'simpson_input.xy'
 
@@ -37,9 +37,9 @@ input_dict = {
 # data, _, _ = processing.read_ascii(output_path+'PbZrO3_mas_scaled_combined.xy', larmor_freq=104.609)
 # data, _, _ = processing.read_ascii(output_path+'PbZrO3_mas_scaled_combined.xy', larmor_freq=104.609)
 # data, _, _ = processing.read_brukerproc('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/11')
-data, _, _ = processing.read_brukerproc('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1')
+data, _, _ = processing.read_brukerproc(r'example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1')
 
-
+# /home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata
 # Define parameter to be optimized
 # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
 params_input = (

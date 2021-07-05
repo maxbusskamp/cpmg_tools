@@ -5,14 +5,17 @@ from nmrglue import process
 from numpy.core.fromnumeric import size
 from cpmg_tools import processing
 import numpy as np
-
+import os
+from pathlib import Path
 plt.rcParams['figure.dpi'] = 200
 
 # Set path to dataset
-datapath = '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_PtMix_MAS_WCPMG_stepped/2999/pdata/1'
+# datapath = r'example_data\195Pt_PtMix_MAS_WCPMG_stepped\2999\pdata\1'
+datapath = r'example_data/195Pt_PtMix_MAS_WCPMG_stepped/2999/pdata/1'
 
 # Read Bruker FID
 data, _ = processing.read_brukerfid(datapath)
+# data, _ = processing.read_brukerproc(datapath)
 
 # Apply linebroadening
 data_lb, window = processing.linebroadening(data,
@@ -59,11 +62,11 @@ import matplotlib.gridspec as gridspec
 plt.rcParams['figure.dpi'] = 200
 
 # Read magnitude data
-data_mc, ppm_scale_mc, hz_scale_mc = processing.read_brukerproc('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1')
+data_mc, ppm_scale_mc, hz_scale_mc = processing.read_brukerproc(r'example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1')
 
 # Read bruker FID
-data, timescale, dic = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1', dict=True)
-data2, timescale2, dic2 = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1', dict=True)
+data, timescale, dic = processing.read_brukerfid(r'example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1', dict=True)
+data2, timescale2, dic2 = processing.read_brukerfid(r'example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1', dict=True)
 
 # Save data for comaprison
 data_before_lb = data
@@ -138,10 +141,10 @@ import matplotlib.gridspec as gridspec
 plt.rcParams['figure.dpi'] = 200
 
 # Read magnitude data
-data_mc, ppm_scale_mc, hz_scale_mc = processing.read_brukerproc('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/11')
+data_mc, ppm_scale_mc, hz_scale_mc = processing.read_brukerproc(r'example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/11')
 
 # Read bruker FID
-data, timescale, dic = processing.split_echotrain('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/2/pdata/1',
+data, timescale, dic = processing.split_echotrain(r'example_data/207Pb_PbZrO3_MAS_WCPMG/2/pdata/1',
                                                   dw=0.2, echolength=560, blankinglength=80, numecho=48)
 
 

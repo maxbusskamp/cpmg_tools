@@ -10,23 +10,23 @@ start_time = time.time()
 
 
 # # PtMix Example:
-datapath = '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_PtMix_WCPMG/1/pdata/1'
-datapath_mc = '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_PtMix_WCPMG/1/pdata/11'
+datapath = r'example_data/195Pt_PtMix_WCPMG/1/pdata/1'
+datapath_mc = r'example_data/195Pt_PtMix_WCPMG/1/pdata/11'
 # # bnds=((3900, 4100), (-55000, -54000), (-15000, -14000))
 
 # Reiset Example NMR300 (Jonas):
-# datapath = '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_Reiset_WCPMG_300er/7/pdata/1'
-# datapath_mc = '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_Reiset_WCPMG_300er/7/pdata/11'
+# datapath = r'example_data/195Pt_Reiset_WCPMG_300er/7/pdata/1'
+# datapath_mc = r'example_data/195Pt_Reiset_WCPMG_300er/7/pdata/11'
 # bnds=((0, 360), (-65000, -55000), (-15000, -5000))
 
 # # Reiset Example Neo500:
-# datapath = '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_Reiset_WCPMG_500er/1/pdata/1'
-# datapath_mc = '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_Reiset_WCPMG_500er/1/pdata/11'
+# datapath = r'example_data/195Pt_Reiset_WCPMG_500er/1/pdata/1'
+# datapath_mc = r'example_data/195Pt_Reiset_WCPMG_500er/1/pdata/11'
 # # bnds=((0, 360), (-100000, -50000), (-10000, 10000))
 
 # # PbZrO3 Example Neo500:
-# datapath = '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1'
-# datapath_mc = '/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/11'
+# datapath = r'example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1'
+# datapath_mc = r'example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/11'
 # # bnds=((0, 1000), (-270000, -260000))
 
 data_mc, ppm_scale_mc, hz_scale_mc = processing.read_brukerproc(datapath_mc)
