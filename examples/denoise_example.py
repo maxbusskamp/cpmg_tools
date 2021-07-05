@@ -1,4 +1,5 @@
 #%%
+# This is an example for the use of SVD denoising as described in DOI: 10.1080/05704928.2018.1523183
 import matplotlib.pyplot as plt
 from cpmg_tools import processing, proc_base
 import numpy as np
@@ -6,13 +7,8 @@ import matplotlib.gridspec as gridspec
 
 plt.rcParams['figure.dpi'] = 160
 
-# Read magnitude data
-# data_mc, ppm_scale_mc, hz_scale_mc = processing.read_brukerproc('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/11')
-
 # Read bruker FID
 data, timescale, dic = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1', dict=True)
-# data, timescale, dic = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_PtMix_WCPMG/1/pdata/1', dict=True)
-# data, timescale, dic = processing.read_brukerfid('/home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/195Pt_PtMix_MAS_WCPMG_stepped/3999/pdata/1', dict=True)
 # fid_before = data
 fid_before, _ = processing.linebroadening(data, lb_variant='scipy_general_hamming', **{'alpha':0.6})
 
@@ -25,17 +21,14 @@ data, window = processing.linebroadening(data, lb_variant='scipy_general_hamming
 fid_after_sglb = data
 
 # Fouriertransform, zerofilling and phasing
-data_before = proc_base.zf_size(fid_before, 32768)    # zero fill to 32768 points
-data_before = proc_base.fft(proc_base.rev(data_before))               # Fourier transform
-data_before = proc_base.ps(data_before, p0=847, p1=-268718)
+data_before = processing.fft(fid_before, si=32768, mc=False, phase=[847, -268718])
+
 # Fouriertransform, zerofilling and phasing
-data_after_sg = proc_base.zf_size(fid_after_sg, 32768)    # zero fill to 32768 points
-data_after_sg = proc_base.fft(proc_base.rev(data_after_sg))               # Fourier transform
-data_after_sg = proc_base.ps(data_after_sg, p0=847, p1=-268718)
+data_after_sg = processing.fft(fid_after_sg, si=32768, mc=False, phase=[847, -268718])
+
 # Fouriertransform, zerofilling and phasing
-data_after_sglb = proc_base.zf_size(fid_after_sglb, 32768)    # zero fill to 32768 points
-data_after_sglb = proc_base.fft(proc_base.rev(data_after_sglb))               # Fourier transform
-data_after_sglb = proc_base.ps(data_after_sglb, p0=847, p1=-268718)
+data_after_sglb = processing.fft(fid_after_sglb, si=32768, mc=False, phase=[847, -268718])
+
 # Generate new scales
 ppm_scale, hz_scale = processing.get_scale(data_before, dic)
 
@@ -65,12 +58,8 @@ f1_ax1.plot(ppm_scale, abs(data_before)/max(abs(data_before)), c='k', lw=1, labe
 f1_ax1.plot(ppm_scale, abs(data_after_sg)/max(abs(data_after_sg)), c='grey', lw=1, label='After SVD - SNR = {:.0f}'.format(snr_svd))
 f1_ax1.plot(ppm_scale, abs(data_after_sglb)/max(abs(data_after_sglb)), c='firebrick', lw=1, label='After SVD+LB - SNR = {:.0f}'.format(snr_svdlb))
 f1_ax1.set_xlim(1000, -1000)
-# f1_ax1.set_xlim(-4000, -6500)
-# f1_ax1.set_xlim(4000, -6500)
 f1_ax1.legend()
 f1_ax1.set_yticks([])
 f1_ax1.set_xlabel('$^{207}$Pb / ppm')
-
-plt.savefig('/home/m_buss13/ownCloud/plots/cpmg_tools/SVD', dpi=600)
 
 plt.show()

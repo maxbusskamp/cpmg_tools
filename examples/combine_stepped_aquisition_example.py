@@ -1,4 +1,5 @@
 #%%
+# This examples show the processing pipeline for a stepped aquisition spectrum. Either for plotting, or use in simpson.
 from cpmg_tools import processing
 import matplotlib.pyplot as plt
 
@@ -77,12 +78,10 @@ plt.plot(hz_scale/1e6, data.real, lw=.3, c='k', label='Combined Spectrum')
 plt.yticks([])
 plt.xlabel('$^{14}$N / MHz')
 
-plt.savefig('/home/m_buss13/ownCloud/plots/cpmg_tools/steppedAQ_sum', dpi=600)
-
-plt.show()
-
 # # Save to XRI file
 # processing.save_xri(output_path, output_name, data, hz_scale)
 
 # # Save to .spe file
 # processing.save_spe(output_path, output_name, data, hz_scale)
+
+plt.show()

@@ -1,4 +1,5 @@
 #%%
+# Example of a processing pipeline for the PtMix sample measured with stepped MAS-WCPMG
 from cpmg_tools import processing
 from nmrglue import proc_base
 import matplotlib.pyplot as plt

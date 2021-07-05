@@ -1,5 +1,5 @@
 #%%
-# Example for the different loss function calculations
+# Example for the fitting of a 2-spin system using the opt package. USE WITH CAUTION! NOT FINISHED!
 from cpmg_tools import simpson, processing
 from lmfit import fit_report
 import time
@@ -52,13 +52,7 @@ params_input = (
 # Specify fitting parameter
 simpson.create_simpson_fit(output_path=output_path,
                             output_name=output_name,
-                            # params_input=params_input,
-                            # data=data,
-                            input_dict=input_dict,
-                            # si=8192*4,
-                            #   proc_dict=proc_dict,
-                            # verb=False,
-                            # method='powell'
+                            input_dict=input_dict
                             )
 
 # Print fancy fit report, additionally to the default printed variables

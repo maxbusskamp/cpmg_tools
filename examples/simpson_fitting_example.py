@@ -1,5 +1,5 @@
 #%%
-# Example for the different loss function calculations
+# Example for the fitting of a 2-spin system
 from cpmg_tools import simpson, processing
 from lmfit import fit_report
 import time
@@ -66,7 +66,6 @@ results = simpson.fit_simpson(output_path=output_path,
                               data=data,
                               input_dict=input_dict,
                               si=8192*4,
-                              # proc_dict=proc_dict,
                               verb=False,
                               method='powell'
                               )

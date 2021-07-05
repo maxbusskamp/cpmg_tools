@@ -400,12 +400,12 @@ $$ /home/m_buss13/ownCloud/nmr_data/neo500_Jonas/207Pb_PbNO3_nutation_2.5mm/54/a
        wrpa from 1 99 "207Pb_PbNO3_nutation_2.5mm" "/home/m_buss13/ownCloud/nmr_data/mas_wcpmg_paper"
        double data hash MD5: 3000
        7E A8 40 77 67 85 7D 56 AD D2 EA 7B BF 1A 9D BE>)
-(  74,<2021-06-23 18:15:11.689 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
+(  74,<2021-07-05 11:17:34.851 +0200>,<m_buss13>,<ubuntuvm>,<proc1d>,<TopSpin 4.0.8>,
       <Start of raw data processing
-       fmc FT_mod = 6 PKNL = 1 SI = 4K 
-       data hash MD5: 4K
-       2A 59 94 C0 41 5F 6D BF B4 A7 26 01 9F 53 4C 13>)
+       fmc FT_mod = 6 PKNL = 1 SI = 32K 
+       data hash MD5: 32K
+       8B 8B 02 59 A2 8E 3F F5 2F 09 E9 FB 6D 77 A0 CC>)
 ##END=
 
 $$ hash MD5
-$$ 8C 1B 25 9E 02 3A 89 C7 9C C0 7B FE 9C 46 EF 78
+$$ F6 A4 4A E9 76 85 60 1A B2 85 5E F3 3C 65 46 B2

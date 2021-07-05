@@ -1,5 +1,5 @@
 #%%
-# Example for the different loss function calculations
+# Example for the fitting of 2-spin system
 from cpmg_tools import simpson, processing
 from lmfit import fit_report
 import time

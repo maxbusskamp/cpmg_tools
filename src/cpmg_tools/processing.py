@@ -947,7 +947,7 @@ def fft(data, si=0, dic=None, mc=True, phase=[0, 0], return_dict=False):
     if(mc==True):
         data = proc_base.mc(data)
     else:
-        data = ps(data, p0=phase[0], p1=phase[1])
+        data = ps(data[::-1], p0=phase[0], p1=phase[1])[::-1]
 
     if dic:
         udic = bruker.guess_udic(dic, data)

@@ -1,10 +1,10 @@
 ##TITLE= Parameter file, TopSpin 4.0.8
 ##JCAMPDX= 5.0
 ##DATATYPE= Parameter Values
-##NPOINTS= 12	$$ modification sequence number
+##NPOINTS= 17	$$ modification sequence number
 ##ORIGIN= Bruker BioSpin GmbH
 ##OWNER= m_buss13
-$$ 2021-06-23 18:15:11.686 +0200  m_buss13@ubuntuvm
+$$ 2021-07-05 11:17:34.848 +0200  m_buss13@ubuntuvm
 $$ /home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1/procs
 $$ process /opt/topspin4.0.8/prog/mod/proc1d
 ##$ABSF1= 0
@@ -39,7 +39,7 @@ $$ process /opt/topspin4.0.8/prog/mod/proc1d
 ##$F1P= 40.9607965697774
 ##$F2P= -76.5753095622413
 ##$FCOR= 1
-##$FTSIZE= 4096
+##$FTSIZE= 32768
 ##$FT_mod= 6
 ##$GAMMA= 0
 ##$GB= 0
@@ -106,7 +106,7 @@ $$ process /opt/topspin4.0.8/prog/mod/proc1d
 ##$RDPOS= 0
 ##$REVERSE= no
 ##$SF= 104.565402367777
-##$SI= 4096
+##$SI= 32768
 ##$SIGF1= 0
 ##$SIGF2= 0
 ##$SINO= 0
@@ -115,7 +115,7 @@ $$ process /opt/topspin4.0.8/prog/mod/proc1d
 ##$SREF_mod= 1
 ##$SREGLST= <1H.CDCl3>
 ##$SSB= 0
-##$STSI= 4096
+##$STSI= 32768
 ##$STSR= 0
 ##$SW_p= 2500000
 ##$SYMM= 0
@@ -135,5 +135,5 @@ $$ process /opt/topspin4.0.8/prog/mod/proc1d
 ##$WDW= 0
 ##$XDIM= 0
 ##$YMAX_p= 394992135
-##$YMIN_p= 135637
+##$YMIN_p= 24036
 ##END=

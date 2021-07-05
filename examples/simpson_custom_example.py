@@ -1,5 +1,5 @@
 #%%
-# Example for the different loss function calculations
+# Example for the simulation of a custom spinsystem
 from cpmg_tools import simpson, processing
 import matplotlib.pyplot as plt
 
@@ -8,7 +8,6 @@ plt.rcParams['figure.dpi'] = 200
 
 # Specify working directory and filenames
 output_path = '/home/m_buss13/testfiles/'
-# output_path = 'C:\sciebo\\testfiles\\'
 output_name = 'simpson_input'
 ascii_file = 'simpson_input.xy'
 

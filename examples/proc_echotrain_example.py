@@ -1,4 +1,5 @@
 #%%
+# This is an example for the proeccing of an cpmg echotrain in python
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from cpmg_tools import processing

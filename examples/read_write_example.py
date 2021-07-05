@@ -1,4 +1,5 @@
 #%%
+# Example for the rea/write process of Bruker files. The overwrite function is not working as intended, due to a bug in nmrglue. Delete files manually before saving!
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from cpmg_tools import processing, proc_base, bruker

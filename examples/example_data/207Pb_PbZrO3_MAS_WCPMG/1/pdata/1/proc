@@ -1,10 +1,10 @@
 ##TITLE= Parameter file, TopSpin 4.0.8
 ##JCAMPDX= 5.0
 ##DATATYPE= Parameter Values
-##NPOINTS= 12	$$ modification sequence number
+##NPOINTS= 13	$$ modification sequence number
 ##ORIGIN= Bruker BioSpin GmbH
 ##OWNER= m_buss13
-$$ 2021-06-23 18:15:09.937 +0200  m_buss13@ubuntuvm
+$$ 2021-07-05 10:51:42.883 +0200  m_buss13@ubuntuvm
 $$ /home/m_buss13/ownCloud/git/cpmg_tools/examples/example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1/proc
 $$ process /opt/topspin4.0.8/prog/mod/dataserver
 ##$ABSF1= 10.99263
@@ -106,11 +106,11 @@ $$ process /opt/topspin4.0.8/prog/mod/dataserver
 ##$RDPOS= 0
 ##$REVERSE= no
 ##$SF= 104.31946078125
-##$SI= 4096
+##$SI= 32768
 ##$SIGF1= 0
 ##$SIGF2= 0
 ##$SINO= 0
-##$SIOLD= 4096
+##$SIOLD= 32768
 ##$SPECTYP= <>
 ##$SREF_mod= 1
 ##$SREGLST= <1H.CDCl3>
