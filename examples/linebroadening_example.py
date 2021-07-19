@@ -149,31 +149,36 @@ data, timescale, dic = processing.split_echotrain(r'example_data/207Pb_PbZrO3_MA
 
 
 # Save data for comparison
-data_before_lb = data
+fid_before = data
 # Apply linebroadening
-data, window = processing.linebroadening(data,
+data_lb1, window_lb1 = processing.linebroadening(data,
                                         lb_variant='compressed_wurst',
                                         lb_const=0.01,
                                         num_windows=7,
                                         lb_n=10,
                                         )
 
+data_lb2, window_lb2 = processing.linebroadening(data,
+                                        lb_variant='scipy_general_hamming',
+                                        **{'alpha':0.68}
+                                        )
 
-fid_before = data_before_lb
-fid_after = data
+fid_after = data_lb1
 
 # Fouriertransform, zerofilling and phasing
-data = processing.fft(data, si=32768, mc=True)
+data_lb1 = processing.fft(data_lb1, si=32768, mc=True)
+data_lb2 = processing.fft(data_lb2, si=32768, mc=True)
 
 # Generate new scales
-ppm_scale, hz_scale = processing.get_scale(data, dic)
+ppm_scale, hz_scale = processing.get_scale(data_lb1, dic)
 
 # Process comparison data equally
 data_before_lb = processing.fft(data_before_lb, si=32768, mc=True)
 
 # Calculation of S/N
-sino_before_lb = processing.signaltonoise_region(data_before_lb.real, noisepts=(1000, 15000))
-sino_after_method1 = processing.signaltonoise_region(data.real, noisepts=(1000, 15000))
+sino_before_lb = processing.signaltonoise_region(data_before_lb.real, noisepts=(2000, 14000))
+sino_after_method1 = processing.signaltonoise_region(data_lb1.real, noisepts=(2000, 14000))
+sino_after_method2 = processing.signaltonoise_region(data_lb2.real, noisepts=(2000, 14000))
 
 # Plotting
 fig = plt.figure(figsize=(7, 7), facecolor='#f4f4f4')
@@ -184,16 +189,20 @@ f1_ax2 = fig.add_subplot(spec[0, 0])
 
 f1_ax2.plot(processing.interleave_complex(fid_before.real, fid_before.imag), c='k')
 f1_ax2.plot(processing.interleave_complex(fid_after.real, fid_after.imag), c='grey')
-f1_ax2.plot(np.linspace(0, len(fid_before)*2, num=len(fid_before)), window*max(abs(processing.interleave_complex(fid_before.real, fid_before.imag))), c='r')
+f1_ax2.plot(np.linspace(0, len(fid_before)*2, num=len(fid_before)), window_lb1*max(abs(processing.interleave_complex(fid_before.real, fid_before.imag))), c='r')
+f1_ax2.plot(np.linspace(0, len(fid_before)*2, num=len(fid_before)), window_lb2*max(abs(processing.interleave_complex(fid_before.real, fid_before.imag))), c='b')
 f1_ax2.set_yticks([])
 f1_ax2.set_xticks([])
 
-f1_ax1.plot(ppm_scale_mc, data_mc.real/max(abs(data_mc.real)), c='dimgrey', lw=1, label='No LB - {:.4f}'.format(sino_before_lb))
-f1_ax1.plot(ppm_scale, abs(data)/max(abs(data.real)), c='r', lw=1, label='shifted WURST - {:.4f}'.format(sino_after_method1))
+f1_ax1.plot(ppm_scale_mc, data_mc.real/max(abs(data_mc.real)), c='dimgrey', lw=1, label='No LB - {:.2f}'.format(sino_before_lb))
+f1_ax1.plot(ppm_scale, abs(data_lb1)/max(abs(data_lb1.real)), c='r', lw=1, label='shifted WURST - {:.2f}'.format(sino_after_method1))
+f1_ax1.plot(ppm_scale, abs(data_lb2)/max(abs(data_lb2.real)), c='b', lw=1, label='shifted WURST - {:.2f}'.format(sino_after_method2))
 
-f1_ax1.set_xlim(1000, -1000)
+f1_ax1.set_xlim(1200, -1200)
 f1_ax1.set_xlabel('$^{207}$Pb / ppm')
 f1_ax1.legend()
 f1_ax1.set_yticks([])
+
+plt.savefig('/home/m_buss13/ownCloud/plots/cpmg_tools/multiwindow.png', dpi=600)
 
 plt.show()
