@@ -7,7 +7,7 @@ import matplotlib.gridspec as gridspec
 
 plt.rcParams['figure.dpi'] = 160
 
-# Read bruker FID
+# Read Bruker FID
 data, timescale, dic = processing.read_brukerfid(r'example_data/207Pb_PbZrO3_MAS_WCPMG/1/pdata/1', dict=True)
 # fid_before = data
 fid_before, _ = processing.linebroadening(data, lb_variant='scipy_general_hamming', **{'alpha':0.6})
