@@ -3,7 +3,7 @@
 from cpmg_tools import processing
 from nmrglue import proc_base
 import matplotlib.pyplot as plt
-plt.rcParams['figure.dpi'] = 120
+plt.rcParams['figure.dpi'] = 200
 
 
 # Or you can read in the unprocessed bruker files:
@@ -73,5 +73,14 @@ plt.yticks([])
 # plt.xlim(500, -700)
 plt.xlim(-400, -600)
 plt.xlabel('$^{195}$Pt / kHz')
+
+# Plot full spectrum
+plt.figure(figsize=(10, 5))
+plt.plot(hz_scale/1000, data, lw=1.0, c='k', label='Combined Spectrum')
+plt.yticks([])
+# plt.xlim(500, -700)
+plt.xlim(450, -700)
+plt.xlabel('$^{195}$Pt / kHz')
+
 
 plt.show()

@@ -3,10 +3,8 @@
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from cpmg_tools import processing
-from nmrglue import proc_base
-
-
 plt.rcParams['figure.dpi'] = 200
+
 
 # Split FID echotrain and sum all echos
 # Choose one of the possible options below by un/commenting one of the lines starting with dw=0.5,...
@@ -21,9 +19,7 @@ data, _, dic = processing.split_echotrain(datapath=r'example_data/119Sn_SnO2_dou
                                   dw=0.5, echolength=600, blankinglength=None, numecho=None, echotop=None)
 
 # Process the resulting echo FID
-data_sum_proc = proc_base.zf_size(data, 32768)    # zero fill to 32768 points
-data_sum_proc = proc_base.fft(proc_base.rev(data_sum_proc))               # Fourier transform
-ppm_scale, hz_scale = processing.get_scale(data_sum_proc, dic)
+data_ft, ppm_scale, hz_scale = processing.fft(data, si=65536, dic=dic, mc=True)
 
 # Read comparison spikelet spectrum
 data_mc, ppm_scale_mc, hz_scale_mc = processing.read_brukerproc(r'example_data/119Sn_SnO2_double_echo_cpmg/1101/pdata/11')
@@ -34,7 +30,7 @@ spec = gridspec.GridSpec(ncols=1, nrows=1, figure=fig)
 spec.update(wspace=0.0, hspace=0.0)
 f1_ax1 = fig.add_subplot(spec[0, 0])
 
-f1_ax1.plot(ppm_scale, abs(data_sum_proc), lw=1.5, c='k', label='Abs. Coadd Python')
+f1_ax1.plot(ppm_scale, data_ft, lw=1.5, c='k', label='Abs. Coadd Python')
 f1_ax1.plot(ppm_scale_mc, data_mc, lw=1.0, ls='--', c='g', label='Abs. Coadd AU')
 
 f1_ax1.set_xlim(600,-1300)
