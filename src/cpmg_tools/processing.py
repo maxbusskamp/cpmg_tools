@@ -58,8 +58,9 @@ def read_brukerfid(datapath, dict=False):
     td = int(dic['acqus']['TD']/2)
     sw_h = float(dic['acqus']['SW_h'])
     dw = 1.0/(sw_h*2.0)
+    nc = int(dic['acqus']['NC'])
     timescale = np.linspace(0, 0+(dw*td),td,endpoint=False)
-    data = data[:td]
+    data = data[:td]*(2**nc)
 
 
     return (data, timescale, dic) if dict==True else (data, timescale)
