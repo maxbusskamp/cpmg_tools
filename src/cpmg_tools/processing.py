@@ -241,7 +241,7 @@ def save_spe(output_path, output_name, data, hz_scale):
             outfile.write('SIMP\n')
             outfile.write('NP='+str(int(len(data)))+'\n')
             outfile.write('SW='+str(np.round((abs(hz_scale[-1])+abs(hz_scale[0])), -3))+'\n')
-            outfile.write('REF=0.0\n')
+            outfile.write('REF='+str(np.median(hz_scale))+'\n')
             outfile.write('TYPE=SPE\n')
             outfile.write('DATA\n')
             np.savetxt(outfile, np.column_stack((data.real, data.imag)), delimiter=' ')
