@@ -36,8 +36,8 @@ data, _, dic = processing.read_brukerfid(datapath, dict=True)
 # Original Data should be optimized much longer, or in multiple steps
 data, phase = processing.autophase(data, bnds=((3900, 4100), (-55000, -54000), (-15000, -14000)),
                                    Ns=4, verb=True, loss_func='phaseloss', workers=4, int_sum_cutoff=0.5,
-                                   minimizer='Nelder-Mead', T=1000, niter=100, disp=False, stepsize=1000,
-                                   tol=1e-25, options={'rhobeg':1000.0, 'maxiter':100, 'maxfev':100},
+                                   minimizer='COBYLA', T=1000, niter=100, disp=False, stepsize=1000,
+                                   tol=1e-25, options={'rhobeg':1000.0, 'maxiter':100},
                                    zf=4096*32, prominence=0.05)
 
 # Get scales for spectrum

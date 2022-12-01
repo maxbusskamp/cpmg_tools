@@ -24,9 +24,9 @@ def read_brukerproc(datapath, dict=False):
         dict (bool, optional): Set True to export the dictionary. Defaults to False.
 
     Returns:
+        data (ndarray)
         ppm_scale (1darray)
         hz_scale (1darray)
-        data (ndarray)
         dic (dictionary, optional)
     """
 
